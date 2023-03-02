@@ -1,8 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'jacoco'
     id 'com.google.gms.google-services'
+    id 'jacoco'
 }
 
 android {
@@ -43,6 +43,7 @@ android {
     }
 
 }
+
 dependencies {
     implementation 'com.google.firebase:firebase-firestore-ktx:24.0.0'
     implementation 'com.google.firebase:firebase-auth:21.1.0'
