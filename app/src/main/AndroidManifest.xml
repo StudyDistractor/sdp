@@ -16,8 +16,14 @@
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".GoogleSignInActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FirebaseUIActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FirebaseActivity"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
