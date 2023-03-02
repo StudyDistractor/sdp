@@ -48,6 +48,14 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:31.2.2')
     implementation 'com.google.firebase:firebase-common-ktx:20.1.0'
     implementation 'com.google.firebase:firebase-database-ktx:20.0.4'
+
+    implementation 'com.firebaseui:firebase-ui-auth:7.2.0' // authentication using firebase
+    // Required only if Facebook login support is required
+    // Find the latest Facebook SDK releases here: https://goo.gl/Ce5L94
+    // TODO implementation 'com.facebook.android:facebook-android-sdk:5.0.0'
+
+
+
     def composeBom = platform('androidx.compose:compose-bom:2023.01.00')
     implementation composeBom
     androidTestImplementation composeBom
