@@ -37,8 +37,9 @@ abstract class FirebaseUIActivity : AppCompatActivity() {
         if (result.resultCode == RESULT_OK) {
             // Successfully signed in
             val user = FirebaseAuth.getInstance().currentUser
-            // ...
+            // TODO successful sign in
         } else {
+            // TODO failed sign in
             // Sign in failed. If response is null the user canceled the
             // sign-in flow using the back button. Otherwise check
             // response.getError().getErrorCode() and handle the error.
@@ -50,7 +51,6 @@ abstract class FirebaseUIActivity : AppCompatActivity() {
         AuthUI.getInstance()
             .signOut(this)
             .addOnCompleteListener {
-                // ...
             }
     }
 
@@ -58,7 +58,6 @@ abstract class FirebaseUIActivity : AppCompatActivity() {
         AuthUI.getInstance()
             .delete(this)
             .addOnCompleteListener {
-                // ...
             }
     }
 }

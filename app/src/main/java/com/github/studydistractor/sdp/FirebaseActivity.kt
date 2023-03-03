@@ -73,23 +73,4 @@ class FirebaseActivity : AppCompatActivity() {
     private fun setValue(email : String, phone : String){
         db.child(email).setValue(phone);
     }
-
-    private val signInLauncher = registerForActivityResult(
-        FirebaseAuthUIActivityResultContract()
-    ) { res ->
-        this.onSignInResult(res)
-    }
-
-    private fun createSignInContent() {
-        val providers = arrayListOf(
-            AuthUI.IdpConfig.GoogleBuilder().build()
-        )
-
-        val signInIntent = AuthUI.getInstance()
-            .createSignInIntentBuilder()
-            .setAvailableProviders(providers)
-            .build()
-        signInLauncher.launch(signInIntent)
-
-    }
 }
