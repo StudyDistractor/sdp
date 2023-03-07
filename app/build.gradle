@@ -74,6 +74,10 @@ dependencies {
 
     // Optional - Integration with activities
     implementation 'androidx.activity:activity-compose:1.6.1'
+
+//  add Google Places API
+    implementation 'com.google.android.libraries.places:places:3.0.0'
+
 }
 
 tasks.withType(Test) {
