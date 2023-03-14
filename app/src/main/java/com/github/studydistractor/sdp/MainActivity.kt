@@ -1,13 +1,13 @@
 package com.github.studydistractor.sdp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.ui.core.Text
+import androidx.compose.Composable
 import androidx.ui.core.setContent
 import com.github.studydistractor.sdp.ui.UIBottomAppBar
+import com.github.studydistractor.sdp.ui.Useless
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent{
