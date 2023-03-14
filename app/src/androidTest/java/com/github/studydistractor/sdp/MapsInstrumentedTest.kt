@@ -1,25 +1,20 @@
 package com.github.studydistractor.sdp
 
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.typeText
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -30,8 +25,9 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 class MapsInstrumentedTest {
 
 
-    @Rule
-    var activityRule: ActivityScenarioRule<MainActivity> = ActivityScenarioRule(MainActivity::class.java)
+
+    @get:Rule
+    var activityRule: ActivityScenarioRule<MapsActivity> = ActivityScenarioRule(MapsActivity::class.java)
 
 //    Test that the map is displayed when the activity is started:
     @Test
@@ -39,23 +35,63 @@ class MapsInstrumentedTest {
         onView(withId(R.id.map)).check(matches(isDisplayed()))
     }
 
-//
-//    @get:Rule
-//    val composeTestRule = createAndroidTestRule(MainActivity::class.java)
-//
-//    @Test
-//    fun testButtonClick() {
-//        val button = composeTestRule.onNode(hasTestTag("yourTestTag"), useUnmergedTree = true)
-//        button.assertIsDisplayed()
-//        button.performClick()
-//    }
-//    @Test
-//    fun whenButtonIsClickedIntentIsSent() {
-//        Intents.init()
-//
-//        Espresso.onView(withId(R.id.mainName)).perform(ViewActions.typeText("John"))
-//        Espresso.onView(withId(R.id.mainGoButton)).perform(ViewActions.click())
-//        intended(hasComponent(GreetingActivity::class.java.getName()))
-//        Intents.release()
-//    }
+//    Test getLocationPermission
+    @Test
+    fun testGetLocationPermission() {
+        val activity = activityRule.scenario
+        activity.onActivity { activity ->
+            activity.getLocationPermission()
+            assertEquals(true, activity.locationPermissionGranted)
+        }
+    }
+
+  @Test
+  fun displayPlacesGoesToTheRightPlace() {
+    val activity = activityRule.scenario
+    activity.onActivity { activity ->
+      val mapFragment = activity.supportFragmentManager
+        .findFragmentById(R.id.map) as SupportMapFragment?
+      val signal = CountDownLatch(1)
+      mapFragment?.getMapAsync(object : OnMapReadyCallback {
+        override fun onMapReady(googleMap: GoogleMap) {
+          activity.map = googleMap
+          activity.displayPlaces()
+          signal.countDown()
+        }
+      })
+      signal.await(10, TimeUnit.SECONDS)
+        activity.map?.cameraPosition?.target?.latitude?.let {
+            assertEquals(46.520544,
+                it, 0.005)
+        }
+        activity.map?.cameraPosition?.target?.longitude?.let {
+            assertEquals(6.567825,
+                it, 0.005)
+        }
+    }
+  }
+
+    @Test
+    fun displayPlacesCorrectlyLaunchesIntent() {
+        val activity = activityRule.scenario
+        activity.onActivity { activity ->
+            val mapFragment = activity.supportFragmentManager
+                .findFragmentById(R.id.map) as SupportMapFragment?
+            val signal = CountDownLatch(1)
+            mapFragment?.getMapAsync(object : OnMapReadyCallback {
+                override fun onMapReady(googleMap: GoogleMap) {
+                    activity.map = googleMap
+                    activity.displayPlaces()
+                    signal.countDown()
+                }
+            })
+            signal.await(10, TimeUnit.SECONDS)
+            val intent = activity.intent
+            assertEquals("com.github.studydistractor.sdp.MapsActivity", intent.component?.className)
+        }
+    }
+
+
+
+
 }
