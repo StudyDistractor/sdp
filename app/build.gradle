@@ -54,6 +54,8 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:31.2.2')
     implementation 'com.google.firebase:firebase-common-ktx:20.1.0'
     implementation 'com.google.firebase:firebase-database-ktx:20.0.4'
+    implementation platform('com.google.firebase:firebase-bom:31.2.3')
+    implementation 'com.google.firebase:firebase-auth-ktx'
 
     implementation 'com.firebaseui:firebase-ui-auth:7.2.0' // authentication using firebase
     // Required only if Facebook login support is required
