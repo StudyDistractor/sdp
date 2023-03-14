@@ -48,8 +48,8 @@ dependencies {
     implementation composeBom
     androidTestImplementation composeBom
 
-    // Material Design 2
-    implementation 'androidx.compose.material:material'
+    // Material Design 3
+    implementation 'androidx.compose.material3:material3:1.0.1'
 
     implementation "androidx.ui:ui-framework:0.1.0-dev03"
 
