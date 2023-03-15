@@ -24,7 +24,7 @@
             android:exported="false"
             android:label="@string/title_activity_maps" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Launcher"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
