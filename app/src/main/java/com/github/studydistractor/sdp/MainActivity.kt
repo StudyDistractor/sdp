@@ -14,7 +14,6 @@ import com.github.studydistractor.sdp.ui.theme.StudyDistractorTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        actionBar!!.hide()
         setContent{
             StudyDistractorTheme {
                 // A surface container using the 'background' color from the theme
