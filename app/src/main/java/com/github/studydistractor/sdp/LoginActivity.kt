@@ -9,12 +9,23 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.dp
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 
@@ -25,24 +36,53 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
         setContent{
-            Column {
+            Column (
+
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                 val email = remember { mutableStateOf(TextFieldValue("")) }
                 val password = remember{mutableStateOf(TextFieldValue("")) }
+                Text(
+                    text = "Log In",
+                    style = MaterialTheme.typography.h4,
+                    modifier = Modifier.padding(vertical = 32.dp)
+                )
 
-                TextField(
+                OutlinedTextField(
                     value = email.value,
+                    label = { Text(text = "Email" ) },
                     onValueChange = { email.value = it
                     },
-                    label = { Text(text = "E-mail" ) },
-                    //placeholder = { Text(text = "Your Placeholder/Hint") },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Email
+                    ),
+                    leadingIcon = {
+                        Icon(Icons.Filled.Email, contentDescription = null)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                        .testTag("email")
                 )
-                TextField(
+                OutlinedTextField(
+
                     value = password.value,
                     onValueChange = { password.value = it
                     },
                     label = { Text(text = "Password" ) },
-                    //placeholder = { Text(text = "Your Placeholder/Hint") },
+                    leadingIcon = {
+                        Icon(Icons.Filled.Lock, contentDescription = null)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                        .testTag("password"),
+                    visualTransformation = PasswordVisualTransformation()
                 )
+
 
                 var emailstr= email.value.text
                 var passwordstr = password.value.text
@@ -61,11 +101,16 @@ class LoginActivity : AppCompatActivity() {
                             } else {
                                 Toast.makeText(this@LoginActivity, "Login Failed", Toast.LENGTH_SHORT).show()
                                 Log.d(TAG, "signInWithEmail:failed")
+                                Log.d(TAG, "email: " + emailstr + ", password: " + passwordstr)
                             }
                         }
                     }
-
-                }) {
+                },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp)
+                        .testTag("Log In")
+                ) {
                     Text(text= "Log in")
                 }
             }
