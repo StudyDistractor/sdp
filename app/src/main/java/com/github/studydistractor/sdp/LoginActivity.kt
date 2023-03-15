@@ -46,8 +46,6 @@ class LoginActivity : AppCompatActivity() {
 
                 var emailstr= email.value.text
                 var passwordstr = password.value.text
-
-                Text("address : " + emailstr + "\npassword :" + passwordstr)
                 Button(onClick = {
                     if (TextUtils.isEmpty(emailstr) || TextUtils.isEmpty(passwordstr)) {
                         Toast.makeText(this@LoginActivity, "Please fill the blanks", Toast.LENGTH_SHORT).show()
