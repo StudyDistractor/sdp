@@ -21,7 +21,7 @@ class ProcrastinationActivityActivity : AppCompatActivity() {
         val procrastinationData = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra("activity", ProcrastinationActivity::class.java)
         } else {
-            intent.getParcelableExtra<ProcrastinationActivity>("data")
+            intent.getParcelableExtra<ProcrastinationActivity>("activity")
         }
 
         val procrastinationActivity = ProcrastinationActivityActivityViewModel().processActivity(procrastinationData)
