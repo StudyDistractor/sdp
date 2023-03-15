@@ -6,7 +6,9 @@ container:
 
 env:
   CC_TEST_REPORTER_ID: ENCRYPTED[!fe70419dfdb7debc17d3aef1ee8b996a4c9e08d42bf7d8e5a62657b37e434c4cc599ba752c1e1bac910625386c132581!]
+  CC_MAPS_API_KEY: ENCRYPTED[!c95bfbac40f5fe9f371207ecfc51501f94132a3c441df1c40175e7391c20a3be3ad398671f4df6f4014b99065ad257b1!]
   GOOGLE_KEY_API : ENCRYPTED[a07be5ba98879121ccec837d5d70c321c57a7e6aa82022d4be5047ff86737d538abb54ad43a63efec2a1a07359b01b60]
+
 
 check_android_task:
   name: Run Android tests
@@ -14,19 +16,20 @@ check_android_task:
     sdkmanager --install "system-images;android-30;google_apis;x86"
   create_avd_script:
     echo no | avdmanager create avd --force
-      --name emulator
-      --package "system-images;android-30;google_apis;x86"
+    --name emulator
+    --package "system-images;android-30;google_apis;x86"
   start_avd_background_script:
     $ANDROID_HOME/emulator/emulator
-      -avd emulator
-      -no-audio
-      -no-boot-anim
-      -gpu swiftshader_indirect
-      -no-snapshot
-      -no-window
-      -camera-back none
+    -avd emulator
+    -no-audio
+    -no-boot-anim
+    -gpu swiftshader_indirect
+    -no-snapshot
+    -no-window
+    -camera-back none
   assemble_instrumented_tests_script: |
     chmod +x gradlew
+    echo MAPS_API_KEY=$CC_MAPS_API_KEY >> local.properties
     ./gradlew assembleDebugAndroidTest
   wait_for_avd_script:
     adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 3; done; input keyevent 82'
@@ -63,3 +66,4 @@ check_android_task:
     androidtest_artifacts:
       path: "./app/build/outputs/**/*.xml"
       format: junit
+
