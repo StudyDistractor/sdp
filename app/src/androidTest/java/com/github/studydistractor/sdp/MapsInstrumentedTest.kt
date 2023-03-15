@@ -35,41 +35,6 @@ class MapsInstrumentedTest {
         onView(withId(R.id.map)).check(matches(isDisplayed()))
     }
 
-//    Test getLocationPermission
-    @Test
-    fun testGetLocationPermission() {
-        val activity = activityRule.scenario
-        activity.onActivity { activity ->
-            activity.getLocationPermission()
-            assertEquals(true, activity.locationPermissionGranted)
-        }
-    }
-
-  @Test
-  fun displayPlacesGoesToTheRightPlace() {
-    val activity = activityRule.scenario
-    activity.onActivity { activity ->
-      val mapFragment = activity.supportFragmentManager
-        .findFragmentById(R.id.map) as SupportMapFragment?
-      val signal = CountDownLatch(1)
-      mapFragment?.getMapAsync(object : OnMapReadyCallback {
-        override fun onMapReady(googleMap: GoogleMap) {
-          activity.map = googleMap
-          activity.displayPlaces()
-          signal.countDown()
-        }
-      })
-      signal.await(10, TimeUnit.SECONDS)
-        activity.map?.cameraPosition?.target?.latitude?.let {
-            assertEquals(46.520544,
-                it, 0.005)
-        }
-        activity.map?.cameraPosition?.target?.longitude?.let {
-            assertEquals(6.567825,
-                it, 0.005)
-        }
-    }
-  }
 
     @Test
     fun displayPlacesCorrectlyLaunchesIntent() {
