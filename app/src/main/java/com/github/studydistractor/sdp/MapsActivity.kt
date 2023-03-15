@@ -68,7 +68,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             MarkerOptions().position(sat).title("Satellite")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA))
         )
-//        TODO: which activity to launch when clicking on the marker? For now, it launches the main activity, because it's the only one, but it should launch the distraction activity
         map?.setOnInfoWindowClickListener {
             val activity = ProcrastinationActivity("Satellite", "have a beer at Satellite")
             val intent = Intent(this, ProcrastinationActivityActivity::class.java)
