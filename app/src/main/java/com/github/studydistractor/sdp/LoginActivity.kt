@@ -95,7 +95,7 @@ class LoginActivity : AppCompatActivity() {
                                 Toast.makeText(this@LoginActivity, "Login Succeed", Toast.LENGTH_SHORT).show()
                                 Log.d(TAG, "signInWithEmail:success")
                                 val user = auth.currentUser
-                                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                                val intent = Intent(this@LoginActivity, TestActivity::class.java)
                                 startActivity(intent)
                                 finish()
                             } else {
