@@ -20,11 +20,18 @@
             android:value="${MAPS_API_KEY}" />
 
         <activity
-            android:name=".TestActivity"
+            android:name=".RegisterActivity"
             android:exported="false" />
+
         <activity
             android:name=".LoginActivity"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ProcrastinationActivityActivity"
             android:exported="false" />
@@ -36,17 +43,7 @@
             android:label="@string/title_activity_maps" />
         <activity
             android:name=".Launcher"
-            android:exported="false"
-            android:label="Launcher" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false" />
     </application>
 
 </manifest>
