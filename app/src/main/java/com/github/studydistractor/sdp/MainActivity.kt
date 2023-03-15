@@ -15,15 +15,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent{
-            Column {
-                Button(onClick = { openProcrastinationActivity() }) {
-                    Text("Procrastination Activity")
-                }
-            }
+
         }
-    }
-    private fun openProcrastinationActivity() {
-        val intent = Intent(this, ProcrastinationActivityList::class.java)
-        startActivity(intent)
     }
 }
