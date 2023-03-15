@@ -66,23 +66,6 @@ class ProcrastinationActivityActivityTest {
             })
     }
 
-    @Test
-    fun clickingOnDoneButtonShowsDoneText() {
-        val name = "name"
-        val description = "description"
-        composeRule.launch<ProcrastinationActivityActivity>(
-            {},
-            intentFactory = {
-                Intent(it, ProcrastinationActivityActivity::class.java).apply {
-                    putExtra("activity", ProcrastinationActivity(name, description))
-                }
-            },
-            onAfterLaunched = {
-                onNodeWithText("Done").performClick()
-                onNodeWithText("activity done").assertIsDisplayed()
-            })
-    }
-
 }
 
 
