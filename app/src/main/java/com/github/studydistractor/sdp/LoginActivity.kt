@@ -95,7 +95,7 @@ class LoginActivity : AppCompatActivity() {
                                 Toast.makeText(this@LoginActivity, "Login Succeed", Toast.LENGTH_SHORT).show()
                                 Log.d(TAG, "signInWithEmail:success")
                                 val user = auth.currentUser
-                                val intent = Intent(this@LoginActivity, TestActivity::class.java)
+                                val intent = Intent(this@LoginActivity, Launcher::class.java)
                                 startActivity(intent)
                                 finish()
                             } else {
@@ -113,8 +113,16 @@ class LoginActivity : AppCompatActivity() {
                 ) {
                     Text(text= "Log in")
                 }
+                Button(onClick = { goToRegister()}) {
+                    Text(text = "Register")
+                }
             }
 
         }
+    }
+
+    private fun goToRegister() {
+        val intent = Intent(this, RegisterActivity::class.java)
+        startActivity(intent)
     }
 }
