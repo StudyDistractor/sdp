@@ -1,0 +1,17 @@
+{
+  "rules": {
+    ".read": "now < 1680213600000",  // 2023-3-31
+    ".write": "now < 1680213600000",  // 2023-3-31
+    "Users": {
+      ".read": true,
+      ".write": true,
+      ".validate": "newData.hasChildren(['birthday', 'firstname', 'lastname', 'score', 'phone'])",
+      "birthday": { ".validate": true },
+      "firstname": { ".validate": "newData.isString() && newData.val().length < 255" },
+      "lastname": { ".validate": "newData.isString() && newData.val().length < 255" },
+      "phone": { ".validate": "newData.isString() && newData.val().length == 10" },
+      "score": { ".validate": "newData.isNumber() && newData.val() < 9999 && newData.val() >= 0" },
+      "$other": { ".validate": false }
+    }
+  }
+}
