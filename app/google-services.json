@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "382825514922",
+    "firebase_url": "https://sdp-firebase-bootcamp-62a08-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "sdp-firebase-bootcamp-62a08",
+    "storage_bucket": "sdp-firebase-bootcamp-62a08.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382825514922:android:6ff1ff5762050f83cf4dd3",
+        "android_client_info": {
+          "package_name": "com.github.studydistractor.sdp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "382825514922-cvfhvvg059scsshh7mm647td7dsd5ves.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "${GOOGLE_API_KEY}"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "382825514922-cvfhvvg059scsshh7mm647td7dsd5ves.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
