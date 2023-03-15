@@ -38,7 +38,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_maps)
-        Places.initialize(applicationContext, BuildConfig.MAPS_API_KEY)
+
+        var apiKey = System.getenv("CC_MAPS_API_KEY") ?: BuildConfig.MAPS_API_KEY
+        Places.initialize(applicationContext, apiKey)
         placesClient = Places.createClient(this)
 
 
