@@ -35,6 +35,10 @@
             android:exported="false"
             android:label="@string/title_activity_maps" />
         <activity
+            android:name=".Launcher"
+            android:exported="false"
+            android:label="Launcher" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
