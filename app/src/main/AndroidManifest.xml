@@ -19,9 +19,6 @@
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".ProcrastinationActivityList"
-            android:exported="false" />
-        <activity
             android:name=".ProcrastinationActivityActivity"
             android:exported="false" />
         <activity
