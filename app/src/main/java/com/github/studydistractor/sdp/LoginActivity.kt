@@ -1,6 +1,7 @@
 package com.github.studydistractor.sdp
 
 import android.content.ContentValues.TAG
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
@@ -53,9 +54,12 @@ class LoginActivity : AppCompatActivity() {
                     } else {
                         auth.signInWithEmailAndPassword(emailstr, passwordstr).addOnCompleteListener { task ->
                             if (task.isSuccessful){
-                                Toast.makeText(this@LoginActivity, "Login Succeed Bitch", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@LoginActivity, "Login Succeed", Toast.LENGTH_SHORT).show()
                                 Log.d(TAG, "signInWithEmail:success")
                                 val user = auth.currentUser
+                                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                                startActivity(intent)
+                                finish()
                             } else {
                                 Toast.makeText(this@LoginActivity, "Login Failed", Toast.LENGTH_SHORT).show()
                                 Log.d(TAG, "signInWithEmail:failed")
