@@ -1,5 +1,6 @@
 package com.github.studydistractor.sdp
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -50,16 +51,18 @@ class ProcrastinationActivityActivity : AppCompatActivity() {
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                var doneText by remember{ mutableStateOf("") }
-                Button(onClick = {doneText = "activity done"}) {
+                Button(onClick = {launchMapsActivity()}) {
                     Text("Done")
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Text(text = doneText)
             }
         }
+    }
+    private fun launchMapsActivity() {
+        val intent = Intent(this, MapsActivity::class.java)
+        startActivity(intent)
     }
 
 }
