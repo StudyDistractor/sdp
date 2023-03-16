@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
@@ -119,6 +121,23 @@ class LoginActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    // create an action bar button
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        // R.menu.mymenu is a reference to an xml file named mymenu.xml which should be inside your res/menu directory.
+        // If you don't have res/menu, just create a directory named "menu" inside res
+        menuInflater.inflate(com.github.studydistractor.sdp.R.menu.menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    // handle button activities
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id: Int = item.getItemId()
+        if (id == com.github.studydistractor.sdp.R.id.futureWelcomeScreen) {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun goToRegister() {
