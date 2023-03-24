@@ -10,11 +10,11 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import javax.inject.Inject
 
-class FireBaseProcrastinationActivityService : ProcrastinationActivityService{
+class FireBaseProcrastinationActivityService @Inject constructor(): ProcrastinationActivityService{
     private val pathStringProcrastinationActivity = "ProcrastinationActivities"
     private val databaseRef : DatabaseReference = FirebaseDatabase.getInstance().getReference(pathStringProcrastinationActivity)
-
     override fun fetchProcrastinationActivities() : SnapshotStateList<ProcrastinationActivity> {
         val result =  mutableStateListOf<ProcrastinationActivity>()
         databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -33,5 +33,9 @@ class FireBaseProcrastinationActivityService : ProcrastinationActivityService{
             })
 
         return result
+    }
+
+    override fun postProcastinationActivities(activity: ProcrastinationActivity) {
+        databaseRef.child(activity.name!!).setValue(activity)
     }
 }
