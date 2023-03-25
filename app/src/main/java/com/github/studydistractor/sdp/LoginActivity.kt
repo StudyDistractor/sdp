@@ -28,12 +28,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
-    private lateinit var auth: FirebaseAuth
+    lateinit var auth: FirebaseAuth
 
+    @Inject
+    lateinit var loginAuth : LoginAuthInterface //Hilt injection
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
@@ -89,6 +93,7 @@ class LoginActivity : AppCompatActivity() {
                 var emailstr= email.value.text
                 var passwordstr = password.value.text
                 Button(onClick = {
+                    loginAuth.login(emailstr, passwordstr) //Uses Hilt
                     if (TextUtils.isEmpty(emailstr) || TextUtils.isEmpty(passwordstr)) {
                         Toast.makeText(this@LoginActivity, "Please fill the blanks", Toast.LENGTH_SHORT).show()
                     } else {
