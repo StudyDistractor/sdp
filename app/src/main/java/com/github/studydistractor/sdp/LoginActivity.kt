@@ -48,7 +48,7 @@ class LoginActivity : AppCompatActivity() {
                     ) {
                 //TODO: remove this after createNewActivity implementation
                 Button(onClick = {
-                    val intent = Intent(this@LoginActivity, CreateNewProcrastinationActivityActivity::class.java)
+                    val intent = Intent(this@LoginActivity, AddProcrastinationActivityActivity::class.java)
                     startActivity(intent)
                 }){
                     Text("launch create activity")

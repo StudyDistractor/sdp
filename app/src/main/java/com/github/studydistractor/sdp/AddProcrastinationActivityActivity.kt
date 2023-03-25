@@ -15,11 +15,12 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.activity.compose.setContent
+import androidx.compose.ui.platform.testTag
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateNewProcrastinationActivityActivity : AppCompatActivity() {
+class AddProcrastinationActivityActivity : AppCompatActivity() {
     @Inject
     lateinit var service: ProcrastinationActivityService
 
@@ -46,24 +47,29 @@ class CreateNewProcrastinationActivityActivity : AppCompatActivity() {
             OutlinedTextField(
                 value = name.value,
                 label = {Text("name")},
-                onValueChange = { name.value = it }
+                onValueChange = { name.value = it },
+                modifier = Modifier.testTag("name")
             )
 
             OutlinedTextField(
                 value = description.value,
                 label = {Text("description")},
-                onValueChange = { description.value = it }
+                onValueChange = { description.value = it },
+                modifier = Modifier.testTag("description")
             )
 
-            Button(onClick = {createNewActivity(name.value.text, description.value.text)}) {
+            Button(onClick = {createNewActivity(name.value.text, description.value.text)},
+                modifier = Modifier.testTag("addActivity")
+            ) {
                 Text("Create new activity")
             }
         }
     }
 
-    fun createNewActivity(name: String, description: String) {
+    private fun createNewActivity(name: String, description: String) {
         if (TextUtils.isEmpty(name) || TextUtils.isEmpty(description)) {
-            Toast.makeText(this@CreateNewProcrastinationActivityActivity, "Please fill the blanks", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@AddProcrastinationActivityActivity, "Please fill the blanks", Toast.LENGTH_SHORT).show()
+            return
         }
 
         val activity = ProcrastinationActivity(name, description)
