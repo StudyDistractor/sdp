@@ -49,6 +49,13 @@ class LoginActivity : AppCompatActivity() {
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                Button(onClick = {
+                    val intent = Intent(this@LoginActivity, RandomProcrastinationActivityActivity::class.java)
+                    startActivity(intent)
+                }) {
+                    Text("Suggest random activity")
+                }
+
                 val email = remember { mutableStateOf(TextFieldValue("")) }
                 val password = remember{mutableStateOf(TextFieldValue("")) }
                 Text(
