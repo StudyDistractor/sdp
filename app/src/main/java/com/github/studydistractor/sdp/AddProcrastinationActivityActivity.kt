@@ -19,8 +19,8 @@ import androidx.compose.ui.platform.testTag
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-@AndroidEntryPoint
-class AddProcrastinationActivityActivity : AppCompatActivity() {
+@AndroidEntryPoint(AppCompatActivity::class)
+class AddProcrastinationActivityActivity : Hilt_AddProcrastinationActivityActivity() {
     @Inject
     lateinit var service: ProcrastinationActivityService
 

@@ -4,7 +4,6 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -49,7 +48,7 @@ class AddProcrastinationActivityTest {
     }
 
     @Test
-    fun addImcompleteActivityDoesNotAddItToService1() {
+    fun addIncompleteActivityDoesNotAddItToService1() {
         val name = "test"
         composeRule.onNodeWithTag("name").performTextInput(name)
         composeRule.onNodeWithTag("name").assert(hasText(name))
@@ -59,11 +58,10 @@ class AddProcrastinationActivityTest {
 
         assertEquals(0, addedActivityList.size)
 
-
     }
 
     @Test
-    fun addImcompleteActivityDoesNotAddItToService2() {
+    fun addIncompleteActivityDoesNotAddItToService2() {
         val description = "test"
         composeRule.onNodeWithTag("description").performTextInput(description)
         composeRule.onNodeWithTag("description").assert(hasText(description))
