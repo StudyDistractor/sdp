@@ -3,10 +3,17 @@ package com.github.studydistractor.sdp.procrastinationActivity
 import android.os.Parcel
 import android.os.Parcelable
 
+/**
+ * Data class that represents a procrastination activity
+ * @param name name of the procrastination activity
+ * @param description description of the procrastination activity
+ * @constructor create the procrastination activity
+ */
 data class ProcrastinationActivity(
     val name: String? = null,
     val description: String? = null) :
     Parcelable {
+    // Parcelable is used to pass a procrastination activity from an activity to another one.
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString()

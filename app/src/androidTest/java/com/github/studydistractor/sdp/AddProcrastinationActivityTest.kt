@@ -4,6 +4,7 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -62,10 +63,11 @@ class AddProcrastinationActivityTest {
 
         assertEquals(0, addedActivityList.size)
 
+
     }
 
     @Test
-    fun addIncompleteActivityDoesNotAddItToService2() {
+    fun addImcompleteActivityDoesNotAddItToService2() {
         val description = "test"
         composeRule.onNodeWithTag("description").performTextInput(description)
         composeRule.onNodeWithTag("description").assert(hasText(description))
