@@ -15,6 +15,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 const val EXTRA_ACTIVITY = "activity"
+
+/**
+ * This activity displays a procrastination activity
+ */
 class ProcrastinationActivityActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +36,9 @@ class ProcrastinationActivityActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Layout for this activity
+     */
     @Composable
     fun ProcrastinationLayout(name: String, description: String) {
         Row {
@@ -60,6 +67,10 @@ class ProcrastinationActivityActivity : AppCompatActivity() {
             }
         }
     }
+
+    /**
+     * Launch the Map activity
+     */
     private fun launchMapsActivity() {
         val intent = Intent(this, MapsActivity::class.java)
         startActivity(intent)

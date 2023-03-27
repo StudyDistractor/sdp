@@ -2,8 +2,16 @@ package com.github.studydistractor.sdp
 
 import androidx.lifecycle.ViewModel
 
+/**
+ * This class help processing data for the procrastination activity
+ */
 class ProcrastinationActivityActivityViewModel : ViewModel(){
 
+    /**
+     * Check the activity and returns a non-null field activity
+     * @param activity an activity that may be null or with null content
+     * @return A procrastination activity
+     */
     fun processActivity(activity : ProcrastinationActivity?): ProcrastinationActivity {
 
         if(activity == null) {

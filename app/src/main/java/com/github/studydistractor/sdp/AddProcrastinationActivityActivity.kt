@@ -19,6 +19,9 @@ import androidx.compose.ui.platform.testTag
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+/**
+ * Activity to add new procrastination activities to the database.
+ */
 @AndroidEntryPoint(AppCompatActivity::class)
 class AddProcrastinationActivityActivity : Hilt_AddProcrastinationActivityActivity() {
     @Inject
@@ -31,6 +34,9 @@ class AddProcrastinationActivityActivity : Hilt_AddProcrastinationActivityActivi
         }
     }
 
+    /**
+     * Compose the layout for this activity
+     */
     @Preview
     @Composable
     fun CreateNewActivityLayout() {
@@ -66,6 +72,13 @@ class AddProcrastinationActivityActivity : Hilt_AddProcrastinationActivityActivi
         }
     }
 
+    /**
+     * Create a procrastination activity with parameters name and description, then post the activity
+     * to the database.
+     *
+     * @param name name of the procrastination activity
+     * @param description description of the procrastination activity
+     */
     private fun createNewActivity(name: String, description: String) {
         if (TextUtils.isEmpty(name) || TextUtils.isEmpty(description)) {
             Toast.makeText(this@AddProcrastinationActivityActivity, "Please fill the blanks", Toast.LENGTH_SHORT).show()

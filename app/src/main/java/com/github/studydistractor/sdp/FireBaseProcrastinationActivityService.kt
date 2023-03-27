@@ -12,9 +12,13 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import javax.inject.Inject
 
+/**
+ * A class that implements the procrastination service to talk with the Firebase realtime database
+ */
 class FireBaseProcrastinationActivityService @Inject constructor(): ProcrastinationActivityService{
     private val pathStringProcrastinationActivity = "ProcrastinationActivities"
     private val databaseRef : DatabaseReference = FirebaseDatabase.getInstance().getReference(pathStringProcrastinationActivity)
+
     override fun fetchProcrastinationActivities() : SnapshotStateList<ProcrastinationActivity> {
         val result =  mutableStateListOf<ProcrastinationActivity>()
         databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
