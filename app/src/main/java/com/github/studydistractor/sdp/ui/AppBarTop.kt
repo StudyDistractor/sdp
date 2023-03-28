@@ -5,6 +5,8 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 
@@ -17,14 +19,18 @@ fun AppBarTop() {
             Text(
                 "Study Distractor",
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.testTag("title")
             )
         },
         navigationIcon = {
-            IconButton(onClick = { println("navigation click") }) {
+            IconButton(
+                onClick = { println("navigation click") },
+                modifier = Modifier.testTag("navigation")
+            ) {
                 Icon(
                     imageVector = Icons.Filled.Menu,
-                    contentDescription = "Localized description"
+                    contentDescription = "Localized description",
                 )
             }
         },

@@ -14,10 +14,10 @@ import android.content.Intent
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
-import androidx.core.content.ContextCompat.startActivity
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
+import com.github.studydistractor.sdp.procrastinationActivity.ProcrastinationActivity
+import com.github.studydistractor.sdp.procrastinationActivity.ProcrastinationActivityActivity
 
 /**
  * Uses a [ComposeTestRule] created via [createEmptyComposeRule] that allows setup before the activity
@@ -56,9 +56,9 @@ class ProcrastinationActivityActivityTest {
         composeRule.launch<ProcrastinationActivityActivity>(
             {},
             intentFactory = {
-                Intent(it, ProcrastinationActivityActivity::class.java).apply {
-                    putExtra("activity", ProcrastinationActivity(name, description))
-                }
+                val intent = Intent(it, ProcrastinationActivityActivity::class.java)
+                intent.putExtra("activity", ProcrastinationActivity(name, description))
+                intent
             },
             onAfterLaunched = {
                 onNodeWithText(name).assertIsDisplayed()

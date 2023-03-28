@@ -1,5 +1,7 @@
 package com.github.studydistractor.sdp
 
+import com.github.studydistractor.sdp.procrastinationActivity.ProcrastinationActivity
+import com.github.studydistractor.sdp.procrastinationActivity.ProcrastinationActivityActivityViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Test
@@ -41,7 +43,4 @@ class ProcrastinationActivityActivityViewModelTest {
             ProcrastinationActivityActivityViewModel().processActivity(activity)
         }
     }
-
-
-
 }
