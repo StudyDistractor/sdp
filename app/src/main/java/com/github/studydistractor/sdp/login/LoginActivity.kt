@@ -10,10 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -31,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.github.studydistractor.sdp.Launcher
 import com.github.studydistractor.sdp.MainActivity
 import com.github.studydistractor.sdp.R
+import com.github.studydistractor.sdp.procrastinationActivity.AddProcrastinationActivityActivity
 import com.github.studydistractor.sdp.register.RegisterActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -51,6 +49,13 @@ class LoginActivity : Hilt_LoginActivity() {
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                //TODO: remove this after createNewActivity implementation
+                Button(onClick = {
+                    val intent = Intent(this@LoginActivity, AddProcrastinationActivityActivity::class.java)
+                    startActivity(intent)
+                }){
+                    Text("launch create activity")
+                }
                 val email = remember { mutableStateOf(TextFieldValue("")) }
                 val password = remember{mutableStateOf(TextFieldValue("")) }
                 Text(

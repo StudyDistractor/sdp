@@ -8,8 +8,12 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import javax.inject.Inject
 
-class FireBaseProcrastinationActivityService : ProcrastinationActivityService {
+/**
+ * A class that implements the procrastination service to talk with the Firebase realtime database
+ */
+class FireBaseProcrastinationActivityService @Inject constructor(): ProcrastinationActivityService {
     private val pathStringProcrastinationActivity = "ProcrastinationActivities"
     private val databaseRef : DatabaseReference = FirebaseDatabase.getInstance().getReference(pathStringProcrastinationActivity)
 
@@ -31,5 +35,9 @@ class FireBaseProcrastinationActivityService : ProcrastinationActivityService {
             })
 
         return result
+    }
+
+    override fun postProcastinationActivities(activity: ProcrastinationActivity) {
+        databaseRef.child(activity.name!!).setValue(activity)
     }
 }
