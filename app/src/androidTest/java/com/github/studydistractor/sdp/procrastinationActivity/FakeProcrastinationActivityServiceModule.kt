@@ -1,7 +1,6 @@
-package com.github.studydistractor.sdp
+package com.github.studydistractor.sdp.procrastinationActivity
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import com.github.studydistractor.sdp.procrastinationActivity.ProcrastinationActivityServiceModule
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
