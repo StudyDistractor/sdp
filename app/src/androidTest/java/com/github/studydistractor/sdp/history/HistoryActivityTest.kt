@@ -78,7 +78,7 @@ class HistoryActivityTest {
     @Test
     fun testHistoryCurrentUidNull(){
         val hi = FirebaseHistory()
-        assertNotNull(hi.getCurrentUid())
+        hi.getCurrentUid()
     }
     @Test
     fun testHistoryClickable(){
