@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.github.studydistractor.sdp.Launcher
 import com.github.studydistractor.sdp.MainActivity
 import com.github.studydistractor.sdp.R
+import com.github.studydistractor.sdp.procrastinationActivity.AddProcrastinationActivityActivity
 import com.github.studydistractor.sdp.register.RegisterActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

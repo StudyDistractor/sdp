@@ -1,4 +1,4 @@
-package com.github.studydistractor.sdp
+package com.github.studydistractor.sdp.procrastinationActivity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

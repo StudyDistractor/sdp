@@ -2,9 +2,10 @@ package com.github.studydistractor.sdp
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import com.github.studydistractor.sdp.procrastinationActivity.AddProcrastinationActivityActivity
+import com.github.studydistractor.sdp.procrastinationActivity.ProcrastinationActivityService
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -49,11 +50,7 @@ class AddProcrastinationActivityTest {
     }
 
     @Test
-<<<<<<< HEAD
-    fun addIncompleteActivityDoesNotAddItToService1() {
-=======
     fun addImcompleteActivityDoesNotAddItToService1() {
->>>>>>> 810423e... Everything is implented, just need to fix the JaCoCo bug for test coverage
         val name = "test"
         composeRule.onNodeWithTag("name").performTextInput(name)
         composeRule.onNodeWithTag("name").assert(hasText(name))

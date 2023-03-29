@@ -20,7 +20,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".AddProcrastinationActivityActivity"
+            android:name=".procrastinationActivity.AddProcrastinationActivityActivity"
             android:exported="false" />
 
         <meta-data
