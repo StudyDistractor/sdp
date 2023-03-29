@@ -18,15 +18,20 @@ import androidx.navigation.compose.rememberNavController
 
 
 @Composable
-@Preview("App Bar Bottom")
-fun AppBarBottom() {
-    val navController = rememberNavController()
-
+fun AppBarBottom(
+    onHomeClick: () -> Unit,
+    onMapClick: () -> Unit,
+    onListClick: () -> Unit,
+    onMagicClick: () -> Unit
+) {
     BottomAppBar(
+        modifier = Modifier
+            .testTag("app-bar-bottom"),
         actions = {
             IconButton(
-                onClick = { println("home") },
-                modifier = Modifier.testTag("home")
+                onClick = onHomeClick,
+                modifier = Modifier
+                    .testTag("app-bar-bottom__home-button")
             ) {
                 Icon(
                     Icons.Outlined.AccountCircle,
@@ -34,8 +39,8 @@ fun AppBarBottom() {
                 )
             }
             IconButton(
-                onClick = { println("map") },
-                modifier = Modifier.testTag("map")
+                onClick = onMapClick,
+                modifier = Modifier.testTag("app-bar-bottom__map-button")
             ) {
                 Icon(
                     ImageVector.vectorResource(id = com.github.studydistractor.sdp.R.drawable.pin_drop),
@@ -44,8 +49,8 @@ fun AppBarBottom() {
                 )
             }
             IconButton(
-                onClick = { println("list") },
-                modifier = Modifier.testTag("list")
+                onClick = onListClick,
+                modifier = Modifier.testTag("app-bar-bottom__list-button")
             ) {
                 Icon(
                     Icons.Outlined.List,
@@ -55,10 +60,10 @@ fun AppBarBottom() {
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { println("Get surprised") },
+                onClick = onMagicClick,
                 containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
                 elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
-                modifier = Modifier.testTag("surprise")
+                modifier = Modifier.testTag("app-bar-bottom__magic-button")
             ) {
                 Icon(ImageVector.vectorResource(id = com.github.studydistractor.sdp.R.drawable.magic_button),
                     contentDescription = "Surprise me",

@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
@@ -44,6 +44,7 @@ class RegisterActivity : Hilt_RegisterActivity() {
         }
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Preview
     @Composable
     fun RegisterScreen() {
@@ -59,7 +60,7 @@ class RegisterActivity : Hilt_RegisterActivity() {
         ) {
             Text(
                 text = "Create an Account",
-                style = MaterialTheme.typography.h4,
+                style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(vertical = 32.dp)
             )
 

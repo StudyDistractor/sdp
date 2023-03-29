@@ -10,6 +10,10 @@ import javax.inject.Inject
  */
 class FirebaseLoginAuth @Inject constructor() : LoginAuthInterface {
     lateinit var auth : FirebaseAuth
+
+    constructor(auth: FirebaseAuth) : this() {
+        this.auth = auth
+    }
     override fun loginWithEmail(email: String, password: String): Task<AuthResult> {
         return auth.signInWithEmailAndPassword(email, password)
     }

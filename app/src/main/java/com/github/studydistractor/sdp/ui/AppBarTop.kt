@@ -1,20 +1,29 @@
 package com.github.studydistractor.sdp.ui
 
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import com.github.studydistractor.sdp.StudyDistractorScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview("App Bar Top")
-fun AppBarTop() {
+fun AppBarTop(
+    currentScreen: StudyDistractorScreen,
+    canNavigateBack: Boolean,
+    navigateUp: () -> Unit,
+    goToMapActivity: () -> Unit,
+    goToDistractionActivity: () -> Unit,
+    goToCreateDistractionActivity: () -> Unit
+) {
     CenterAlignedTopAppBar(
+        modifier = Modifier
+            .testTag("app-bar-top"),
         title = {
             Text(
                 "Study Distractor",
@@ -24,23 +33,49 @@ fun AppBarTop() {
             )
         },
         navigationIcon = {
-            IconButton(
-                onClick = { println("navigation click") },
-                modifier = Modifier.testTag("navigation")
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Menu,
-                    contentDescription = "Localized description",
-                )
+            Row {
+                if(canNavigateBack) {
+                    IconButton(
+                        onClick = { if (canNavigateBack) navigateUp() },
+                        modifier = Modifier.testTag("backButton")
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back arrow"
+                        )
+                    }
+                }
+
+                IconButton(
+                    onClick = goToCreateDistractionActivity,
+                    modifier = Modifier.testTag("top-bar__create-distraction-button")
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = "Create distraction"
+                    )
+                }
             }
         },
-//        actions = {
-//            IconButton(onClick = { println("fav click") }) {
-//                Icon(
-//                    imageVector = Icons.Filled.Favorite,
-//                    contentDescription = "Localized description"
-//                )
-//            }
-//        }
+        actions = {
+            IconButton(
+                onClick = goToDistractionActivity,
+                modifier = Modifier.testTag("top-bar__distraction-button")
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.HourglassFull,
+                    contentDescription = "Distraction"
+                )
+            }
+            IconButton(
+                onClick = goToMapActivity,
+                modifier = Modifier.testTag("top-bar__map-button")
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Map,
+                    contentDescription = "Map"
+                )
+            }
+        }
     )
 }

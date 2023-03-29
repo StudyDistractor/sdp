@@ -31,9 +31,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     var locationPermissionGranted = false
     var map: GoogleMap? = null
     private var lastKnownLocation: Location? = null
-    private val defaultLocation = LatLng(46.520544, 6.567825)
+    private val defaultLocation = LatLng(46.520544, 6.567825) // Done
 
-    object Constants {
+    object Constants { // DONE
         const val TAG = "MapsActivity"
         const val LOCATION_PERMISSION_REQUEST_CODE = 1
         const val DEFAULT_ZOOM = 17f
@@ -152,7 +152,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      * Gets the current location of the device, and positions the map's camera.
      */
     @SuppressLint("MissingPermission")
-    private fun getDeviceLocation() {
+    private fun getDeviceLocation() { // DOING
         /*
          * Get the best and most recent location of the device, which may be null in rare
          * cases when a location is not available.
