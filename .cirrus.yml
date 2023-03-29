@@ -9,6 +9,22 @@ env:
   CC_MAPS_API_KEY: ENCRYPTED[!c95bfbac40f5fe9f371207ecfc51501f94132a3c441df1c40175e7391c20a3be3ad398671f4df6f4014b99065ad257b1!]
   GOOGLE_KEY_API : ENCRYPTED[a07be5ba98879121ccec837d5d70c321c57a7e6aa82022d4be5047ff86737d538abb54ad43a63efec2a1a07359b01b60]
 
+check_gitlint_task:
+  name: Gitlint
+  container:
+    image: python:latest
+  clone_script: |
+    if [ -z "$CIRRUS_PR" ]; then
+      git clone --recursive --branch=$CIRRUS_BRANCH https://x-access-token:${CIRRUS_REPO_CLONE_TOKEN}@github.com/${CIRRUS_REPO_FULL_NAME}.git $CIRRUS_WORKING_DIR
+      git reset --hard $CIRRUS_CHANGE_IN_REPO
+    else
+      git clone --recursive https://x-access-token:${CIRRUS_REPO_CLONE_TOKEN}@github.com/${CIRRUS_REPO_FULL_NAME}.git $CIRRUS_WORKING_DIR
+      git fetch origin pull/$CIRRUS_PR/head:pull/$CIRRUS_PR
+      git reset --hard $CIRRUS_CHANGE_IN_REPO
+    fi
+  run_gitlint_script: |
+    python3 -m pip install gitlint
+    gitlint --commits "remotes/origin/main..HEAD"
 
 check_android_task:
   name: Run Android tests
