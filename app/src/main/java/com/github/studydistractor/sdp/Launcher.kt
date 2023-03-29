@@ -1,6 +1,5 @@
 package com.github.studydistractor.sdp
 
-import android.R
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -15,9 +14,13 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import com.github.studydistractor.sdp.maps.MapsActivity
+import dagger.hilt.android.AndroidEntryPoint
 
 
-class Launcher : AppCompatActivity() {
+@AndroidEntryPoint(AppCompatActivity::class)
+class Launcher : Hilt_Launcher() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent{
@@ -29,7 +32,9 @@ class Launcher : AppCompatActivity() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text("Hello human !")
-                Button(onClick = { launchMapsActivity() }) {
+                Button(onClick = { launchMapsActivity() },
+                    modifier = Modifier.testTag("distract")
+                ) {
                     Text("Distract me!")
                 }
             }

@@ -1,4 +1,4 @@
-package com.github.studydistractor.sdp
+package com.github.studydistractor.sdp.procrastinationActivity
 
 import android.content.Intent
 import android.os.Build
@@ -11,8 +11,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.github.studydistractor.sdp.maps.MapsActivity
 
 const val EXTRA_ACTIVITY = "activity"
 class ProcrastinationActivityActivity : AppCompatActivity() {
@@ -51,7 +53,10 @@ class ProcrastinationActivityActivity : AppCompatActivity() {
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Button(onClick = {launchMapsActivity()}) {
+                Button(
+                    onClick = {launchMapsActivity()},
+                    modifier = Modifier.testTag("done")
+                ) {
                     Text("Done")
                 }
 

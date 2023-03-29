@@ -1,4 +1,4 @@
-package com.github.studydistractor.sdp
+package com.github.studydistractor.sdp.procrastinationActivity
 
 import android.os.Parcel
 import android.os.Parcelable

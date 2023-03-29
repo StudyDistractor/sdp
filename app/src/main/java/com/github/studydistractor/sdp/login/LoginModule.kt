@@ -1,7 +1,5 @@
-package com.github.studydistractor.sdp
+package com.github.studydistractor.sdp.login
 
-import com.google.firebase.auth.FirebaseAuth
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

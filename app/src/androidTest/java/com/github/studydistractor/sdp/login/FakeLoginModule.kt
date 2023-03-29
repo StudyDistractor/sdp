@@ -1,7 +1,9 @@
-package com.github.studydistractor.sdp
+package com.github.studydistractor.sdp.login
 
 import android.util.Log
-import dagger.Binds
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.TaskCompletionSource
+import com.google.firebase.auth.AuthResult
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.android.components.ActivityComponent
@@ -22,7 +24,13 @@ object FakeLoginModule {
 }
 
 class FakeLoginAuth @Inject constructor() : LoginAuthInterface {
-    override fun login(email: String, password: String) {
-        Log.d("FakeLoginAuth","Using fake login auth !")
+    override fun loginWithEmail(email: String, password: String): Task<AuthResult> {
+        var t = TaskCompletionSource<AuthResult>()
+        if(email == "email" && password == "password"){
+            t.setException(IllegalArgumentException())
+            return t.task
+        }
+        t.setResult(null)
+        return t.task
     }
 }
