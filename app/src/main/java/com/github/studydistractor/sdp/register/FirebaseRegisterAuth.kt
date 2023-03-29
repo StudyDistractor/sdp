@@ -6,7 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
 class FirebaseRegisterAuth : RegisterAuthInterface {
-    lateinit var auth : FirebaseAuth
+    private var auth : FirebaseAuth = FirebaseAuth.getInstance()
     override fun createUserWithEmailAndPassword(email: String, password: String): Task<AuthResult> {
         return auth.createUserWithEmailAndPassword(email, password)
     }

@@ -1,5 +1,6 @@
 package com.github.studydistractor.sdp.register
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.setContent
@@ -17,12 +18,11 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
+import com.github.studydistractor.sdp.account.CreateAccountActivity
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Exception
 import javax.inject.Inject
@@ -32,9 +32,6 @@ class RegisterActivity : Hilt_RegisterActivity() {
 
     @Inject
     lateinit var auth : RegisterAuthInterface
-
-//    @Inject
-//    lateinit var db: FirebaseDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -137,19 +134,19 @@ class RegisterActivity : Hilt_RegisterActivity() {
         }
 
     }
-    fun newUser(email: String, password: String, pseudo: String): Task<AuthResult> {
+    private fun newUser(email: String, password: String, pseudo: String): Task<AuthResult> {
         if (email.isEmpty()) {
-            val t = TaskCompletionSource<AuthResult>();
+            val t = TaskCompletionSource<AuthResult>()
             t.setException(Exception("Email Not valid"))
             return t.task
         }
         if (password.isEmpty()) {
-            val t = TaskCompletionSource<AuthResult>();
+            val t = TaskCompletionSource<AuthResult>()
             t.setException(Exception("Password not valid"))
             return t.task
         }
         if (pseudo.isEmpty()) {
-            val t = TaskCompletionSource<AuthResult>();
+            val t = TaskCompletionSource<AuthResult>()
             t.setException(Exception("Pseudo not valid"))
             return t.task
         }
@@ -159,19 +156,14 @@ class RegisterActivity : Hilt_RegisterActivity() {
                     // Registration successful, navigate to next activity
                     val userid = auth.getCurrentUserUid()
                     if (userid != null) {
-                        addUserToTheDatabase(email, password, pseudo, userid)
+                        createAccount()
                     }
                 }
             }
     }
-    fun addUserToTheDatabase(email : String, password : String, pseudo : String, userid : String) {
-//        db.getReference("users").child(userid).setValue(hashMapOf(
-//            "score" to 0,
-//            "birthday" to hashMapOf("day" to 0, "mouth" to 0, "year" to 0),
-//            "firstname" to "test",
-//            "lastname" to "test",
-//            "phone" to "0000000000"
-//        ))
-
+    private fun createAccount() {
+        val intent = Intent(this, CreateAccountActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }
