@@ -32,7 +32,6 @@ class LoginActivityTest {
         composeRule.onNodeWithTag("email").performTextInput(email)
         composeRule.onNodeWithTag("password").performTextInput(password)
         composeRule.onNodeWithTag("login").performClick()
-        //Take a look at Logcat to see the fake Log.d
     }
 
     @Test
@@ -42,7 +41,6 @@ class LoginActivityTest {
         composeRule.onNodeWithTag("email").performTextInput(email)
         composeRule.onNodeWithTag("password").performTextInput(password)
         composeRule.onNodeWithTag("login").performClick()
-        //Take a look at Logcat to see the fake Log.d
     }
 
     @Test
@@ -51,7 +49,6 @@ class LoginActivityTest {
         var password = "1234567890"
         composeRule.onNodeWithTag("password").performTextInput(password)
         composeRule.onNodeWithTag("login").performClick()
-        //Take a look at Logcat to see the fake Log.d
     }
 
     @Test
@@ -60,7 +57,6 @@ class LoginActivityTest {
         var password = "1234567890"
         composeRule.onNodeWithTag("email").performTextInput(email)
         composeRule.onNodeWithTag("login").performClick()
-        //Take a look at Logcat to see the fake Log.d
     }
     @Test
     fun testRegisterButton(){
