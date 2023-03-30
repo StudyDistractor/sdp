@@ -58,7 +58,7 @@ class ProcrastinationActivityActivityTest {
                 val intent2 = Intent(
                     it, ProcrastinationActivityActivity::class.java
                 )
-                intent2.putExtra("activity", ProcrastinationActivity("salut", "bonjour"))
+                intent2.putExtra("activity", ProcrastinationActivity("salut", 0.0, 0.0, "salut"))
                 intent2
             },
             onAfterLaunched = {
