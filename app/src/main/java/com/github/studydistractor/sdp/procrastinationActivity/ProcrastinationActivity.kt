@@ -5,15 +5,21 @@ import android.os.Parcelable
 
 data class ProcrastinationActivity(
     val name: String? = null,
+    val lat: Double? = null,
+    val long: Double? = null,
     val description: String? = null) :
     Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
+        parcel.readDouble(),
+        parcel.readDouble(),
         parcel.readString()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
+        parcel.writeDouble(lat!!)
+        parcel.writeDouble(long!!)
         parcel.writeString(description)
     }
 

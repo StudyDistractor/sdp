@@ -13,7 +13,7 @@ class FireBaseProcrastinationActivityService : ProcrastinationActivityService {
     private val pathStringProcrastinationActivity = "ProcrastinationActivities"
     private val databaseRef : DatabaseReference = FirebaseDatabase.getInstance().getReference(pathStringProcrastinationActivity)
 
-    override fun fetchProcrastinationActivities() : SnapshotStateList<ProcrastinationActivity> {
+    override fun fetchProcrastinationActivities(callback: (List<ProcrastinationActivity>) -> Unit) {
         val result =  mutableStateListOf<ProcrastinationActivity>()
         databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -23,13 +23,14 @@ class FireBaseProcrastinationActivityService : ProcrastinationActivityService {
                             result.add(activityItem)
                         }
                     }
+                    callback(result)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
                     Log.d("Firebase", "loadPost:onCancelled " + error.toException().toString())
+                    callback(emptyList())
                 }
             })
 
-        return result
     }
 }
