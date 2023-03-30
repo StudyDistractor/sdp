@@ -1,7 +1,9 @@
 package com.github.studydistractor.sdp.history
 
-import java.util.*
-
+/**
+ * This data class is the base class for history entry, each entry correspond to one
+ * ProcrastinationActivity did by the user.
+ */
 data class HistoryEntry (
     /**
      * The name of the procrastination activity in the history

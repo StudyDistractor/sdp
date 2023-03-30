@@ -6,6 +6,10 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
+/**
+ * This class is the implementation of the interface for historyActivity using Firebase
+ *
+ */
 class FirebaseHistory : HistoryInterface {
     private var db : FirebaseDatabase = FirebaseDatabase.getInstance()
     private var auth : FirebaseAuth = FirebaseAuth.getInstance()
@@ -19,7 +23,7 @@ class FirebaseHistory : HistoryInterface {
                 for(entry in snapshot.children) {
                     val historyEntry = entry.getValue(HistoryEntry::class.java)
                     if(historyEntry != null) {
-                        historyEntry!!.date = entry.key!!.toLong()
+                        historyEntry.date = entry.key!!.toLong()
                         result.add(historyEntry)
                     }
                 }

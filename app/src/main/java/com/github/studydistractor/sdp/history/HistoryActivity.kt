@@ -10,7 +10,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material3.Surface
@@ -23,6 +22,10 @@ import java.util.Date
 import javax.inject.Inject
 
 
+/**
+ * The HistoryActivity showing the historic of the current logged user fetching data online using
+ * Firebase.
+ */
 @AndroidEntryPoint(AppCompatActivity::class)
 class HistoryActivity : Hilt_HistoryActivity() {
 
@@ -34,7 +37,7 @@ class HistoryActivity : Hilt_HistoryActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var historyEntries = hi.getHistory(hi.getCurrentUid()!!)
+        val historyEntries = hi.getHistory(hi.getCurrentUid()!!)
         setContent{
                 HistoryScreen(historyEntries)
         }
