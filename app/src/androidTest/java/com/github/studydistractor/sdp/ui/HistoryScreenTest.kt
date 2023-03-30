@@ -1,29 +1,35 @@
-package com.github.studydistractor.sdp.history
+package com.github.studydistractor.sdp.ui
 
-import android.util.Log
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import com.github.studydistractor.sdp.history.FakeHistoryModule
+import com.github.studydistractor.sdp.history.FirebaseHistory
+import com.github.studydistractor.sdp.history.HistoryEntry
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 @HiltAndroidTest
-class HistoryActivityTest {
+class HistoryScreenTest {
 
     @get:Rule(order = 0)
     var rule = HiltAndroidRule(this)
 
     @get:Rule(order = 1)
-    val composeTestRule = createAndroidComposeRule<HistoryActivity>()
+    val composeTestRule = createComposeRule()
 
     @Before
     fun setup() {
         rule.inject()
+        
+        composeTestRule.setContent { 
+            HistoryScreen(hi = FakeHistoryModule().provideHistoryInterface())
+        }
     }
     @Test
     fun testHistory(){

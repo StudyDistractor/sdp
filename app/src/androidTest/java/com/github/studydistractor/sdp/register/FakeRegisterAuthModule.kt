@@ -1,13 +1,9 @@
 package com.github.studydistractor.sdp.register
 
-import android.util.Log
-import com.github.studydistractor.sdp.login.LoginAuthInterface
-import com.github.studydistractor.sdp.login.LoginModule
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.FirebaseDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.android.components.ActivityComponent

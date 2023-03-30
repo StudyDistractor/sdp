@@ -7,6 +7,7 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.Assert.assertEquals
 
 @HiltAndroidTest
 class RegisterScreenTest {
@@ -40,10 +41,10 @@ class RegisterScreenTest {
     fun testRegisteredButtonWorks() {
         composeRule.onNodeWithTag("register-screen__registered-button").assertIsDisplayed()
         composeRule.onNodeWithTag("register-screen__registered-button").assertHasClickAction()
-        assert(clicks == 0)
+        assertEquals(0, clicks)
         composeRule.onNodeWithTag("register-screen__registered-button").performClick()
-        assert(clicks == 1)
+        assertEquals(1, clicks)
         composeRule.onNodeWithTag("register-screen__registered-button").performClick()
-        assert(clicks == 2)
+        assertEquals(2, clicks)
     }
 }

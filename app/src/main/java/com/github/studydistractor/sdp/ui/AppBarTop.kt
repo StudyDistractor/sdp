@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import com.github.studydistractor.sdp.StudyDistractorScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -18,7 +17,7 @@ fun AppBarTop(
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     goToMapActivity: () -> Unit,
-    goToDistractionActivity: () -> Unit,
+    goToHistoryActivity: () -> Unit,
     goToCreateDistractionActivity: () -> Unit
 ) {
     CenterAlignedTopAppBar(
@@ -59,12 +58,12 @@ fun AppBarTop(
         },
         actions = {
             IconButton(
-                onClick = goToDistractionActivity,
-                modifier = Modifier.testTag("app-bar-top__distraction-button")
+                onClick = goToHistoryActivity,
+                modifier = Modifier.testTag("app-bar-top__history-button")
             ) {
                 Icon(
                     imageVector = Icons.Filled.HourglassFull,
-                    contentDescription = "Distraction"
+                    contentDescription = "History"
                 )
             }
             IconButton(

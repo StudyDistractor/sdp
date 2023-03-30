@@ -10,20 +10,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.github.studydistractor.sdp.history.FirebaseHistory
 import com.github.studydistractor.sdp.login.FirebaseLoginAuth
 import com.github.studydistractor.sdp.maps.MapsActivity
 import com.github.studydistractor.sdp.procrastinationActivity.AddProcrastinationActivityActivity
-import com.github.studydistractor.sdp.procrastinationActivity.ProcrastinationActivity
-import com.github.studydistractor.sdp.procrastinationActivity.ProcrastinationActivityActivity
 import com.github.studydistractor.sdp.register.RegisterActivity
 import com.github.studydistractor.sdp.ui.*
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -37,7 +34,8 @@ enum class StudyDistractorScreen(@StringRes val title: Int) {
     Register(title = R.string.screen_name_register),
     Maps(title = R.string.screen_name_maps),
     Distraction(title = R.string.screen_name_distraction),
-    CreateDistraction(title = R.string.screen_name_create_distraction)
+    CreateDistraction(title = R.string.screen_name_create_distraction),
+    History(title = R.string.screen_name_history)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,13 +62,8 @@ fun StudyDistractorApp(
             goToCreateDistractionActivity = {
                 context.startActivity(Intent(context, AddProcrastinationActivityActivity::class.java))
             },
-            goToDistractionActivity = {
-                val intent = Intent(context, ProcrastinationActivityActivity::class.java)
-                intent.putExtra("activity", ProcrastinationActivity(
-                    "Dummy Activity",
-                    "Lorem ipsum dolor sit amet"
-                ))
-                context.startActivity(intent)
+            goToHistoryActivity = {
+                navController.navigate(StudyDistractorScreen.History.name)
             },
             goToMapActivity = {
                 context.startActivity(Intent(context, MapsActivity::class.java))
@@ -120,6 +113,9 @@ fun StudyDistractorApp(
             }
             composable(route = StudyDistractorScreen.CreateDistraction.name)  {
                 CreateDistractionScreen()
+            }
+            composable(route = StudyDistractorScreen.History.name) {
+                HistoryScreen(hi = FirebaseHistory())
             }
         }
     }

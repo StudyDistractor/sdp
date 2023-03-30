@@ -6,15 +6,13 @@ import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.firebase.auth.AuthResult
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.testing.TestInstallIn
 import javax.inject.Inject
 
 @Module
-@TestInstallIn(
-    components = [ActivityComponent::class],
-    replaces = [LoginModule::class]
-)
+@InstallIn(ActivityComponent::class)
 object FakeLoginModule {
 
     @Provides

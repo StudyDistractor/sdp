@@ -7,7 +7,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import com.github.studydistractor.sdp.StudyDistractorScreen
-import com.github.studydistractor.sdp.login.FakeLoginAuth
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
@@ -37,7 +36,7 @@ class AppBarTopTest {
                 canNavigateBack = false,
                 navigateUp = { throw Error("this should never be called") },
                 goToMapActivity = { /* this must not be tested as it is temporary */ },
-                goToDistractionActivity = { /* this must not be tested as it is temporary */ },
+                goToHistoryActivity = { /* this must not be tested as it is temporary */ },
                 goToCreateDistractionActivity = { /* this must not be tested as it is temporary */ })
         }
 
@@ -52,7 +51,7 @@ class AppBarTopTest {
                 canNavigateBack = false,
                 navigateUp = { throw Error("this should never be called") },
                 goToMapActivity = { /* this must not be tested as it is temporary */ },
-                goToDistractionActivity = { /* this must not be tested as it is temporary */ },
+                goToHistoryActivity = { /* this must not be tested as it is temporary */ },
                 goToCreateDistractionActivity = { /* this must not be tested as it is temporary */ })
         }
 
@@ -69,7 +68,7 @@ class AppBarTopTest {
                 canNavigateBack = true,
                 navigateUp = { backClicks++ },
                 goToMapActivity = { /* this must not be tested as it is temporary */ },
-                goToDistractionActivity = { /* this must not be tested as it is temporary */ },
+                goToHistoryActivity = { /* this must not be tested as it is temporary */ },
                 goToCreateDistractionActivity = { /* this must not be tested as it is temporary */ })
         }
 

@@ -8,4 +8,5 @@
     <string name="screen_name_maps">Maps</string>
     <string name="screen_name_distraction">Distraction</string>
     <string name="screen_name_create_distraction">CreateDistraction</string>
+    <string name="screen_name_history">History</string>
 </resources>

@@ -37,9 +37,6 @@
             android:name=".procrastinationActivity.ProcrastinationActivityActivity"
             android:exported="false" />
         <activity
-            android:name=".history.HistoryActivity"
-            android:exported="false"/>
-        <activity
             android:name=".MainActivity"
             android:exported="true">
 
