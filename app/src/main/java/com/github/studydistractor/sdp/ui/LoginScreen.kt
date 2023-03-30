@@ -1,7 +1,6 @@
 package com.github.studydistractor.sdp.ui
 
 import android.content.ContentValues
-import android.content.Intent
 import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
@@ -21,11 +20,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.github.studydistractor.sdp.Launcher
 import com.github.studydistractor.sdp.login.LoginAuthInterface
-import com.github.studydistractor.sdp.procrastinationActivity.AddProcrastinationActivityActivity
 
 /**
  * Author: Bluedrack and AdrienBouquet

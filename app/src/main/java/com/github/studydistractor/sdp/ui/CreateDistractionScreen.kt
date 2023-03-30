@@ -15,6 +15,6 @@ fun CreateDistractionScreen() {
             .padding(16.dp)
             .testTag("create-distraction-screen__main-container")
     ) {
-        Text(text = "Distraction screen")
+        Text(text = "Create distraction screen")
     }
 }

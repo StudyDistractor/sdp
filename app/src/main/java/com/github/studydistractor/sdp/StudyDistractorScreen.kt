@@ -80,7 +80,7 @@ fun StudyDistractorApp(
             onHomeClick = { navController.navigate(StudyDistractorScreen.Login.name) },
             onListClick = { navController.navigate(StudyDistractorScreen.Distraction.name) },
             onMapClick = { navController.navigate(StudyDistractorScreen.Maps.name) },
-            onMagicClick = { navController.navigate(StudyDistractorScreen.Distraction.name) }
+            onMagicClick = { navController.navigate(StudyDistractorScreen.CreateDistraction.name) }
         ) }
     ) {
         NavHost(

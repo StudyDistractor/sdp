@@ -29,7 +29,7 @@ fun AppBarTop(
                 "Study Distractor",
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.testTag("title")
+                modifier = Modifier.testTag("app-bar-top__title")
             )
         },
         navigationIcon = {
@@ -37,7 +37,7 @@ fun AppBarTop(
                 if(canNavigateBack) {
                     IconButton(
                         onClick = { if (canNavigateBack) navigateUp() },
-                        modifier = Modifier.testTag("backButton")
+                        modifier = Modifier.testTag("app-bar-top__back-button")
                     ) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
@@ -48,7 +48,7 @@ fun AppBarTop(
 
                 IconButton(
                     onClick = goToCreateDistractionActivity,
-                    modifier = Modifier.testTag("top-bar__create-distraction-button")
+                    modifier = Modifier.testTag("app-bar-top__create-distraction-button")
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Add,
@@ -60,7 +60,7 @@ fun AppBarTop(
         actions = {
             IconButton(
                 onClick = goToDistractionActivity,
-                modifier = Modifier.testTag("top-bar__distraction-button")
+                modifier = Modifier.testTag("app-bar-top__distraction-button")
             ) {
                 Icon(
                     imageVector = Icons.Filled.HourglassFull,
@@ -69,7 +69,7 @@ fun AppBarTop(
             }
             IconButton(
                 onClick = goToMapActivity,
-                modifier = Modifier.testTag("top-bar__map-button")
+                modifier = Modifier.testTag("app-bar-top__map-button")
             ) {
                 Icon(
                     imageVector = Icons.Filled.Map,

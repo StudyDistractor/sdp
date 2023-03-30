@@ -20,7 +20,10 @@ fun RegisterScreen(
             .testTag("register-screen__main-container")
     ) {
         Text(text = "Register screen")
-        TextButton(onClick = onRegistered) {
+        TextButton(
+            onClick = onRegistered,
+            modifier = Modifier.testTag("register-screen__registered-button")
+        ) {
             Text(text = "Registered")
         }
     }
