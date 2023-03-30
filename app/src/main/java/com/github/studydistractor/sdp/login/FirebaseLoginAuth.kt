@@ -9,7 +9,7 @@ import javax.inject.Inject
     This is a dummy implementation of the interface to show how Hilt works.
  */
 class FirebaseLoginAuth @Inject constructor() : LoginAuthInterface {
-    lateinit var auth : FirebaseAuth
+    var auth : FirebaseAuth = FirebaseAuth.getInstance()
     override fun loginWithEmail(email: String, password: String): Task<AuthResult> {
         return auth.signInWithEmailAndPassword(email, password)
     }
