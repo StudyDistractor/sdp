@@ -2,11 +2,8 @@ package com.github.studydistractor.sdp.procrastinationActivity
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
 
-/**
- * This interface is the abstraction to talk to the database for procrastination activities related
- * request.
- */
 interface ProcrastinationActivityService {
+    fun fetchProcrastinationActivities(callback: (List<ProcrastinationActivity>) -> Unit)
 
     /**
      * Fetch all the procrastination activities available in the database
