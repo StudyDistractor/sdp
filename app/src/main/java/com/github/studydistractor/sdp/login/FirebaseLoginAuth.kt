@@ -14,6 +14,7 @@ class FirebaseLoginAuth @Inject constructor() : LoginAuthInterface {
     constructor(auth: FirebaseAuth) : this() {
         this.auth = auth
     }
+
     override fun loginWithEmail(email: String, password: String): Task<AuthResult> {
         return auth.signInWithEmailAndPassword(email, password)
     }
