@@ -7,6 +7,8 @@ import com.github.studydistractor.sdp.history.HistoryInterface
 import com.github.studydistractor.sdp.ui.components.MessageCard
 
 /**
+ *  Screen showing the history of the current logged user fetching data online using the HistoryInterface.
+ *
  * Author: Bluedrack
  */
 @Composable

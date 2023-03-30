@@ -119,13 +119,4 @@ fun StudyDistractorApp(
             }
         }
     }
-
-    val authenticated: Boolean = true;
-    val firstname: String = "Aizen"
-
-//    if(!authenticated) {
-//        return LoginScreen()
-//    }
-
-
 }
