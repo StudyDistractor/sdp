@@ -53,11 +53,14 @@ class ProcrastinationActivityActivityTest {
     fun displaySimpleActivityTest() {
         val name = "name"
         val description = "description"
+        val lat = 0.0
+        val long = 0.0
+
         composeRule.launch<ProcrastinationActivityActivity>(
             {},
             intentFactory = {
                 val intent = Intent(it, ProcrastinationActivityActivity::class.java)
-                intent.putExtra("activity", ProcrastinationActivity(name, description))
+                intent.putExtra("activity", ProcrastinationActivity(name, lat, long, description))
                 intent
             },
             onAfterLaunched = {

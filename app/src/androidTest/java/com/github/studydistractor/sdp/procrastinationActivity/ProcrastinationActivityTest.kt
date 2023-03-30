@@ -3,12 +3,12 @@ package com.github.studydistractor.sdp.procrastinationActivity
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class ProcrastiniationActivityTest {
+class ProcrastinationActivityTest {
     @Test
     fun createOneProcrastinationActivity(){
         val name = "salut"
         val description = "bonjour"
-        val act = ProcrastinationActivity(name, description)
+        val act = ProcrastinationActivity(name, 0.0, 0.0, description)
         assertEquals(act.name, name)
         assertEquals(act.description, description)
     }
