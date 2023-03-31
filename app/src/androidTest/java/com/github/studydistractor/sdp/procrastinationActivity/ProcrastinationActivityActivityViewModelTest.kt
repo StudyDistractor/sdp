@@ -16,11 +16,11 @@ class ProcrastinationActivityActivityViewModelTest {
     @Test
     fun noName(){
         assertThrows(NullPointerException::class.java, {
-            p.processActivity(ProcrastinationActivity(null, null, null, description))
+            p.processActivity(ProcrastinationActivity(null, description,null, null))
         })
     }
     @Test
     fun nameAndDescription(){
-        p.processActivity(ProcrastinationActivity(name, null, null, description))
+        p.processActivity(ProcrastinationActivity(name, description,null, null))
     }
 }

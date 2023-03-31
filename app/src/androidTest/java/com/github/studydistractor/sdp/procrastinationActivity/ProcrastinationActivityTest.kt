@@ -8,7 +8,7 @@ class ProcrastinationActivityTest {
     fun createOneProcrastinationActivity(){
         val name = "salut"
         val description = "bonjour"
-        val act = ProcrastinationActivity(name, 0.0, 0.0, description)
+        val act = ProcrastinationActivity(name, description,0.0, 0.0)
         assertEquals(act.name, name)
         assertEquals(act.description, description)
     }
