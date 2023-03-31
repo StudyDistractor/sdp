@@ -40,13 +40,12 @@ class AddProcrastinationActivityTest {
         composeRule.onNodeWithTag("description").assert(hasText(description))
 
         composeRule.onNodeWithTag("addActivity").performClick()
-        val addedActivityList = fakeService.fetchProcrastinationActivities()
-
-        assertEquals(1, addedActivityList.size)
-        val addedActivity = addedActivityList[0]
-        assertEquals(name, addedActivity.name)
-        assertEquals(description, addedActivity.description)
-
+        val addedActivityList = fakeService.fetchProcrastinationActivities {
+            assertEquals(1, it.size)
+            val addedActivity = it[0]
+            assertEquals(name, addedActivity.name)
+            assertEquals(description, addedActivity.description)
+        }
     }
 
     @Test
@@ -56,11 +55,9 @@ class AddProcrastinationActivityTest {
         composeRule.onNodeWithTag("name").assert(hasText(name))
 
         composeRule.onNodeWithTag("addActivity").performClick()
-        val addedActivityList = fakeService.fetchProcrastinationActivities()
-
-        assertEquals(0, addedActivityList.size)
-
-
+        val addedActivityList = fakeService.fetchProcrastinationActivities {
+            assertEquals(0, it.size)
+        }
     }
 
     @Test
@@ -70,8 +67,8 @@ class AddProcrastinationActivityTest {
         composeRule.onNodeWithTag("description").assert(hasText(description))
 
         composeRule.onNodeWithTag("addActivity").performClick()
-        val addedActivityList = fakeService.fetchProcrastinationActivities()
-
-        assertEquals(0, addedActivityList.size)
+        val addedActivityList = fakeService.fetchProcrastinationActivities{
+            assertEquals(0, it.size)
+        }
     }
 }
