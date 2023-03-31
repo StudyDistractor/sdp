@@ -60,7 +60,7 @@ class ProcrastinationActivityActivityTest {
             {},
             intentFactory = {
                 val intent = Intent(it, ProcrastinationActivityActivity::class.java)
-                intent.putExtra("activity", ProcrastinationActivity(name, lat, long, description))
+                intent.putExtra("activity", ProcrastinationActivity(name, description, lat, long))
                 intent
             },
             onAfterLaunched = {
