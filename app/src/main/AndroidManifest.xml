@@ -34,6 +34,9 @@
             android:exported="false"
             android:label="@string/title_activity_maps" />
         <activity
+            android:name=".procrastinationActivity.DistractionList"
+            android:exported="false" />
+        <activity
             android:name=".procrastinationActivity.ProcrastinationActivityActivity"
             android:exported="false" />
         <activity

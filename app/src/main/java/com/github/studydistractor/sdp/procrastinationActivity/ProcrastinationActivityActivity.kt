@@ -46,7 +46,7 @@ class ProcrastinationActivityActivity : AppCompatActivity() {
     fun ProcrastinationLayout(name: String, description: String) {
         Row {
             Column (
-                modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+                modifier = Modifier.fillMaxWidth().fillMaxHeight().padding(26.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally ) {
                 Text(
@@ -65,7 +65,12 @@ class ProcrastinationActivityActivity : AppCompatActivity() {
                     onClick = {launchMapsActivity()},
                     modifier = Modifier.testTag("done")
                 ) {
-                    Text("Done")
+                    Text("Take me back to the map!")
+                }
+                Button(
+                    onClick = {launchDistractionList()},
+                ) {
+                    Text("I want more distractions!")
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -79,6 +84,11 @@ class ProcrastinationActivityActivity : AppCompatActivity() {
      */
     private fun launchMapsActivity() {
         val intent = Intent(this, MapsActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun launchDistractionList() {
+        val intent = Intent(this, DistractionList::class.java)
         startActivity(intent)
     }
 
