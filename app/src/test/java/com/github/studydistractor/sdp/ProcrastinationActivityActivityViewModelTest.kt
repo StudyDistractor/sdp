@@ -10,7 +10,7 @@ class ProcrastinationActivityActivityViewModelTest {
     fun rightIntentReturnsProcrastinationActivity() {
         val name = "name"
         val description = "description"
-        val activity = ProcrastinationActivity(name, description)
+        val activity = ProcrastinationActivity(name, 0.0, 0.0, description)
         val returnedProcrastinationActivity = ProcrastinationActivityActivityViewModel().processActivity(activity)
 
         assertEquals(name, returnedProcrastinationActivity.name)
@@ -28,7 +28,7 @@ class ProcrastinationActivityActivityViewModelTest {
 
     @Test
     fun nullNameThrowsException() {
-        val activity = ProcrastinationActivity(null, "")
+        val activity = ProcrastinationActivity(null, 0.0, 0.0, "")
 
         assertThrows(java.lang.NullPointerException::class.java) {
             ProcrastinationActivityActivityViewModel().processActivity(activity)
@@ -37,7 +37,7 @@ class ProcrastinationActivityActivityViewModelTest {
 
     @Test
     fun nullDescriptionThrowsException() {
-        val activity = ProcrastinationActivity("", null)
+        val activity = ProcrastinationActivity("", null, null, null)
 
         assertThrows(java.lang.NullPointerException::class.java) {
             ProcrastinationActivityActivityViewModel().processActivity(activity)

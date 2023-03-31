@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.github.studydistractor.sdp.BuildConfig
 import com.github.studydistractor.sdp.R
+import com.github.studydistractor.sdp.procrastinationActivity.FireBaseProcrastinationActivityService
 import com.github.studydistractor.sdp.procrastinationActivity.ProcrastinationActivity
 import com.github.studydistractor.sdp.procrastinationActivity.ProcrastinationActivityActivity
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -28,8 +29,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var placesClient: PlacesClient
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    var locationPermissionGranted = false
-    var map: GoogleMap? = null
+    private var locationPermissionGranted = false
+    private var map: GoogleMap? = null
     private var lastKnownLocation: Location? = null
     private val defaultLocation = LatLng(46.520544, 6.567825)
 
@@ -59,31 +60,51 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         getLocationPermission()
         updateLocationUI()
         getDeviceLocation()
-        displayPlaces()
+        displayActivitiesOnMap()
+    }
+
+    /**
+     * Displays a single ProcrastinationActivity on a Google Map and sets up a listener to
+     * open a detailed view of the activity when its associated marker is clicked.
+     *
+     * @param activity The ProcrastinationActivity to display on the map.
+     */
+    private fun displayActivity(activity: ProcrastinationActivity) {
+        val latLng = activity.lat?.let { activity.long?.let { it1 -> LatLng(it, it1) } }
+        val marker = latLng?.let {
+            MarkerOptions()
+                .position(it)
+                .title(activity.name)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA))
+        }?.let {
+            map?.addMarker(
+                it
+            )
+        }
+        marker?.tag = activity
+        map?.setOnInfoWindowClickListener { activityMarker ->
+            val procActivity = activityMarker.tag as ProcrastinationActivity
+            val intent = Intent(this, ProcrastinationActivityActivity::class.java)
+            intent.putExtra("activity", procActivity)
+            startActivity(intent)
+        }
     }
 
     /**
      * Displays the places on the map and launches the distraction activity when clicking on the marker
      */
-    fun displayPlaces() {
-        val sat = LatLng(46.520544, 6.567825)
-//        TODO: set marker style according to our color scheme and perhaps according to the type of place
-        map?.addMarker(
-            MarkerOptions().position(sat).title("Satellite")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA))
-        )
-        map?.setOnInfoWindowClickListener {
-            val activity = ProcrastinationActivity("Satellite", "have a beer at Satellite")
-            val intent = Intent(this, ProcrastinationActivityActivity::class.java)
-            intent.putExtra("activity", activity)
-            startActivity(intent)
+    private fun displayActivitiesOnMap() {
+        FireBaseProcrastinationActivityService().fetchProcrastinationActivities { activities ->
+            for (activity in activities) {
+                displayActivity(activity)
+            }
         }
     }
 
     /**
      * Gets permission to access the device location.
      */
-    fun getLocationPermission() {
+    private fun getLocationPermission() {
         /*
          * Request location permission, so that we can get the location of the
          * device. The result of the permission request is handled by a callback,

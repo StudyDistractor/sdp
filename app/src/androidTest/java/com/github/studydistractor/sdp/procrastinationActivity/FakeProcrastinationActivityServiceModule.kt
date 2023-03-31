@@ -25,8 +25,8 @@ class FakeProcrastinationActivityService : ProcrastinationActivityService{
 
     private val activityList = SnapshotStateList<ProcrastinationActivity>()
 
-    override fun fetchProcrastinationActivities(): SnapshotStateList<ProcrastinationActivity> {
-        return this.activityList
+    override fun fetchProcrastinationActivities(callback: (List<ProcrastinationActivity>) -> Unit) {
+        callback(activityList)
     }
 
     override fun postProcastinationActivities(activity: ProcrastinationActivity) {
