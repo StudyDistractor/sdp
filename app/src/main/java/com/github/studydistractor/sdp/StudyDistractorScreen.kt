@@ -15,11 +15,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.github.studydistractor.sdp.account.FirebaseCreateAccount
 import com.github.studydistractor.sdp.history.FirebaseHistory
 import com.github.studydistractor.sdp.login.FirebaseLoginAuth
 import com.github.studydistractor.sdp.maps.MapsActivity
 import com.github.studydistractor.sdp.procrastinationActivity.AddProcrastinationActivityActivity
-import com.github.studydistractor.sdp.register.RegisterActivity
+import com.github.studydistractor.sdp.register.FirebaseRegisterAuth
 import com.github.studydistractor.sdp.ui.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -35,7 +36,8 @@ enum class StudyDistractorScreen(@StringRes val title: Int) {
     Maps(title = R.string.screen_name_maps),
     Distraction(title = R.string.screen_name_distraction),
     CreateDistraction(title = R.string.screen_name_create_distraction),
-    History(title = R.string.screen_name_history)
+    History(title = R.string.screen_name_history),
+    CreateAccount(title = R.string.screen_name_create_account)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,7 +88,7 @@ fun StudyDistractorApp(
             composable(route = StudyDistractorScreen.Login.name) {
                 LoginScreen(
                     onRegisterButtonClicked = {
-                        context.startActivity(Intent(context, RegisterActivity::class.java))
+                        navController.navigate(StudyDistractorScreen.Register.name)
                     },
                     onLoggedIn = {
                         navController.navigate(StudyDistractorScreen.Maps.name)
@@ -97,8 +99,17 @@ fun StudyDistractorApp(
             composable(route = StudyDistractorScreen.Register.name) {
                 RegisterScreen(
                     onRegistered = {
+                        navController.navigate(StudyDistractorScreen.CreateAccount.name)
+                    },
+                    registerAuth = FirebaseRegisterAuth(Firebase.auth)
+                )
+            }
+            composable(route = StudyDistractorScreen.CreateAccount.name) {
+                CreateAccountScreen(
+                    onAccountCreated = {
                         navController.navigate(StudyDistractorScreen.Maps.name)
-                    }
+                    },
+                    createAccount = FirebaseCreateAccount()
                 )
             }
             composable(route = StudyDistractorScreen.Maps.name) {
