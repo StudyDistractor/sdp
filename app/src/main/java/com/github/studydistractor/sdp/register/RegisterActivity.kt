@@ -18,7 +18,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
-import com.github.studydistractor.sdp.account.CreateAccountActivity
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.firebase.FirebaseApp

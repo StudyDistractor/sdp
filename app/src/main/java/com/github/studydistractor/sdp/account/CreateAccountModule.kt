@@ -15,7 +15,7 @@ import dagger.hilt.android.components.ActivityComponent
 object CreateAccountModule {
 
     @Provides
-    fun provideCreateAccount(): CreateAccInterface {
+    fun provideCreateAccount(): CreateAccountInterface {
         return FirebaseCreateAccount()
     }
 

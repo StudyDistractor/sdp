@@ -1,12 +1,9 @@
 package com.github.studydistractor.sdp.account
 
-import androidx.compose.Context
-import javax.inject.Inject
-
 /**
  * This interface defines the contract for creating a user account on Firebase.
  */
-interface CreateAccInterface {
+interface CreateAccountInterface {
 
     /**
      * Check if the given name has the good format

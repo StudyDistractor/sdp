@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.github.studydistractor.sdp.account.FirebaseCreateAccount
 import com.github.studydistractor.sdp.history.FirebaseHistory
 import com.github.studydistractor.sdp.login.FirebaseLoginAuth
 import com.github.studydistractor.sdp.maps.MapsActivity
@@ -35,7 +36,8 @@ enum class StudyDistractorScreen(@StringRes val title: Int) {
     Maps(title = R.string.screen_name_maps),
     Distraction(title = R.string.screen_name_distraction),
     CreateDistraction(title = R.string.screen_name_create_distraction),
-    History(title = R.string.screen_name_history)
+    History(title = R.string.screen_name_history),
+    CreateAccount(title = R.string.screen_name_create_account)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -99,6 +101,14 @@ fun StudyDistractorApp(
                     onRegistered = {
                         navController.navigate(StudyDistractorScreen.Maps.name)
                     }
+                )
+            }
+            composable(route = StudyDistractorScreen.CreateAccount.name) {
+                CreateAccountScreen(
+                    onAccountCreated = {
+                        navController.navigate(StudyDistractorScreen.Maps.name)
+                    },
+                    createAccount = FirebaseCreateAccount()
                 )
             }
             composable(route = StudyDistractorScreen.Maps.name) {

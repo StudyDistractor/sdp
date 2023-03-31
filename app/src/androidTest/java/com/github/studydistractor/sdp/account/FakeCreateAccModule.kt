@@ -1,6 +1,5 @@
 package com.github.studydistractor.sdp.account
 
-import androidx.compose.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.android.components.ActivityComponent
@@ -16,12 +15,12 @@ import javax.inject.Inject
 object FakeCreateAccModule {
 
     @Provides
-    fun provideFakeCreateModule() : CreateAccInterface{
+    fun provideFakeCreateModule() : CreateAccountInterface{
         return FakeCreateAccImpl()
     }
 }
 
-class FakeCreateAccImpl @Inject constructor() : CreateAccInterface {
+class FakeCreateAccImpl @Inject constructor() : CreateAccountInterface {
     //fake implementation
     override fun checkNameFormat(name: String): Boolean {
         return !(name.isEmpty() || name.length >= 255)
