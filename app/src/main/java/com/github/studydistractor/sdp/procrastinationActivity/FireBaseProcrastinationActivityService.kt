@@ -35,7 +35,6 @@ class FireBaseProcrastinationActivityService @Inject constructor(): Procrastinat
                     callback(emptyList())
                 }
             })
-
     }
 
     override fun postProcastinationActivities(activity: ProcrastinationActivity) {

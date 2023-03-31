@@ -4,20 +4,17 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.compose.ui.test.junit4.ComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
+import com.github.studydistractor.sdp.launch
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
 
 /**
  * Uses a [ComposeTestRule] created via [createEmptyComposeRule] that allows setup before the activity
