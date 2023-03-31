@@ -11,23 +11,27 @@ import android.os.Parcelable
  */
 data class ProcrastinationActivity(
     val name: String? = null,
+    val description: String? = null,
     val lat: Double? = null,
-    val long: Double? = null,
-    val description: String? = null) :
+    val long: Double? = null) :
     Parcelable {
     // Parcelable is used to pass a procrastination activity from an activity to another one.
     constructor(parcel: Parcel) : this(
         parcel.readString(),
+        parcel.readString(),
         parcel.readDouble(),
-        parcel.readDouble(),
-        parcel.readString()
+        parcel.readDouble()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
-        parcel.writeDouble(lat!!)
-        parcel.writeDouble(long!!)
         parcel.writeString(description)
+        if (lat != null) {
+            parcel.writeDouble(lat)
+        }
+        if (long != null) {
+            parcel.writeDouble(long)
+        }
     }
 
     override fun describeContents(): Int {

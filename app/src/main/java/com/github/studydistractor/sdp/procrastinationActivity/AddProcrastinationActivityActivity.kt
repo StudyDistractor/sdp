@@ -88,7 +88,7 @@ class AddProcrastinationActivityActivity : Hilt_AddProcrastinationActivityActivi
         }
 
 //        TODO: add the possibility to add a location to the activity
-        val activity = ProcrastinationActivity(name, null, null, description)
+        val activity = ProcrastinationActivity(name, description, null, null)
         service.postProcastinationActivities(activity)
     }
 }
