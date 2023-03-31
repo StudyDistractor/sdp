@@ -60,7 +60,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         getLocationPermission()
         updateLocationUI()
         getDeviceLocation()
-        displayPlaces()
+        displayActivitiesOnMap()
     }
 
     /**
@@ -93,7 +93,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     /**
      * Displays the places on the map and launches the distraction activity when clicking on the marker
      */
-    private fun displayPlaces() {
+    private fun displayActivitiesOnMap() {
         FireBaseProcrastinationActivityService().fetchProcrastinationActivities { activities ->
             for (activity in activities) {
                 displayActivity(activity)
