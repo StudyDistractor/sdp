@@ -20,7 +20,7 @@ import com.github.studydistractor.sdp.history.FirebaseHistory
 import com.github.studydistractor.sdp.login.FirebaseLoginAuth
 import com.github.studydistractor.sdp.maps.MapsActivity
 import com.github.studydistractor.sdp.procrastinationActivity.AddProcrastinationActivityActivity
-import com.github.studydistractor.sdp.register.RegisterActivity
+import com.github.studydistractor.sdp.register.FirebaseRegisterAuth
 import com.github.studydistractor.sdp.ui.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -88,7 +88,7 @@ fun StudyDistractorApp(
             composable(route = StudyDistractorScreen.Login.name) {
                 LoginScreen(
                     onRegisterButtonClicked = {
-                        context.startActivity(Intent(context, RegisterActivity::class.java))
+                        navController.navigate(StudyDistractorScreen.Register.name)
                     },
                     onLoggedIn = {
                         navController.navigate(StudyDistractorScreen.Maps.name)
@@ -99,8 +99,9 @@ fun StudyDistractorApp(
             composable(route = StudyDistractorScreen.Register.name) {
                 RegisterScreen(
                     onRegistered = {
-                        navController.navigate(StudyDistractorScreen.Maps.name)
-                    }
+                        navController.navigate(StudyDistractorScreen.CreateAccount.name)
+                    },
+                    registerAuth = FirebaseRegisterAuth(Firebase.auth)
                 )
             }
             composable(route = StudyDistractorScreen.CreateAccount.name) {

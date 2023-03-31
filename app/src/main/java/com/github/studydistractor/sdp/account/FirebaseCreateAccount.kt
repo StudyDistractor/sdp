@@ -14,7 +14,7 @@ class FirebaseCreateAccount @Inject constructor(): CreateAccountInterface{
 
     private var db: FirebaseDatabase = FirebaseDatabase.getInstance()
 
-    private var PATH = "users"
+    private var PATH = "Users"
 
 
 

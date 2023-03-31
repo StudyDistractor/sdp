@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CardGiftcard
 import androidx.compose.material.icons.filled.Person
@@ -38,6 +38,7 @@ import java.util.*
  * @return A composable UI screen for creating a new account
  */
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateAccountScreen(
     onAccountCreated: () -> Unit,
@@ -85,7 +86,7 @@ fun CreateAccountScreen(
             onClick = {
                 datePicker.show()
             },
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+            colors = ButtonDefaults.buttonColors(contentColor = Color.White),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)

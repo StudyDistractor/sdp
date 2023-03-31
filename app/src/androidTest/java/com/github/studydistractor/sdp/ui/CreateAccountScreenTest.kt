@@ -1,11 +1,12 @@
-package com.github.studydistractor.sdp.account
+package com.github.studydistractor.sdp.ui
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onChild
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import com.github.studydistractor.sdp.account.CreateAccountModule.provideCreateAccount
+import com.github.studydistractor.sdp.account.FakeCreateAccModule.provideFakeCreateModule
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import junit.framework.TestCase.assertEquals
@@ -14,17 +15,23 @@ import org.junit.Rule
 import org.junit.Test
 
 @HiltAndroidTest
-class CreateAccountActivityTest {
+class CreateAccountScreenTest {
 
     @get:Rule(order = 0)
     var rule = HiltAndroidRule(this)
 
     @get:Rule(order = 1)
-    val composeRule = createAndroidComposeRule<CreateAccountActivity>() // If you are doing UI testing, but now the Activity is injected with the mock !
+    val composeRule = createComposeRule() // If you are doing UI testing, but now the Activity is injected with the mock !
 
     @Before
     fun setup() {
         rule.inject()
+        composeRule.setContent {
+            CreateAccountScreen(
+                {},
+                createAccount = provideFakeCreateModule()
+            )
+        }
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.github.studydistractor.sdp.ui
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import com.github.studydistractor.sdp.register.FakeRegisterAuthModule.provideFakeRegisterAuth
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
@@ -17,34 +18,85 @@ class RegisterScreenTest {
     var rule = HiltAndroidRule(this)
 
     @get:Rule(order = 1)
-    val composeRule = createComposeRule()
+    val composeTestRule = createComposeRule()
 
     @Before
     fun setup() {
         rule.inject()
 
         clicks = 0
-        composeRule.setContent {
+        composeTestRule.setContent {
             RegisterScreen(
-                onRegistered = { clicks++ }
+                onRegistered = { clicks++ },
+                registerAuth = provideFakeRegisterAuth()
             )
         }
     }
 
-    @Test
-    fun testScreenIsDisplayed() {
-        composeRule.onNodeWithTag("register-screen__main-container").assertIsDisplayed()
-        composeRule.onNodeWithText("Register screen").assertIsDisplayed()
-    }
 
     @Test
-    fun testRegisteredButtonWorks() {
-        composeRule.onNodeWithTag("register-screen__registered-button").assertIsDisplayed()
-        composeRule.onNodeWithTag("register-screen__registered-button").assertHasClickAction()
+    fun testRegisteredButtonFailsWithNoData() {
+        composeTestRule.onNodeWithTag("register-screen__registered-button").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("register-screen__registered-button").assertHasClickAction()
         assertEquals(0, clicks)
-        composeRule.onNodeWithTag("register-screen__registered-button").performClick()
-        assertEquals(1, clicks)
-        composeRule.onNodeWithTag("register-screen__registered-button").performClick()
-        assertEquals(2, clicks)
+        composeTestRule.onNodeWithTag("register-screen__registered-button").performClick()
+        assertEquals(0, clicks)
+    }
+    @Test
+    fun testRegisterButton() {
+
+        val email = "test@gmail.com"
+        val password = "123456789qwertzuiop"
+        // Find the email and password text fields and enter some text
+        composeTestRule.onNodeWithTag("email").performTextInput(email)
+        composeTestRule.onNodeWithTag("password").performTextInput(password)
+        composeTestRule.onNodeWithTag("pseudo").performTextInput("test")
+
+        // Find the "Register" button and click it
+
+        composeTestRule.onNodeWithTag("register-screen__registered-button").performClick()
+    }
+    @Test
+    fun testRegisterButtonWithoutPassword() {
+
+        val email = "test@gmail.com"
+        val password = "123456789qwertzuiop"
+        val pseudo = "test"
+        // Find the email and password text fields and enter some text
+        composeTestRule.onNodeWithTag("email").performTextInput(email)
+//        composeTestRule.onNodeWithTag("password").performTextInput(password)
+        composeTestRule.onNodeWithTag("pseudo").performTextInput("test")
+
+        // Find the "Register" button and click it
+
+        composeTestRule.onNodeWithTag("register-screen__registered-button").performClick()
+    }
+    @Test
+    fun testRegisterButtonWithoutEmail() {
+
+        val email = "test@gmail.com"
+        val password = "123456789qwertzuiop"
+        val pseudo = "test"
+        // Find the email and password text fields and enter some text
+        composeTestRule.onNodeWithTag("password").performTextInput(password)
+        composeTestRule.onNodeWithTag("pseudo").performTextInput("test")
+
+        // Find the "Register" button and click it
+
+        composeTestRule.onNodeWithTag("register-screen__registered-button").performClick()
+    }
+    @Test
+    fun testRegisterButtonWithoutPseudo() {
+
+        val email = "test@gmail.com"
+        val password = "123456789qwertzuiop"
+        val pseudo = "test"
+        // Find the email and password text fields and enter some text
+        composeTestRule.onNodeWithTag("email").performTextInput(email)
+        composeTestRule.onNodeWithTag("password").performTextInput(password)
+
+        // Find the "Register" button and click it
+
+        composeTestRule.onNodeWithTag("register-screen__registered-button").performClick()
     }
 }
