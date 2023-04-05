@@ -48,6 +48,7 @@ class MainNavigationTest {
         composeRule.onNodeWithTag("app-bar-bottom__list-button").performClick()
         composeRule.onNodeWithTag("login-screen__main-container").assertDoesNotExist()
         composeRule.onNodeWithTag("maps-screen__main-container").assertDoesNotExist()
+        composeRule.onNodeWithTag("distraction-screen__main-container").assertIsDisplayed()
         composeRule.onNodeWithTag("create-distraction-screen__main-container").assertDoesNotExist()
 
         composeRule.onNodeWithTag("app-bar-bottom__magic-button").performClick()
