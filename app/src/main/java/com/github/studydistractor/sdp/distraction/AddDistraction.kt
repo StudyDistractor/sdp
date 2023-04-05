@@ -1,4 +1,4 @@
-package com.github.studydistractor.sdp.procrastinationActivity
+package com.github.studydistractor.sdp.distraction
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -21,12 +21,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /**
- * Activity to add new procrastination activities to the database.
+ * Activity to add new distractions to the database.
  */
 @AndroidEntryPoint(AppCompatActivity::class)
-class AddProcrastinationActivityActivity : Hilt_AddProcrastinationActivityActivity() {
+class AddDistraction : Hilt_AddDistraction() {
     @Inject
-    lateinit var service: ProcrastinationActivityService
+    lateinit var service: DistractionService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +66,7 @@ class AddProcrastinationActivityActivity : Hilt_AddProcrastinationActivityActivi
                 modifier = Modifier.testTag("description")
             )
 
-            Button(onClick = {createNewActivity(name.value.text, description.value.text)},
+            Button(onClick = {createNewDistraction(name.value.text, description.value.text)},
                 modifier = Modifier.testTag("addActivity")
             ) {
                 Text("Create new activity")
@@ -75,20 +75,20 @@ class AddProcrastinationActivityActivity : Hilt_AddProcrastinationActivityActivi
     }
 
     /**
-     * Create a procrastination activity with parameters name and description, then post the activity
+     * Create a distraction with parameters name and description, then post the activity
      * to the database.
      *
-     * @param name name of the procrastination activity
-     * @param description description of the procrastination activity
+     * @param name name of the distraction
+     * @param description description of the distraction
      */
-    private fun createNewActivity(name: String, description: String) {
+    private fun createNewDistraction(name: String, description: String) {
         if (TextUtils.isEmpty(name) || TextUtils.isEmpty(description)) {
-            Toast.makeText(this@AddProcrastinationActivityActivity, "Please fill the blanks", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@AddDistraction, "Please fill the blanks", Toast.LENGTH_SHORT).show()
             return
         }
 
 //        TODO: add the possibility to add a location to the activity
-        val activity = ProcrastinationActivity(name, description, null, null)
-        service.postProcastinationActivities(activity)
+        val activity = Distraction(name, description, null, null)
+        service.postDistraction(activity)
     }
 }

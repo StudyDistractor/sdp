@@ -9,17 +9,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.github.studydistractor.sdp.account.FirebaseCreateAccount
-import com.github.studydistractor.sdp.history.FirebaseHistory
+import com.github.studydistractor.sdp.history.HistoryInterface
 import com.github.studydistractor.sdp.login.FirebaseLoginAuth
 import com.github.studydistractor.sdp.maps.MapsActivity
-import com.github.studydistractor.sdp.procrastinationActivity.AddProcrastinationActivityActivity
+import com.github.studydistractor.sdp.distraction.DistractionViewModel
+import com.github.studydistractor.sdp.distraction.DistractionService
 import com.github.studydistractor.sdp.register.FirebaseRegisterAuth
 import com.github.studydistractor.sdp.ui.*
 import com.google.firebase.auth.ktx.auth
@@ -34,6 +35,7 @@ enum class StudyDistractorScreen(@StringRes val title: Int) {
     Login(title = R.string.screen_name_login),
     Register(title = R.string.screen_name_register),
     Maps(title = R.string.screen_name_maps),
+    DistractionList(title = R.string.screen_name_distraction_list),
     Distraction(title = R.string.screen_name_distraction),
     CreateDistraction(title = R.string.screen_name_create_distraction),
     History(title = R.string.screen_name_history),
@@ -42,10 +44,11 @@ enum class StudyDistractorScreen(@StringRes val title: Int) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview("Study Distractor App")
 fun StudyDistractorApp(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    historyInterface: HistoryInterface,
+    distractionService : DistractionService
 ) {
 
     // Get current back stack entry
@@ -55,6 +58,7 @@ fun StudyDistractorApp(
         backStackEntry?.destination?.route ?: StudyDistractorScreen.Login.name
     )
     val context = LocalContext.current
+    val distractionViewModel: DistractionViewModel = viewModel()
 
     Scaffold(
         topBar = { AppBarTop(
@@ -62,7 +66,7 @@ fun StudyDistractorApp(
             canNavigateBack = navController.previousBackStackEntry != null,
             navigateUp = { navController.navigateUp() },
             goToCreateDistractionActivity = {
-                context.startActivity(Intent(context, AddProcrastinationActivityActivity::class.java))
+                navController.navigate(StudyDistractorScreen.CreateDistraction.name)
             },
             goToHistoryActivity = {
                 navController.navigate(StudyDistractorScreen.History.name)
@@ -73,7 +77,7 @@ fun StudyDistractorApp(
         ) },
         bottomBar = { AppBarBottom(
             onHomeClick = { navController.navigate(StudyDistractorScreen.Login.name) },
-            onListClick = { navController.navigate(StudyDistractorScreen.Distraction.name) },
+            onListClick = { navController.navigate(StudyDistractorScreen.DistractionList.name) },
             onMapClick = { navController.navigate(StudyDistractorScreen.Maps.name) },
             onMagicClick = { navController.navigate(StudyDistractorScreen.CreateDistraction.name) }
         ) }
@@ -119,14 +123,22 @@ fun StudyDistractorApp(
                     }*/
                 )
             }
-            composable(route = StudyDistractorScreen.Distraction.name) {
-                DistractionScreen()
+            composable(route = StudyDistractorScreen.DistractionList.name) {
+                DistractionListScreen(distractionService,
+                    onDistractionClick  = {
+                            navController.navigate(StudyDistractorScreen.Distraction.name)
+                        },
+                        distractionViewModel
+                    )
+            }
+            composable(route = StudyDistractorScreen.Distraction.name)  {
+                DistractionScreen(distractionViewModel)
             }
             composable(route = StudyDistractorScreen.CreateDistraction.name)  {
-                CreateDistractionScreen()
+                CreateDistractionScreen(distractionService)
             }
             composable(route = StudyDistractorScreen.History.name) {
-                HistoryScreen(hi = FirebaseHistory())
+                HistoryScreen(historyInterface)
             }
         }
     }

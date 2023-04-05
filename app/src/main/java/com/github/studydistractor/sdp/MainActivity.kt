@@ -7,9 +7,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import com.github.studydistractor.sdp.history.HistoryInterface
+import com.github.studydistractor.sdp.distraction.DistractionService
 import com.github.studydistractor.sdp.ui.theme.StudyDistractorTheme
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+@AndroidEntryPoint(AppCompatActivity::class)
+class MainActivity : Hilt_MainActivity() {
+    @Inject
+    lateinit var historyInterface : HistoryInterface
+
+    @Inject
+    lateinit var distractionService : DistractionService
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent{
@@ -19,7 +29,7 @@ class MainActivity : AppCompatActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    StudyDistractorApp()
+                    StudyDistractorApp(historyInterface = historyInterface, distractionService = distractionService)
                 }
             }
         }

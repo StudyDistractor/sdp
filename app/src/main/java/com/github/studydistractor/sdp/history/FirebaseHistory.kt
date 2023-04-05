@@ -5,12 +5,13 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import javax.inject.Inject
 
 /**
  * This class is the implementation of the interface for historyActivity using Firebase
  *
  */
-class FirebaseHistory : HistoryInterface {
+class FirebaseHistory @Inject constructor(): HistoryInterface {
     private var db : FirebaseDatabase = FirebaseDatabase.getInstance()
     private var auth : FirebaseAuth = FirebaseAuth.getInstance()
 
