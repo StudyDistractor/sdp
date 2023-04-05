@@ -19,6 +19,7 @@ import com.github.studydistractor.sdp.login.FirebaseLoginAuth
 import com.github.studydistractor.sdp.maps.MapsActivity
 import com.github.studydistractor.sdp.distraction.DistractionViewModel
 import com.github.studydistractor.sdp.distraction.DistractionService
+import com.github.studydistractor.sdp.distraction.DistractionListViewModel
 import com.github.studydistractor.sdp.history.HistoryInterface
 import com.github.studydistractor.sdp.register.FirebaseRegisterAuth
 import com.github.studydistractor.sdp.ui.*
@@ -60,6 +61,7 @@ fun StudyDistractorApp(
     )
     val context = LocalContext.current
     val distractionViewModel: DistractionViewModel = viewModel()
+    val distractionListViewModel = DistractionListViewModel(distractionService)
 
     Scaffold(
         topBar = { AppBarTop(
@@ -125,12 +127,13 @@ fun StudyDistractorApp(
                 )
             }
             composable(route = StudyDistractorScreen.DistractionList.name) {
-                DistractionListScreen(distractionService,
-                    onDistractionClick  = {
-                            navController.navigate(StudyDistractorScreen.Distraction.name)
-                        },
-                        distractionViewModel
-                    )
+                DistractionListScreen(
+                    onClickingDistraction = {
+                        navController.navigate(StudyDistractorScreen.Distraction.name)
+                    },
+                    distractionViewModel,
+                    distractionListViewModel
+                )
             }
             composable(route = StudyDistractorScreen.Distraction.name)  {
                 DistractionScreen(distractionViewModel)

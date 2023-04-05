@@ -15,7 +15,8 @@ import javax.inject.Inject
 class DistractionListTest {
     val name = "test"
     val description = "desc"
-    val viewmodel = DistractionViewModel()
+    val distractionViewmodel = DistractionViewModel()
+    lateinit var distractionListViewModel: DistractionListViewModel
 
     @get:Rule(order = 0)
     var rule = HiltAndroidRule(this)
@@ -29,10 +30,11 @@ class DistractionListTest {
     @Before
     fun setup() {
         rule.inject()
+        distractionListViewModel = DistractionListViewModel(fakeService)
         val distraction = Distraction(name, description)
         fakeService.postDistraction(distraction)
         composeTestRule.setContent {
-            DistractionListScreen(distractionService = fakeService, {}, viewmodel)
+            DistractionListScreen({}, distractionViewmodel, distractionListViewModel)
         }
     }
 
@@ -43,7 +45,7 @@ class DistractionListTest {
         composeTestRule.onNodeWithTag("name", useUnmergedTree = true).assert(hasText(name))
         composeTestRule.onNodeWithTag("distractionLayout").performClick()
 
-        assertEquals(name, viewmodel.distraction!!.name)
-        assertEquals(description, viewmodel.distraction!!.description)
+        assertEquals(name, distractionViewmodel.distraction!!.name)
+        assertEquals(description, distractionViewmodel.distraction!!.description)
     }
 }
