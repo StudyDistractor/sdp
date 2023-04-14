@@ -1,6 +1,5 @@
 package com.github.studydistractor.sdp.login
 
-import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.firebase.auth.AuthResult
@@ -8,7 +7,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
-import dagger.hilt.testing.TestInstallIn
 import javax.inject.Inject
 
 @Module
@@ -23,12 +21,16 @@ object FakeLoginModule {
 
 class FakeLoginAuth @Inject constructor() : LoginAuthInterface {
     override fun loginWithEmail(email: String, password: String): Task<AuthResult> {
-        var t = TaskCompletionSource<AuthResult>()
-        if(email == "email" && password == "password"){
+        val t = TaskCompletionSource<AuthResult>()
+        return if(email == "invalidEmail" && password == "invalidPassword"){
             t.setException(IllegalArgumentException())
-            return t.task
+            t.task
+        } else if (email == "validEmail" && password == "validPassword"){
+            t.setResult(null)
+            t.task
+        } else {
+            t.setException(IllegalArgumentException())
+            t.task
         }
-        t.setResult(null)
-        return t.task
     }
 }

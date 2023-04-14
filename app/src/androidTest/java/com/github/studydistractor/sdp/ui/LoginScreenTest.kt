@@ -12,8 +12,8 @@ import org.junit.Assert.assertEquals
 
 @HiltAndroidTest
 class LoginScreenTest {
-    var registerButtonClicks = 0
-    var loggedInCount = 0
+    private var registerButtonClicks = 0
+    private var loggedInCount = 0
 
     @get:Rule(order = 0)
     var rule = HiltAndroidRule(this)
@@ -38,15 +38,18 @@ class LoginScreenTest {
 
     @Test
     fun testToLoginWithValidEmailAndPassword() {
-        var email = "test@gmail.com"
-        var password = "1234567890"
+        val email = "validEmail"
+        val password = "validPassword"
         composeRule.onNodeWithTag("email").performTextInput(email)
         composeRule.onNodeWithTag("password").performTextInput(password)
 
         assertEquals(0, loggedInCount)
         composeRule.onNodeWithTag("login").performClick()
-        composeRule.waitUntil(1000) {
-            loggedInCount == 1
+        try {
+            composeRule.waitUntil(1000) {
+                loggedInCount == 1
+            }
+        } catch (_: ComposeTimeoutException) {
         }
 
         assertEquals(0, registerButtonClicks)
@@ -67,37 +70,79 @@ class LoginScreenTest {
 
     @Test
     fun testToLoginWithInvalidEmailAndPassword() {
-        var email = "email"
-        var password = "password"
+        val email = "invalidEmail"
+        val password = "invalidPassword"
         composeRule.onNodeWithTag("email").performTextInput(email)
         composeRule.onNodeWithTag("password").performTextInput(password)
         composeRule.onNodeWithTag("login").performClick()
-
+        try {
+            composeRule.waitUntil(1000) {
+                loggedInCount == 1
+            }
+        } catch (_: ComposeTimeoutException) {
+        }
         assertEquals(0, registerButtonClicks)
         assertEquals(0, loggedInCount)
     }
 
     @Test
     fun testToLoginWithoutEmail() {
-        var password = "1234567890"
+        val password = "validPassword"
         composeRule.onNodeWithTag("password").performTextInput(password)
         composeRule.onNodeWithTag("login").performClick()
-
+        try {
+            composeRule.waitUntil(1000) {
+                loggedInCount == 1
+            }
+        } catch (_: ComposeTimeoutException) {
+        }
         assertEquals(0, registerButtonClicks)
         assertEquals(0, loggedInCount)
     }
 
     @Test
     fun testToLoginWithoutPassword() {
-        var email = "test@gmail.com"
+        val email = "validEmail"
         composeRule.onNodeWithTag("email").performTextInput(email)
         composeRule.onNodeWithTag("login").performClick()
-
+        try {
+            composeRule.waitUntil(1000) {
+                loggedInCount == 1
+            }
+        } catch (_: ComposeTimeoutException) {
+        }
         assertEquals(0, registerButtonClicks)
         assertEquals(0, loggedInCount)
     }
     @Test
     fun testRegisterButton(){
         composeRule.onNodeWithTag("register").performClick()
+        try {
+            composeRule.waitUntil(1000) {
+                registerButtonClicks == 1
+            }
+        } catch (_: ComposeTimeoutException) {
+        }
+        assertEquals(1, registerButtonClicks)
     }
+
+    @Test
+    fun testLogInWithValidEmailAndPasswordWithWhiteSpace(){
+        val email = "validEmail   "
+        val password = "validPassword   "
+        composeRule.onNodeWithTag("email").performTextInput(email)
+        composeRule.onNodeWithTag("password").performTextInput(password)
+
+        assertEquals(0, loggedInCount)
+        composeRule.onNodeWithTag("login").performClick()
+        try {
+            composeRule.waitUntil(1000) {
+                loggedInCount == 1
+            }
+        } catch (_: ComposeTimeoutException) {
+        }
+
+        assertEquals(0, registerButtonClicks)
+        assertEquals(1, loggedInCount)
+}
 }
