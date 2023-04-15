@@ -37,7 +37,17 @@ class FireBaseProcrastinationActivityService @Inject constructor(): Procrastinat
             })
     }
 
-    override fun postProcastinationActivities(activity: ProcrastinationActivity) {
-        databaseRef.child(activity.name!!).setValue(activity)
+    override fun postProcastinationActivities(
+        activity: ProcrastinationActivity,
+        onSuccess: () -> Unit,
+        onFailure: () -> Unit
+    ) {
+        databaseRef.child(activity.name!!).setValue(activity).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                onSuccess()
+            } else {
+                onFailure()
+            }
+        }
     }
 }

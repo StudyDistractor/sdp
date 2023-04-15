@@ -29,7 +29,12 @@ class FakeProcrastinationActivityService : ProcrastinationActivityService{
         callback(activityList)
     }
 
-    override fun postProcastinationActivities(activity: ProcrastinationActivity) {
+    override fun postProcastinationActivities(activity: ProcrastinationActivity, onSuccess: () -> Unit, onFailure: () -> Unit) {
         activityList.add(activity)
+        if (activityList.contains(activity)) {
+            onSuccess()
+        } else {
+            onFailure()
+        }
     }
 }

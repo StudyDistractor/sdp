@@ -1,6 +1,5 @@
 package com.github.studydistractor.sdp.procrastinationActivity
 
-import androidx.compose.runtime.snapshots.SnapshotStateList
 interface ProcrastinationActivityService {
 
     /**
@@ -14,5 +13,5 @@ interface ProcrastinationActivityService {
      * Post the activity to the database
      * @param activity the activity to be posted to the database
      */
-    fun postProcastinationActivities(activity : ProcrastinationActivity)
+    fun postProcastinationActivities(activity : ProcrastinationActivity, onSuccess: () -> Unit, onFailure: () -> Unit)
 }
