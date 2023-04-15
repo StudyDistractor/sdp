@@ -1,21 +1,20 @@
 package com.github.studydistractor.sdp.procrastinationActivity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.activity.compose.setContent
-import androidx.compose.material3.*
-import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.style.TextAlign
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -26,6 +25,10 @@ import javax.inject.Inject
 class AddProcrastinationActivityActivity : Hilt_AddProcrastinationActivityActivity() {
     @Inject
     lateinit var service: ProcrastinationActivityService
+    companion object {
+        const val MAX_NAME_LENGTH = 20
+        const val MAX_DESCRIPTION_LENGTH = 200
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +47,9 @@ class AddProcrastinationActivityActivity : Hilt_AddProcrastinationActivityActivi
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(150.dp)
+                .fillMaxHeight()
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -54,15 +59,33 @@ class AddProcrastinationActivityActivity : Hilt_AddProcrastinationActivityActivi
             OutlinedTextField(
                 value = name.value,
                 label = {Text("name")},
-                onValueChange = { name.value = it },
-                modifier = Modifier.testTag("name")
+                onValueChange = { if (it.text.length <= MAX_NAME_LENGTH) name.value = it },
+                modifier = Modifier
+                    .testTag("name")
+                    .fillMaxWidth(),
+                        supportingText = {
+                    Text(
+                        text = "${name.value.text.length}/$MAX_NAME_LENGTH",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.End
+                    )
+                },
             )
 
             OutlinedTextField(
                 value = description.value,
                 label = {Text("description")},
-                onValueChange = { description.value = it },
-                modifier = Modifier.testTag("description")
+                onValueChange = { if (it.text.length <= MAX_DESCRIPTION_LENGTH) description.value = it },
+                modifier = Modifier
+                    .testTag("description")
+                    .fillMaxWidth(),
+                supportingText = {
+                    Text(
+                        text = "${description.value.text.length}/$MAX_DESCRIPTION_LENGTH",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.End
+                    )
+                },
             )
 
             Button(onClick = {createNewActivity(name.value.text, description.value.text)},
@@ -90,7 +113,6 @@ class AddProcrastinationActivityActivity : Hilt_AddProcrastinationActivityActivi
             return
         }
 
-//        TODO: add the possibility to add a location to the activity
         val activity = ProcrastinationActivity(name, description, null, null)
         service.postProcastinationActivities(activity,
             {
