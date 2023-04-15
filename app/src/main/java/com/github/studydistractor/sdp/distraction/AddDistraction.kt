@@ -3,11 +3,9 @@ package com.github.studydistractor.sdp.distraction
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,8 +13,9 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.activity.compose.setContent
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.*
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.style.TextAlign
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -88,7 +87,21 @@ class AddDistraction : Hilt_AddDistraction() {
         }
 
 //        TODO: add the possibility to add a location to the activity
-        val activity = Distraction(name, description, null, null, length = Distraction.Length.SHORT)
-        service.postDistraction(activity)
+        val activity = Distraction(name, description, null, null, length = Distraction.Length.SHORT))
+        service.postDistraction(activity,
+            {
+                Toast.makeText(
+                    this@AddDistraction,
+                    "Activity added",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }, {
+                Toast.makeText(
+                    this@AddDistraction,
+                    "Error while adding activity",
+                    Toast.LENGTH_SHORT
+                ).show(
+                )
+            })
     }
 }
