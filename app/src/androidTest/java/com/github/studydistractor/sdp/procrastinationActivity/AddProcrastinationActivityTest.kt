@@ -9,6 +9,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import javax.inject.Inject
+import com.github.studydistractor.sdp.procrastinationActivity.AddProcrastinationActivityActivity
+import com.github.studydistractor.sdp.procrastinationActivity.ProcrastinationActivityService
 
 @HiltAndroidTest
 class AddProcrastinationActivityTest {
