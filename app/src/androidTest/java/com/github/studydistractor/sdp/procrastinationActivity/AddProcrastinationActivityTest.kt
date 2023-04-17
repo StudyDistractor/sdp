@@ -41,6 +41,7 @@ class AddProcrastinationActivityTest {
 
         composeRule.onNodeWithTag("addActivity").performClick()
         val addedActivityList = fakeService.fetchProcrastinationActivities {
+            Thread.sleep(1000)
             assertEquals(1, it.size)
             val addedActivity = it[0]
             assertEquals(name, addedActivity.name)
