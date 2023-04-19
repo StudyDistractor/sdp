@@ -1,8 +1,5 @@
 package com.github.studydistractor.sdp.register
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.setValue
-
 class Register {
     companion object {
         fun newUser(auth : RegisterAuthInterface, email: String, password: String, pseudo: String, onRegisterSuccess: () -> Unit, onRegisterFailure: (reason: String) -> Unit) {
@@ -12,8 +9,9 @@ class Register {
                 onRegisterFailure("Password is empty")
             } else if ( pseudo.isEmpty()) {
                 onRegisterFailure("Pseudo is empty")
+            } else if (password.length < 6) {
+                onRegisterFailure("Password must be at least 6 characters")
             } else {
-
                 auth.createUserWithEmailAndPassword(email.trim(), password.trim())
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {

@@ -85,8 +85,8 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        var emailstr = email.value.text
-        var passwordstr = password.value.text
+        var emailstr = email.value.text.trim()
+        var passwordstr = password.value.text.trim()
         Button(
             onClick = {
                 if (TextUtils.isEmpty(emailstr) || TextUtils.isEmpty(passwordstr)) {
