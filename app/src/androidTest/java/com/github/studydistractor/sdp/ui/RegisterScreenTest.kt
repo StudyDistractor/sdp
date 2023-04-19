@@ -33,6 +33,45 @@ class RegisterScreenTest {
         }
     }
 
+    @Test
+    fun mainContainerExists(){
+        composeTestRule.onNodeWithTag("register-screen__main-container").assertIsDisplayed()
+    }
+
+    @Test
+    fun mainContainerHasCorrectText(){
+        composeTestRule.onNodeWithTag("register-screen__main-container").onChildAt(0).assertTextContains("Create an Account")
+    }
+
+    @Test
+    fun emailFieldExists() {
+        composeTestRule.onNodeWithTag("email").assertIsDisplayed()
+    }
+
+    @Test
+    fun passwordFieldExists() {
+        composeTestRule.onNodeWithTag("password").assertIsDisplayed()
+    }
+
+    @Test
+    fun pseudoFieldExists() {
+        composeTestRule.onNodeWithTag("pseudo").assertIsDisplayed()
+    }
+
+    @Test
+    fun emailFieldHasCorrectLabel() {
+        composeTestRule.onNodeWithTag("email").assert(hasText("Email"))
+    }
+
+    @Test
+    fun passwordFieldHasCorrectLabel() {
+        composeTestRule.onNodeWithTag("password").assert(hasText("Password"))
+    }
+
+    @Test
+    fun pseudoFieldHasCorrectLabel() {
+        composeTestRule.onNodeWithTag("pseudo").assert(hasText("Pseudo"))
+    }
 
     @Test
     fun testRegisteredButtonFailsWithNoData() {
