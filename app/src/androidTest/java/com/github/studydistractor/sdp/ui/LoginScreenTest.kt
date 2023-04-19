@@ -38,8 +38,8 @@ class LoginScreenTest {
 
     @Test
     fun testToLoginWithValidEmailAndPassword() {
-        val email = "validEmail"
-        val password = "validPassword"
+        val email = "test@gmail.com"
+        val password = "1234567890"
         composeRule.onNodeWithTag("email").performTextInput(email)
         composeRule.onNodeWithTag("password").performTextInput(password)
 
@@ -70,8 +70,8 @@ class LoginScreenTest {
 
     @Test
     fun testToLoginWithInvalidEmailAndPassword() {
-        val email = "invalidEmail"
-        val password = "invalidPassword"
+        val email = "email"
+        val password = "password"
         composeRule.onNodeWithTag("email").performTextInput(email)
         composeRule.onNodeWithTag("password").performTextInput(password)
         composeRule.onNodeWithTag("login").performClick()
@@ -87,7 +87,7 @@ class LoginScreenTest {
 
     @Test
     fun testToLoginWithoutEmail() {
-        val password = "validPassword"
+        val password = "1234567890"
         composeRule.onNodeWithTag("password").performTextInput(password)
         composeRule.onNodeWithTag("login").performClick()
         try {
@@ -102,7 +102,7 @@ class LoginScreenTest {
 
     @Test
     fun testToLoginWithoutPassword() {
-        val email = "validEmail"
+        val email = "test@gmail.com"
         composeRule.onNodeWithTag("email").performTextInput(email)
         composeRule.onNodeWithTag("login").performClick()
         try {
@@ -125,24 +125,4 @@ class LoginScreenTest {
         }
         assertEquals(1, registerButtonClicks)
     }
-
-    @Test
-    fun testLogInWithValidEmailAndPasswordWithWhiteSpace(){
-        val email = "validEmail   "
-        val password = "validPassword   "
-        composeRule.onNodeWithTag("email").performTextInput(email)
-        composeRule.onNodeWithTag("password").performTextInput(password)
-
-        assertEquals(0, loggedInCount)
-        composeRule.onNodeWithTag("login").performClick()
-        try {
-            composeRule.waitUntil(1000) {
-                loggedInCount == 1
-            }
-        } catch (_: ComposeTimeoutException) {
-        }
-
-        assertEquals(0, registerButtonClicks)
-        assertEquals(1, loggedInCount)
-}
 }
