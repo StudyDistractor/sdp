@@ -1,6 +1,5 @@
 package com.github.studydistractor.sdp.ui
 
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -23,12 +22,13 @@ class HistoryScreenTest {
     @get:Rule(order = 1)
     val composeTestRule = createComposeRule()
 
+
     @Before
     fun setup() {
         rule.inject()
         
         composeTestRule.setContent { 
-            HistoryScreen(hi = FakeHistoryModule().provideHistoryInterface())
+            HistoryScreen(hi = FakeHistoryModule().provideFakeHistoryInterface())
         }
     }
     @Test

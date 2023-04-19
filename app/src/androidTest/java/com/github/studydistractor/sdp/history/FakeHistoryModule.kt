@@ -1,17 +1,12 @@
 package com.github.studydistractor.sdp.history
 
-import android.os.Parcel
-import android.os.Parcelable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.TaskCompletionSource
-import com.google.firebase.database.DataSnapshot
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.testing.TestInstallIn
-import java.util.*
+import javax.inject.Inject
 
 @Module
 @TestInstallIn(
@@ -20,12 +15,12 @@ import java.util.*
 )
 class FakeHistoryModule {
     @Provides
-    fun provideHistoryInterface() : HistoryInterface{
+    fun provideFakeHistoryInterface() : HistoryInterface {
         return FakeHistoryInterface()
     }
 }
 
-class FakeHistoryInterface : HistoryInterface {
+class FakeHistoryInterface @Inject constructor(): HistoryInterface {
     override fun getHistory(uid: String): SnapshotStateList<HistoryEntry> {
         val list = mutableStateListOf(
             HistoryEntry("test", "test", 0L),

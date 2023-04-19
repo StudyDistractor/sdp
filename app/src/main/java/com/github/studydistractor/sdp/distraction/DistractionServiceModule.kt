@@ -1,6 +1,5 @@
-package com.github.studydistractor.sdp.procrastinationActivity
+package com.github.studydistractor.sdp.distraction
 
-import com.github.studydistractor.sdp.procrastinationActivity.FireBaseProcrastinationActivityService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,7 +11,7 @@ import javax.inject.Singleton
  */
 @Module
 @InstallIn(SingletonComponent::class)
-object ProcrastinationActivityServiceModule {
+object DistractionServiceModule {
 
     /**
      * Inject the implementation of the interface with Firebase realtime database
@@ -20,7 +19,7 @@ object ProcrastinationActivityServiceModule {
      */
     @Singleton
     @Provides
-    fun provideProcrastinationAcitvityService() : ProcrastinationActivityService {
-        return FireBaseProcrastinationActivityService()
+    fun provideDistractionService() : DistractionService {
+        return FireBaseDistractionService()
     }
 }

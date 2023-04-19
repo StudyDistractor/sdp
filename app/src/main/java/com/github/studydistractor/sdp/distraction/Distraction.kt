@@ -1,21 +1,21 @@
-package com.github.studydistractor.sdp.procrastinationActivity
+package com.github.studydistractor.sdp.distraction
 
 import android.os.Parcel
 import android.os.Parcelable
 
 /**
- * Data class that represents a procrastination activity
- * @param name name of the procrastination activity
- * @param description description of the procrastination activity
- * @constructor create the procrastination activity
+ * Data class that represents a Distraction
+ * @param name name of the Distraction
+ * @param description description of the Distraction
+ * @constructor create the Distraction
  */
-data class ProcrastinationActivity(
+data class Distraction(
     val name: String? = null,
     val description: String? = null,
     val lat: Double? = null,
     val long: Double? = null) :
     Parcelable {
-    // Parcelable is used to pass a procrastination activity from an activity to another one.
+    // Parcelable is used to pass a Distractionfrom an activity to another one.
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
@@ -38,12 +38,12 @@ data class ProcrastinationActivity(
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<ProcrastinationActivity> {
-        override fun createFromParcel(parcel: Parcel): ProcrastinationActivity {
-            return ProcrastinationActivity(parcel)
+    companion object CREATOR : Parcelable.Creator<Distraction> {
+        override fun createFromParcel(parcel: Parcel): Distraction {
+            return Distraction(parcel)
         }
 
-        override fun newArray(size: Int): Array<ProcrastinationActivity?> {
+        override fun newArray(size: Int): Array<Distraction?> {
             return arrayOfNulls(size)
         }
     }

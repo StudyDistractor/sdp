@@ -12,9 +12,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.github.studydistractor.sdp.BuildConfig
 import com.github.studydistractor.sdp.R
-import com.github.studydistractor.sdp.procrastinationActivity.FireBaseProcrastinationActivityService
-import com.github.studydistractor.sdp.procrastinationActivity.ProcrastinationActivity
-import com.github.studydistractor.sdp.procrastinationActivity.ProcrastinationActivityActivity
+import com.github.studydistractor.sdp.distraction.Distraction
+import com.github.studydistractor.sdp.distraction.FireBaseDistractionService
+import com.github.studydistractor.sdp.tempActivityWrappers.DistractionActivityWrapper
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -69,7 +69,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      *
      * @param activity The ProcrastinationActivity to display on the map.
      */
-    private fun displayActivity(activity: ProcrastinationActivity) {
+    private fun displayActivity(activity: Distraction) {
         val latLng = activity.lat?.let { activity.long?.let { it1 -> LatLng(it, it1) } }
         val marker = latLng?.let {
             MarkerOptions()
@@ -82,10 +82,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             )
         }
         marker?.tag = activity
-        map?.setOnInfoWindowClickListener { activityMarker ->
-            val procActivity = activityMarker.tag as ProcrastinationActivity
-            val intent = Intent(this, ProcrastinationActivityActivity::class.java)
-            intent.putExtra("activity", procActivity)
+        map?.setOnInfoWindowClickListener { distractionMarker ->
+            val distraction = distractionMarker.tag as Distraction
+            val intent = Intent(this, DistractionActivityWrapper::class.java)
+            intent.putExtra("activity", distraction)
             startActivity(intent)
         }
     }
@@ -94,9 +94,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      * Displays the places on the map and launches the distraction activity when clicking on the marker
      */
     private fun displayActivitiesOnMap() {
-        FireBaseProcrastinationActivityService().fetchProcrastinationActivities { activities ->
-            for (activity in activities) {
-                displayActivity(activity)
+        FireBaseDistractionService().fetchDistractionsCallBack {
+            list ->
+            for(distraction in list) {
+                displayActivity(distraction)
             }
         }
     }
