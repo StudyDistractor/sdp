@@ -15,8 +15,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.github.studydistractor.sdp.account.FirebaseCreateAccount
-import com.github.studydistractor.sdp.history.HistoryInterface
+import com.github.studydistractor.sdp.user.FirebaseUserService
+import com.github.studydistractor.sdp.history.FirebaseHistory
 import com.github.studydistractor.sdp.login.FirebaseLoginAuth
 import com.github.studydistractor.sdp.maps.MapsActivity
 import com.github.studydistractor.sdp.distraction.DistractionViewModel
@@ -39,7 +39,7 @@ enum class StudyDistractorScreen(@StringRes val title: Int) {
     Distraction(title = R.string.screen_name_distraction),
     CreateDistraction(title = R.string.screen_name_create_distraction),
     History(title = R.string.screen_name_history),
-    CreateAccount(title = R.string.screen_name_create_account)
+    CreateUser(title = R.string.screen_name_create_user)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -103,17 +103,17 @@ fun StudyDistractorApp(
             composable(route = StudyDistractorScreen.Register.name) {
                 RegisterScreen(
                     onRegistered = {
-                        navController.navigate(StudyDistractorScreen.CreateAccount.name)
+                        navController.navigate(StudyDistractorScreen.CreateUser.name)
                     },
                     registerAuth = FirebaseRegisterAuth(Firebase.auth)
                 )
             }
-            composable(route = StudyDistractorScreen.CreateAccount.name) {
-                CreateAccountScreen(
-                    onAccountCreated = {
+            composable(route = StudyDistractorScreen.CreateUser.name) {
+                CreateUserScreen(
+                    onUserCreated = {
                         navController.navigate(StudyDistractorScreen.Maps.name)
                     },
-                    createAccount = FirebaseCreateAccount()
+                    userService = FirebaseUserService()
                 )
             }
             composable(route = StudyDistractorScreen.Maps.name) {
