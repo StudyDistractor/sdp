@@ -16,10 +16,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.github.studydistractor.sdp.distraction.Distraction
 import com.github.studydistractor.sdp.distraction.DistractionService
 
+object DistractionScreenConstants {
+    const val MAX_NAME_LENGTH = 20
+    const val MAX_DESCRIPTION_LENGTH = 200
+}
 /**
  * Screen to create distraction
  *
@@ -29,6 +34,7 @@ import com.github.studydistractor.sdp.distraction.DistractionService
 @Composable
 fun CreateDistractionScreen(distractionService: DistractionService) {
     val context = LocalContext.current
+
     Box(
         modifier = Modifier
             .padding(16.dp)
@@ -47,15 +53,33 @@ fun CreateDistractionScreen(distractionService: DistractionService) {
             OutlinedTextField(
                 value = name.value,
                 label = {Text("name")},
-                onValueChange = { name.value = it },
-                modifier = Modifier.testTag("name")
+                onValueChange = { if (it.text.length <= DistractionScreenConstants.MAX_NAME_LENGTH) name.value = it },
+                modifier = Modifier
+                    .testTag("name")
+                    .fillMaxWidth(),
+                supportingText = {
+                    Text(
+                        text = "${name.value.text.length}/${DistractionScreenConstants.MAX_NAME_LENGTH}",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.End
+                    )
+                },
             )
 
             OutlinedTextField(
                 value = description.value,
                 label = {Text("description")},
-                onValueChange = { description.value = it },
-                modifier = Modifier.testTag("description")
+                onValueChange = { if (it.text.length <= DistractionScreenConstants.MAX_DESCRIPTION_LENGTH) description.value = it },
+                modifier = Modifier
+                    .testTag("description")
+                    .fillMaxWidth(),
+                supportingText = {
+                    Text(
+                        text = "${description.value.text.length}/${DistractionScreenConstants.MAX_DESCRIPTION_LENGTH}",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.End
+                    )
+                },
             )
 
             Button(onClick = {createDistraction(name.value.text, description.value.text, context, distractionService)},
@@ -85,8 +109,16 @@ private fun createDistraction(
         return
     }
 
-//        TODO: add the possibility to add a location to the activity
     val activity = Distraction(name, description, null, null)
-    service.postDistraction(activity)
-    Toast.makeText(context, "Distraction added !", Toast.LENGTH_SHORT).show()
+    service.postDistraction(activity,
+        {
+            displayMessage(context, "Distraction added")
+        }, {
+            displayMessage(context, "Error adding distraction")
+        })
+
+}
+
+private fun displayMessage(context: Context, message: String) {
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
