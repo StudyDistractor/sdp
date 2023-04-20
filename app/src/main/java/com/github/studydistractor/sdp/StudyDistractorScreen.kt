@@ -21,6 +21,7 @@ import com.github.studydistractor.sdp.login.FirebaseLoginAuth
 import com.github.studydistractor.sdp.maps.MapsActivity
 import com.github.studydistractor.sdp.distraction.DistractionViewModel
 import com.github.studydistractor.sdp.distraction.DistractionService
+import com.github.studydistractor.sdp.history.HistoryInterface
 import com.github.studydistractor.sdp.register.FirebaseRegisterAuth
 import com.github.studydistractor.sdp.ui.*
 import com.google.firebase.auth.ktx.auth
@@ -48,7 +49,8 @@ fun StudyDistractorApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     historyInterface: HistoryInterface,
-    distractionService : DistractionService
+    distractionService : DistractionService,
+    userService: FirebaseUserService
 ) {
 
     // Get current back stack entry
@@ -113,7 +115,7 @@ fun StudyDistractorApp(
                     onUserCreated = {
                         navController.navigate(StudyDistractorScreen.Maps.name)
                     },
-                    userService = FirebaseUserService()
+                    userService = userService
                 )
             }
             composable(route = StudyDistractorScreen.Maps.name) {
