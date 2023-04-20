@@ -1,9 +1,6 @@
 package com.github.studydistractor.sdp.user
 
 import android.telephony.PhoneNumberUtils
-import android.widget.Toast
-import androidx.compose.Context
-import java.sql.Date
 
 class UserViewModel {
     private val MAX_NAME_LENGTH = 255
