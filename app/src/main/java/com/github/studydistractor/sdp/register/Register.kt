@@ -17,7 +17,7 @@ class Register {
                         if (task.isSuccessful) {
                             onRegisterSuccess()
                         } else {
-                            onRegisterFailure("Failed to update database")
+                            onRegisterFailure("Failed to update database: " + task.exception)
                         }
                     }
             }

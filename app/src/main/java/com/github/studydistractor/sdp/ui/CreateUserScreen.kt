@@ -1,7 +1,10 @@
 package com.github.studydistractor.sdp.ui
 
 import android.app.DatePickerDialog
+import android.util.Log
 import android.widget.DatePicker
+import android.widget.Toast
+import androidx.compose.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,11 +24,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.github.studydistractor.sdp.account.CreateAccountInterface
-import com.github.studydistractor.sdp.account.CreateAccount.Companion.displayError
+import com.github.studydistractor.sdp.user.UserData
+import com.github.studydistractor.sdp.user.UserService
+import com.github.studydistractor.sdp.user.UserViewModel
+import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 
 
+object Constants{
+    const val TAG = "CreateAccountScreen"
+    // TODO add more constants
+}
 
 /**
  * A composable function that creates a screen for creating a new account. The function
@@ -37,12 +46,11 @@ import java.util.*
  * the LocalContext.current property to access the current context of the application.
  * @return A composable UI screen for creating a new account
  */
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateAccountScreen(
-    onAccountCreated: () -> Unit,
-    createAccount : CreateAccountInterface
+fun CreateUserScreen(
+    onUserCreated: () -> Unit,
+    userService : UserService
 ){
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
@@ -61,6 +69,8 @@ fun CreateAccountScreen(
         }, year, month, dayOfMonth
     )
 
+    val auth = FirebaseAuth.getInstance()
+    val userId = auth.currentUser?.uid
     var firstname by remember { mutableStateOf("") }
     var lastname by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
@@ -137,7 +147,7 @@ fun CreateAccountScreen(
         OutlinedTextField(
             value = phone,
             onValueChange = { phone = it },
-            label = { Text("Phone") },
+            label = { Text("Phone (ex: +41123456789)") },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Email
@@ -153,18 +163,21 @@ fun CreateAccountScreen(
 
         // Validate
         Button( onClick = {
-            if (selectedDateText.isEmpty()){
-                displayError(context, "Date")
-            } else if (!createAccount.checkNameFormat(firstname)){
-                displayError(context,"Firstname")
-            } else if (!createAccount.checkNameFormat(lastname)){
-                displayError(context,"Lastname")
-            } else if (!createAccount.checkPhoneFormat(phone)){
-                displayError(context,"Phone")
-            } else {
-                createAccount.postData(year, month, dayOfMonth, firstname, lastname, phone)
-                onAccountCreated()
+            var isUserCreated = true
+            val birthday = hashMapOf(
+                "year" to year, "month" to month, "day" to dayOfMonth)
+            val user = UserData(userId, firstname, lastname, phone, birthday, 0)
+            try {
+                UserViewModel().processUser(user, userService)
+            } catch (e: java.lang.Exception){
+                isUserCreated = false
+                e.message?.let { displayError(context, it) }
             }
+
+            if(isUserCreated){
+                onUserCreated()
+            }
+
         },
             modifier = Modifier
                 .fillMaxWidth()
@@ -175,5 +188,9 @@ fun CreateAccountScreen(
             Text(text = "Valid data")
         }
     }
+}
 
+private fun displayError(context: Context, data: String){
+    Log.d(Constants.TAG, "User has not been created $data")
+    Toast.makeText(context, data, Toast.LENGTH_SHORT).show()
 }

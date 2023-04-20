@@ -10,5 +10,5 @@
     <string name="screen_name_distraction_list">Distraction</string>
     <string name="screen_name_create_distraction">CreateDistraction</string>
     <string name="screen_name_history">History</string>
-    <string name="screen_name_create_account">CreateAccount</string>
+    <string name="screen_name_create_user">CreateUser</string>
 </resources>
