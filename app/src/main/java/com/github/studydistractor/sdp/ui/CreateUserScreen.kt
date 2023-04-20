@@ -24,9 +24,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.github.studydistractor.sdp.account.CreateAccountInterface
-import com.github.studydistractor.sdp.account.CreateAccount.Companion.displayError
-import com.github.studydistractor.sdp.ui.Constants.DATE_REGEX
 import com.github.studydistractor.sdp.user.UserData
 import com.github.studydistractor.sdp.user.UserService
 import com.github.studydistractor.sdp.user.UserViewModel
