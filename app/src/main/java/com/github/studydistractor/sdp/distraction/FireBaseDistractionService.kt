@@ -46,6 +46,16 @@ class FireBaseDistractionService @Inject constructor(): DistractionService {
                 onFailure()
             }
         }
+//        detach listeners
+        databaseRef.removeEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                // Do nothing
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Do nothing
+            }
+        })
     }
 
     /**
