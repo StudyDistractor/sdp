@@ -12,5 +12,5 @@ interface DistractionService {
      * Post the distraction to the database
      * @param activity the distraction to be posted to the database
      */
-    fun postDistraction(activity : Distraction)
+    fun postDistraction(activity : Distraction, onSuccess: () -> Unit, onFailure: () -> Unit)
 }

@@ -38,8 +38,14 @@ class FireBaseDistractionService @Inject constructor(): DistractionService {
         return distractions
     }
 
-    override fun postDistraction(activity: Distraction) {
-        databaseRef.child(activity.name!!).setValue(activity)
+    override fun postDistraction(activity: Distraction, onSuccess: () -> Unit, onFailure: () -> Unit) {
+        databaseRef.child(activity.name!!).setValue(activity).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                onSuccess()
+            } else {
+                onFailure()
+            }
+        }
     }
 
     /**

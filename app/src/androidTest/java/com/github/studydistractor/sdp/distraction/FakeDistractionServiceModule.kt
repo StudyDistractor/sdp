@@ -29,7 +29,12 @@ class FakeDistractionService : DistractionService{
         return activityList
     }
 
-    override fun postDistraction(activity: Distraction) {
+    override fun postDistraction(activity: Distraction, onSuccess: () -> Unit, onFailure: () -> Unit) {
         activityList.add(activity)
+        if (activityList.contains(activity)) {
+            onSuccess()
+        } else {
+            onFailure()
+        }
     }
 }
