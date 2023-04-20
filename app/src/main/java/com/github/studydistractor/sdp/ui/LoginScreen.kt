@@ -85,8 +85,8 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        var emailstr = email.value.text.trim()
-        var passwordstr = password.value.text.trim()
+        val emailstr = email.value.text
+        val passwordstr = password.value.text
         Button(
             onClick = {
                 if (TextUtils.isEmpty(emailstr) || TextUtils.isEmpty(passwordstr)) {
@@ -105,7 +105,7 @@ fun LoginScreen(
                                 Log.d(ContentValues.TAG, "signInWithEmail:failed")
                                 Log.d(
                                     ContentValues.TAG,
-                                    "email: " + emailstr + ", password: " + passwordstr
+                                    "email: $emailstr, password: $passwordstr"
                                 )
                             }
                         }
