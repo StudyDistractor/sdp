@@ -37,9 +37,59 @@ class LoginScreenTest {
     }
 
     @Test
+    fun mainContainerExists() {
+        composeRule.onNodeWithTag("login-screen__main-container").assertIsDisplayed()
+    }
+
+    @Test
+    fun mainContainerHasCorrectText() {
+        composeRule.onNodeWithTag("login-screen__main-container").onChildAt(0).assertTextContains("Log In")
+    }
+
+    @Test
+    fun emailFieldExists() {
+        composeRule.onNodeWithTag("email").assertIsDisplayed()
+    }
+
+    @Test
+    fun passwordFieldExists() {
+        composeRule.onNodeWithTag("password").assertIsDisplayed()
+    }
+
+    @Test
+    fun loginButtonExists() {
+        composeRule.onNodeWithTag("login").assertIsDisplayed()
+    }
+
+    @Test
+    fun loginButtonHasCorrectText() {
+        composeRule.onNodeWithTag("login").assert(hasText("Log in"))
+    }
+
+    @Test
+    fun registerButtonHasCorrectText() {
+        composeRule.onNodeWithTag("register").assert(hasText("Register"))
+    }
+
+    @Test
+    fun loginButtonCanBeClicked() {
+        composeRule.onNodeWithTag("login").assertHasClickAction()
+    }
+
+    @Test
+    fun emailFieldHasCorrectHint() {
+        composeRule.onNodeWithTag("email").assert(hasText("Email"))
+    }
+
+    @Test
+    fun passwordFieldHasCorrectHint() {
+        composeRule.onNodeWithTag("password").assert(hasText("Password"))
+    }
+
+    @Test
     fun testToLoginWithValidEmailAndPassword() {
-        val email = "test@gmail.com"
-        val password = "1234567890"
+        val email = "validEmail"
+        val password = "validPassword"
         composeRule.onNodeWithTag("email").performTextInput(email)
         composeRule.onNodeWithTag("password").performTextInput(password)
 
@@ -70,8 +120,8 @@ class LoginScreenTest {
 
     @Test
     fun testToLoginWithInvalidEmailAndPassword() {
-        val email = "email"
-        val password = "password"
+        val email = "invalidEmail"
+        val password = "invalidPassword"
         composeRule.onNodeWithTag("email").performTextInput(email)
         composeRule.onNodeWithTag("password").performTextInput(password)
         composeRule.onNodeWithTag("login").performClick()
