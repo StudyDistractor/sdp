@@ -15,8 +15,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.github.studydistractor.sdp.user.FirebaseUserService
-import com.github.studydistractor.sdp.history.FirebaseHistory
 import com.github.studydistractor.sdp.login.FirebaseLoginAuth
 import com.github.studydistractor.sdp.maps.MapsActivity
 import com.github.studydistractor.sdp.distraction.DistractionViewModel
@@ -24,6 +22,7 @@ import com.github.studydistractor.sdp.distraction.DistractionService
 import com.github.studydistractor.sdp.history.HistoryInterface
 import com.github.studydistractor.sdp.register.FirebaseRegisterAuth
 import com.github.studydistractor.sdp.ui.*
+import com.github.studydistractor.sdp.user.UserService
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -50,7 +49,7 @@ fun StudyDistractorApp(
     navController: NavHostController = rememberNavController(),
     historyInterface: HistoryInterface,
     distractionService : DistractionService,
-    userService: FirebaseUserService
+    userService: UserService
 ) {
 
     // Get current back stack entry
