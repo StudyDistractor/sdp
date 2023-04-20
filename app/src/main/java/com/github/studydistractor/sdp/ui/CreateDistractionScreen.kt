@@ -112,18 +112,13 @@ private fun createDistraction(
     val activity = Distraction(name, description, null, null)
     service.postDistraction(activity,
         {
-            Toast.makeText(
-                context,
-                "Distraction added",
-                Toast.LENGTH_SHORT
-            ).show()
+            displayMessage(context, "Distraction added")
         }, {
-            Toast.makeText(
-                context,
-                "Error while adding distraction",
-                Toast.LENGTH_SHORT
-            ).show(
-            )
+            displayMessage(context, "Error adding distraction")
         })
 
+}
+
+private fun displayMessage(context: Context, message: String) {
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
