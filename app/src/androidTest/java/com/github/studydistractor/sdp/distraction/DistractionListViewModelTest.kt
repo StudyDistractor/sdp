@@ -29,7 +29,7 @@ class DistractionListViewModelTest {
     fun setup() {
         rule.inject()
         for (distraction in distractions) {
-            fakeService.postDistraction(distraction)
+            fakeService.postDistraction(distraction, {}, {})
         }
     }
 

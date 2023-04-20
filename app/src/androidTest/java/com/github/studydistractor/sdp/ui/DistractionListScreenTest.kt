@@ -36,7 +36,7 @@ class DistractionListScreenTestTest {
         rule.inject()
         distractionListViewModel = DistractionListViewModel(fakeService)
         val distraction = Distraction(name, description)
-        fakeService.postDistraction(distraction)
+        fakeService.postDistraction(distraction, {}, {})
         composeTestRule.setContent {
             DistractionListScreen({}, distractionViewmodel, distractionListViewModel)
         }
