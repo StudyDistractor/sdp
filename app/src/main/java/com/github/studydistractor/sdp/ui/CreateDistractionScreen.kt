@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.github.studydistractor.sdp.distraction.Distraction
 import com.github.studydistractor.sdp.distraction.DistractionService
 
-object Constants {
+object DistractionScreenConstants {
     const val MAX_NAME_LENGTH = 20
     const val MAX_DESCRIPTION_LENGTH = 200
 }
@@ -53,13 +53,13 @@ fun CreateDistractionScreen(distractionService: DistractionService) {
             OutlinedTextField(
                 value = name.value,
                 label = {Text("name")},
-                onValueChange = { if (it.text.length <= Constants.MAX_NAME_LENGTH) name.value = it },
+                onValueChange = { if (it.text.length <= DistractionScreenConstants.MAX_NAME_LENGTH) name.value = it },
                 modifier = Modifier
                     .testTag("name")
                     .fillMaxWidth(),
                 supportingText = {
                     Text(
-                        text = "${name.value.text.length}/${Constants.MAX_NAME_LENGTH}",
+                        text = "${name.value.text.length}/${DistractionScreenConstants.MAX_NAME_LENGTH}",
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.End
                     )
@@ -69,13 +69,13 @@ fun CreateDistractionScreen(distractionService: DistractionService) {
             OutlinedTextField(
                 value = description.value,
                 label = {Text("description")},
-                onValueChange = { if (it.text.length <= Constants.MAX_DESCRIPTION_LENGTH) description.value = it },
+                onValueChange = { if (it.text.length <= DistractionScreenConstants.MAX_DESCRIPTION_LENGTH) description.value = it },
                 modifier = Modifier
                     .testTag("description")
                     .fillMaxWidth(),
                 supportingText = {
                     Text(
-                        text = "${description.value.text.length}/${Constants.MAX_DESCRIPTION_LENGTH}",
+                        text = "${description.value.text.length}/${DistractionScreenConstants.MAX_DESCRIPTION_LENGTH}",
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.End
                     )
