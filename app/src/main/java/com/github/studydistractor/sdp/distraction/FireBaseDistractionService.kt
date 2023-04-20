@@ -11,30 +11,31 @@ import com.google.firebase.database.ValueEventListener
 import javax.inject.Inject
 
 /**
- * A class that implements the distraction service to talk with the Firebase realtime database
+ * A class that implements the procrastination service to talk with the Firebase realtime database
  */
 class FireBaseDistractionService @Inject constructor(): DistractionService {
     private val pathStringProcrastinationActivity = "ProcrastinationActivities"
     private val databaseRef : DatabaseReference = FirebaseDatabase.getInstance().getReference(pathStringProcrastinationActivity)
-    val result =  mutableStateListOf<Distraction>()
+    val distractions =  mutableStateListOf<Distraction>()
 
-    override fun fetchDistractions(): SnapshotStateList<Distraction> {
+    init {
         databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for(activity in snapshot.children) {
-                        val activityItem = activity.getValue(Distraction::class.java)
-                        if(activityItem != null) {
-                            result.add(activityItem)
-                        }
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(activity in snapshot.children) {
+                    val activityItem = activity.getValue(Distraction::class.java)
+                    if(activityItem != null) {
+                        distractions.add(activityItem)
                     }
                 }
-                override fun onCancelled(error: DatabaseError) {
-                    Log.d("Firebase", "loadPost:onCancelled " + error.toException().toString())
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("Firebase", "loadPost:onCancelled " + error.toException().toString())
+            }
+        })
+    }
 
-                }
-            })
-
-        return result
+    override fun fetchDistractions(): SnapshotStateList<Distraction> {
+        return distractions
     }
 
     override fun postDistraction(activity: Distraction) {

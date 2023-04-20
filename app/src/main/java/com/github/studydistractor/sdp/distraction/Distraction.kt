@@ -13,14 +13,19 @@ data class Distraction(
     val name: String? = null,
     val description: String? = null,
     val lat: Double? = null,
-    val long: Double? = null) :
+    val long: Double? = null,
+    val length : Length? = null,
+    val tags: List<String>? = null
+    ) :
     Parcelable {
     // Parcelable is used to pass a Distractionfrom an activity to another one.
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
         parcel.readDouble(),
-        parcel.readDouble()
+        parcel.readDouble(),
+        parcel.readString()?.let { Length.valueOf(it) },
+        parcel.createStringArrayList()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -32,6 +37,10 @@ data class Distraction(
         if (long != null) {
             parcel.writeDouble(long)
         }
+        if (length != null) {
+            parcel.writeString(length.name)
+        }
+        parcel.writeStringList(tags)
     }
 
     override fun describeContents(): Int {
@@ -46,5 +55,11 @@ data class Distraction(
         override fun newArray(size: Int): Array<Distraction?> {
             return arrayOfNulls(size)
         }
+    }
+
+    enum class Length {
+        SHORT,
+        MEDIUM,
+        LONG
     }
 }

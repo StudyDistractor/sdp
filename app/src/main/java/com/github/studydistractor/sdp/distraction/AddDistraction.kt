@@ -88,7 +88,7 @@ class AddDistraction : Hilt_AddDistraction() {
         }
 
 //        TODO: add the possibility to add a location to the activity
-        val activity = Distraction(name, description, null, null)
+        val activity = Distraction(name, description, null, null, length = Distraction.Length.SHORT)
         service.postDistraction(activity)
     }
 }
