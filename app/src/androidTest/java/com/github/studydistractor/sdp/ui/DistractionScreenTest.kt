@@ -43,4 +43,15 @@ class DistractionScreenTest {
         composeRule.onNodeWithTag("description").assertExists()
         composeRule.onNodeWithTag("description").assert(hasText(description))
     }
+
+    @Test
+    fun buttonToCompleteActivityExistsAndHasCorrectText() {
+        val distraction = Distraction("test", "test description")
+        distractionViewModel.addDistraction(distraction)
+        composeRule.setContent {
+            DistractionScreen(distractionViewModel)
+        }
+        composeRule.onNodeWithTag("completeButton").assertExists()
+        composeRule.onNodeWithTag("completeButton").assert(hasText("Activity completed!"))
+    }
 }
