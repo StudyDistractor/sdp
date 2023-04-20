@@ -24,6 +24,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.github.studydistractor.sdp.account.CreateAccountInterface
+import com.github.studydistractor.sdp.account.CreateAccount.Companion.displayError
+import com.github.studydistractor.sdp.ui.Constants.DATE_REGEX
 import com.github.studydistractor.sdp.user.UserData
 import com.github.studydistractor.sdp.user.UserService
 import com.github.studydistractor.sdp.user.UserViewModel
@@ -79,39 +82,16 @@ fun CreateUserScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(16.dp)
+            .testTag("create_account_screen"),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        Text(
-            text = if (selectedDateText.isNotEmpty()) {
-                "Your birthday is $selectedDateText"
-            } else {
-                "Please pick your birthday"
-            }
-        )
-
-        // Birthday button
-        Button(
-            onClick = {
-                datePicker.show()
-            },
-            colors = ButtonDefaults.buttonColors(contentColor = Color.White),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-                .testTag("birthday"),
-
-            ) {
-            Icon(Icons.Filled.CardGiftcard, contentDescription = null)
-            Text(text = "Select your birthday")
-        }
-
-        // Firstname Text Field
+       // Firstname Text Field
         OutlinedTextField(
             value = firstname,
             onValueChange = { firstname = it },
-            label = { Text("Firstname") },
+            label = { Text("First name") },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Email
@@ -129,7 +109,7 @@ fun CreateUserScreen(
         OutlinedTextField(
             value = lastname,
             onValueChange = { lastname = it },
-            label = { Text("Lastname") },
+            label = { Text("Last name") },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Email
@@ -161,6 +141,28 @@ fun CreateUserScreen(
                 .testTag("phone")
         )
 
+        OutlinedTextField(
+            value = selectedDateText,
+            onValueChange = { selectedDateText = it },
+            leadingIcon = {
+                Icon(Icons.Filled.CardGiftcard, contentDescription = null)
+            },
+            label = { Text("Birthday") },
+            trailingIcon = { Button(
+                    onClick = { datePicker.show()},
+                    colors = ButtonDefaults.buttonColors(contentColor = Color.White),
+                    modifier = Modifier.testTag("selectBirthdayButton").padding(8.dp),
+                    shape = MaterialTheme.shapes.small,
+            ) {
+                Text("Select")
+            }},
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+                .testTag("birthday")
+        )
+
         // Validate
         Button( onClick = {
             var isUserCreated = true
@@ -185,7 +187,7 @@ fun CreateUserScreen(
                 .testTag("validbutton"),
 
             ) {
-            Text(text = "Valid data")
+            Text(text = "Validate")
         }
     }
 }
