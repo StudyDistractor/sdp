@@ -12,8 +12,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.github.studydistractor.sdp.BuildConfig
 import com.github.studydistractor.sdp.R
-import com.github.studydistractor.sdp.distraction.Distraction
-import com.github.studydistractor.sdp.distraction.FireBaseDistractionService
+import com.github.studydistractor.sdp.data.Distraction
+import com.github.studydistractor.sdp.distractionList.DistractionListServiceFirebase
 import com.github.studydistractor.sdp.tempActivityWrappers.DistractionActivityWrapper
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -94,7 +94,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      * Displays the places on the map and launches the distraction activity when clicking on the marker
      */
     private fun displayActivitiesOnMap() {
-        FireBaseDistractionService().fetchDistractionsCallBack {
+        DistractionListServiceFirebase().fetchDistractionsCallBack {
             list ->
             for(distraction in list) {
                 displayActivity(distraction)

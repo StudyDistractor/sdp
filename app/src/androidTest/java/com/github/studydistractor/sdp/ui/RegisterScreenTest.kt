@@ -1,34 +1,36 @@
 package com.github.studydistractor.sdp.ui
 
-import androidx.compose.ui.test.*
+import androidx.compose.ui.test.ComposeTimeoutException
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertHasClickAction
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextContains
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
-import com.github.studydistractor.sdp.register.FakeRegisterAuthModule.provideFakeRegisterAuth
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
+import androidx.compose.ui.test.onChildAt
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
+import com.github.studydistractor.sdp.fakeServices.RegisterServiceFake
+import com.github.studydistractor.sdp.register.RegisterViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-@HiltAndroidTest
 class RegisterScreenTest {
     private var successfullyRegistered = false
 
-    @get:Rule(order = 0)
-    var rule = HiltAndroidRule(this)
-
-    @get:Rule(order = 1)
+    @get:Rule
     val composeTestRule = createComposeRule()
 
     @Before
     fun setup() {
-        rule.inject()
-
         successfullyRegistered = false
         composeTestRule.setContent {
             RegisterScreen(
-                onRegistered = { successfullyRegistered = true },
-                registerAuth = provideFakeRegisterAuth()
+                onSuccess = { successfullyRegistered = true },
+                registerViewModel = RegisterViewModel(RegisterServiceFake())
             )
         }
     }

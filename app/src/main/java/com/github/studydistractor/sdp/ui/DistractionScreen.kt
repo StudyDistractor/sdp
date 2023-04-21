@@ -1,9 +1,18 @@
 package com.github.studydistractor.sdp.ui
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,6 +27,8 @@ import com.github.studydistractor.sdp.distraction.DistractionViewModel
 
 @Composable
 fun DistractionScreen(distractionViewModel : DistractionViewModel) {
+    val uiState by distractionViewModel.uiState.collectAsState()
+
     val context = LocalContext.current
     Column(
         modifier = Modifier.fillMaxWidth().fillMaxHeight().padding(26.dp),
@@ -25,17 +36,17 @@ fun DistractionScreen(distractionViewModel : DistractionViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         Text(
-            text = distractionViewModel.distraction!!.name!!,
-            fontWeight = FontWeight.Thin,
+            text = uiState.distraction.name.orEmpty(),
+            fontWeight = FontWeight.Bold,
             fontSize = 45.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier.testTag("name"),
         )
-        if (activityHasIcon(distractionViewModel.distraction!!.iconName)) {
+        if (activityHasIcon(uiState.distraction.iconName)) {
             Icon(
                 painter = painterResource(
                     LocalContext.current.resources.getIdentifier(
-                        distractionViewModel.distraction!!.iconName!!,
+                        uiState.distraction.iconName,
                         "drawable",
                         "com.github.studydistractor.sdp"
                     )
@@ -44,11 +55,11 @@ fun DistractionScreen(distractionViewModel : DistractionViewModel) {
                 modifier = Modifier
                     .size(350.dp)
                     .testTag("icon"),
-                contentDescription = distractionViewModel.distraction!!.iconName!!,
+                contentDescription = uiState.distraction.iconName,
             )
         }
         Text(
-            text = distractionViewModel.distraction!!.description!!,
+            text = uiState.distraction.description.orEmpty(),
             fontSize = 24.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier

@@ -1,114 +1,89 @@
 package com.github.studydistractor.sdp.ui
 
-import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
-import com.github.studydistractor.sdp.distraction.Distraction
-import com.github.studydistractor.sdp.distraction.DistractionListViewModel
-import com.github.studydistractor.sdp.distraction.DistractionService
-import com.github.studydistractor.sdp.distraction.DistractionViewModel
-import com.github.studydistractor.sdp.ui.DistractionListScreen
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import com.github.studydistractor.sdp.data.Distraction
+import com.github.studydistractor.sdp.distractionList.DistractionListViewModel
+import com.github.studydistractor.sdp.fakeServices.DistractionListServiceFake
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import javax.inject.Inject
 
-@HiltAndroidTest
 class DistractionListScreenTestTest {
-    val name = "test"
-    val description = "desc"
-    val distractionViewmodel = DistractionViewModel()
-    lateinit var distractionListViewModel: DistractionListViewModel
 
-    @get:Rule(order = 0)
-    var rule = HiltAndroidRule(this)
-
-    @get:Rule(order = 1)
+    @get:Rule
     val composeTestRule = createComposeRule()
 
-    @Inject
-    lateinit var fakeService : DistractionService
+    private val distractionListServiceFake = DistractionListServiceFake()
+    private val availableTags = distractionListServiceFake.getAvailableTags()
+    private lateinit var lastDistractionClicked: Distraction
+    private val distractionListViewModel = DistractionListViewModel(distractionListServiceFake)
 
     @Before
     fun setup() {
-        rule.inject()
-        distractionListViewModel = DistractionListViewModel(fakeService)
-        val distraction = Distraction(name, description)
-        fakeService.postDistraction(distraction, {}, {})
         composeTestRule.setContent {
-            DistractionListScreen({}, distractionViewmodel, distractionListViewModel)
+            DistractionListScreen(
+                onDistractionClicked = { lastDistractionClicked = it },
+                distractionListViewModel = distractionListViewModel
+            )
         }
+        distractionListViewModel.showFilteredDistractions()
     }
 
     @Test
     fun distractionsAreDisplayedCorrectly() {
-        composeTestRule.onNodeWithTag("distraction-list-screen__box-distraction").assertExists()
-        composeTestRule.onNodeWithTag("name", useUnmergedTree = true).assertExists()
-        composeTestRule.onNodeWithTag("name", useUnmergedTree = true).assert(hasText(name))
-        composeTestRule.onNodeWithTag("distraction-list-screen__box-distraction").performClick()
+        distractionListServiceFake.distractions.forEach {
+            composeTestRule.onNodeWithText(it.name!!).assertExists()
+            composeTestRule.onNodeWithText(it.name!!).performClick()
 
-        assertEquals(name, distractionViewmodel.distraction!!.name)
-        assertEquals(description, distractionViewmodel.distraction!!.description)
+            assertEquals(it, lastDistractionClicked)
+        }
     }
 
     @Test
     fun clickOnFilterExpandColumn() {
         composeTestRule.onNodeWithTag("distraction-list-screen__filter-Button").assertExists()
         composeTestRule.onNodeWithTag("distraction-list-screen__filter-Button").performClick()
-        composeTestRule.onNodeWithTag("filterIsOpen").assertExists()
         composeTestRule.onNodeWithTag("tags").assertExists()
         composeTestRule.onNodeWithTag("length").assertExists()
         composeTestRule.onNodeWithText("Length").assertExists()
         composeTestRule.onNodeWithText("Short").assertExists()
         composeTestRule.onNodeWithText("Medium").assertExists()
         composeTestRule.onNodeWithText("Long").assertExists()
-        composeTestRule.onNodeWithText("Apply Filters").assertExists()
     }
 
     @Test
     fun applyLengthsWorks() {
         composeTestRule.onNodeWithTag("distraction-list-screen__filter-Button").performClick()
         composeTestRule.onNodeWithText("Short").performClick()
-        composeTestRule.onNodeWithTag("distraction-list-screen__button-apply-button").performClick()
-        assertEquals(Distraction.Length.SHORT, distractionListViewModel.filterLength)
-        composeTestRule.onNodeWithTag("distraction-list-screen__filter-Button").performClick()
+        assertEquals(Distraction.Length.SHORT, distractionListViewModel.uiState.value.filtersSelectedLength)
         composeTestRule.onNodeWithText("Short").performClick()
-        composeTestRule.onNodeWithTag("distraction-list-screen__button-apply-button").performClick()
-        assertEquals(null, distractionListViewModel.filterLength)
+        assertNull(distractionListViewModel.uiState.value.filtersSelectedLength)
 
-        composeTestRule.onNodeWithTag("distraction-list-screen__filter-Button").performClick()
         composeTestRule.onNodeWithText("Medium").performClick()
-        composeTestRule.onNodeWithTag("distraction-list-screen__button-apply-button").performClick()
-        assertEquals(Distraction.Length.MEDIUM, distractionListViewModel.filterLength)
-        composeTestRule.onNodeWithTag("distraction-list-screen__filter-Button").performClick()
+        assertEquals(Distraction.Length.MEDIUM, distractionListViewModel.uiState.value.filtersSelectedLength)
         composeTestRule.onNodeWithText("Medium").performClick()
-        composeTestRule.onNodeWithTag("distraction-list-screen__button-apply-button").performClick()
-        assertEquals(null, distractionListViewModel.filterLength)
+        assertNull(distractionListViewModel.uiState.value.filtersSelectedLength)
 
-        composeTestRule.onNodeWithTag("distraction-list-screen__filter-Button").performClick()
         composeTestRule.onNodeWithText("Long").performClick()
-        composeTestRule.onNodeWithTag("distraction-list-screen__button-apply-button").performClick()
-        assertEquals(Distraction.Length.LONG, distractionListViewModel.filterLength)
-        composeTestRule.onNodeWithTag("distraction-list-screen__filter-Button").performClick()
+        assertEquals(Distraction.Length.LONG, distractionListViewModel.uiState.value.filtersSelectedLength)
         composeTestRule.onNodeWithText("Long").performClick()
-        composeTestRule.onNodeWithTag("distraction-list-screen__button-apply-button").performClick()
-        assertEquals(null, distractionListViewModel.filterLength)
+        assertNull(distractionListViewModel.uiState.value.filtersSelectedLength)
     }
 
     @Test
     fun applyTagsWorks() {
         composeTestRule.onNodeWithTag("distraction-list-screen__filter-Button").performClick()
-        composeTestRule.onNodeWithText("Food").assertExists()
-        composeTestRule.onNodeWithText("Food").performClick()
-        composeTestRule.onNodeWithTag("distraction-list-screen__button-apply-button").performClick()
-        assert(distractionListViewModel.filterTags.contains("Food"))
+        composeTestRule.onNodeWithText("food").assertExists()
+        composeTestRule.onNodeWithText("food").performClick()
+        assert(distractionListViewModel.uiState.value.filtersSelectedTags.contains("food"))
 
-        composeTestRule.onNodeWithTag("distraction-list-screen__filter-Button").performClick()
-        composeTestRule.onNodeWithText("Food").assertExists()
-        composeTestRule.onNodeWithText("Food").performClick()
-        composeTestRule.onNodeWithTag("distraction-list-screen__button-apply-button").performClick()
-        assert(!distractionListViewModel.filterTags.contains("Food"))
+        composeTestRule.onNodeWithText("food").assertExists()
+        composeTestRule.onNodeWithText("food").performClick()
+        assert(!distractionListViewModel.uiState.value.filtersSelectedTags.contains("food"))
     }
 }

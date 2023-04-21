@@ -1,33 +1,35 @@
 package com.github.studydistractor.sdp.ui
 
-import androidx.compose.ui.test.*
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertHasClickAction
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextContains
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
-import com.github.studydistractor.sdp.user.FakeCreateUserModule.provideFakeCreateUserModule
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
+import com.github.studydistractor.sdp.createUser.CreateUserViewModel
+import com.github.studydistractor.sdp.fakeServices.CreateUserServiceFake
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 
-@HiltAndroidTest
 class CreateUserScreenTest {
 
     private var accountCreated = false
-    @get:Rule(order = 0)
-    var rule = HiltAndroidRule(this)
 
-    @get:Rule(order = 1)
+    @get:Rule
     val composeRule = createComposeRule()
 
     @Before
     fun setup() {
-        rule.inject()
         composeRule.setContent {
             CreateUserScreen(
                 onUserCreated = { accountCreated = true },
-                userService = provideFakeCreateUserModule()
+                createUserViewModel = CreateUserViewModel(CreateUserServiceFake())
             )
         }
     }
@@ -80,21 +82,11 @@ class CreateUserScreenTest {
     }
 
     @Test
-    fun performTextInputOnBirthdayField() {
-        val birthday = "01/01/2000"
-        composeRule.onNodeWithTag("birthday").performTextInput(birthday)
-        composeRule.onNodeWithTag("birthday").assert(hasText(birthday))
-    }
-
-    @Test
     fun selectBirthdayButtonExistsAndIsClickable() {
         composeRule.onNodeWithTag("selectBirthdayButton").assertExists()
         composeRule.onNodeWithTag("selectBirthdayButton").assert(hasText("Select"))
         composeRule.onNodeWithTag("selectBirthdayButton").assertHasClickAction()
     }
-
-
-
 
     @Test
     fun testValidButton(){

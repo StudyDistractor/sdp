@@ -7,25 +7,16 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import com.github.studydistractor.sdp.StudyDistractorScreen
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-@HiltAndroidTest
 class AppBarTopTest {
-
-
-    @get:Rule(order = 0)
-    var rule = HiltAndroidRule(this)
-
-    @get:Rule(order = 1)
+    @get:Rule
     val composeRule = createComposeRule()
 
     @Before
     fun setup() {
-        rule.inject()
     }
 
     @Test

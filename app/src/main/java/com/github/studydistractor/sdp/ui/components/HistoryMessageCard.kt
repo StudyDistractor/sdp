@@ -11,7 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import com.github.studydistractor.sdp.history.HistoryEntry
+import com.github.studydistractor.sdp.data.HistoryEntry
 import java.text.SimpleDateFormat
 import java.util.*
 

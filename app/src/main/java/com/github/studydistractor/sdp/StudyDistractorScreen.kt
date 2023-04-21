@@ -1,6 +1,8 @@
 package com.github.studydistractor.sdp
 
 import android.content.Intent
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -9,23 +11,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.github.studydistractor.sdp.login.FirebaseLoginAuth
-import com.github.studydistractor.sdp.maps.MapsActivity
+import com.github.studydistractor.sdp.createDistraction.CreateDistractionServiceFirebase
+import com.github.studydistractor.sdp.createDistraction.CreateDistractionViewModel
+import com.github.studydistractor.sdp.createUser.CreateUserServiceFirebase
+import com.github.studydistractor.sdp.createUser.CreateUserViewModel
+import com.github.studydistractor.sdp.distraction.DistractionServiceFirebase
 import com.github.studydistractor.sdp.distraction.DistractionViewModel
-import com.github.studydistractor.sdp.distraction.DistractionService
-import com.github.studydistractor.sdp.distraction.DistractionListViewModel
-import com.github.studydistractor.sdp.history.HistoryInterface
-import com.github.studydistractor.sdp.register.FirebaseRegisterAuth
+import com.github.studydistractor.sdp.distractionList.DistractionListServiceFirebase
+import com.github.studydistractor.sdp.distractionList.DistractionListViewModel
+import com.github.studydistractor.sdp.friends.FriendsServiceFirebase
+import com.github.studydistractor.sdp.friends.FriendsViewModel
+import com.github.studydistractor.sdp.history.HistoryServiceFirebase
+import com.github.studydistractor.sdp.history.HistoryViewModel
+import com.github.studydistractor.sdp.login.LoginServiceFirebase
+import com.github.studydistractor.sdp.login.LoginViewModel
+import com.github.studydistractor.sdp.maps.MapsActivity
+import com.github.studydistractor.sdp.register.RegisterServiceFirebase
+import com.github.studydistractor.sdp.register.RegisterViewModel
 import com.github.studydistractor.sdp.ui.*
-import com.github.studydistractor.sdp.user.UserService
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 
 // Inspired by https://developer.android.com/codelabs/basic-android-kotlin-compose-navigation#7
 
@@ -43,14 +51,12 @@ enum class StudyDistractorScreen(@StringRes val title: Int) {
     CreateUser(title = R.string.screen_name_create_user)
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StudyDistractorApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    historyInterface: HistoryInterface,
-    distractionService : DistractionService,
-    userService: UserService
 ) {
 
     // Get current back stack entry
@@ -60,8 +66,15 @@ fun StudyDistractorApp(
         backStackEntry?.destination?.route ?: StudyDistractorScreen.Login.name
     )
     val context = LocalContext.current
-    val distractionViewModel: DistractionViewModel = viewModel()
-    val distractionListViewModel = DistractionListViewModel(distractionService)
+
+    val createDistractionViewModel = CreateDistractionViewModel(CreateDistractionServiceFirebase())
+    val createUserViewModel        = CreateUserViewModel(CreateUserServiceFirebase())
+    val distractionListViewModel   = DistractionListViewModel(DistractionListServiceFirebase())
+    val distractionViewModel       = DistractionViewModel(DistractionServiceFirebase())
+    val friendsViewModel           = FriendsViewModel(FriendsServiceFirebase())
+    val historyViewModel           = HistoryViewModel(HistoryServiceFirebase())
+    val loginViewModel             = LoginViewModel(LoginServiceFirebase())
+    val registerViewModel          = RegisterViewModel(RegisterServiceFirebase())
 
     Scaffold(
         topBar = { AppBarTop(
@@ -100,15 +113,15 @@ fun StudyDistractorApp(
                     onLoggedIn = {
                         navController.navigate(StudyDistractorScreen.Maps.name)
                     },
-                    loginAuth = FirebaseLoginAuth(Firebase.auth) // TODO: This should be handled in the modelview
+                    loginViewModel = loginViewModel
                 )
             }
             composable(route = StudyDistractorScreen.Register.name) {
                 RegisterScreen(
-                    onRegistered = {
+                    onSuccess = {
                         navController.navigate(StudyDistractorScreen.CreateUser.name)
                     },
-                    registerAuth = FirebaseRegisterAuth(Firebase.auth)
+                    registerViewModel = registerViewModel
                 )
             }
             composable(route = StudyDistractorScreen.CreateUser.name) {
@@ -116,7 +129,7 @@ fun StudyDistractorApp(
                     onUserCreated = {
                         navController.navigate(StudyDistractorScreen.Maps.name)
                     },
-                    userService = userService
+                    createUserViewModel = createUserViewModel
                 )
             }
             composable(route = StudyDistractorScreen.Maps.name) {
@@ -128,21 +141,31 @@ fun StudyDistractorApp(
             }
             composable(route = StudyDistractorScreen.DistractionList.name) {
                 DistractionListScreen(
-                    onClickingDistraction = {
+                    onDistractionClicked = { distraction ->
+                        distractionViewModel.updateDistraction(distraction)
                         navController.navigate(StudyDistractorScreen.Distraction.name)
                     },
-                    distractionViewModel,
-                    distractionListViewModel
+                    distractionListViewModel = distractionListViewModel
                 )
             }
             composable(route = StudyDistractorScreen.Distraction.name)  {
-                DistractionScreen(distractionViewModel)
+                DistractionScreen(
+                    distractionViewModel = distractionViewModel
+                )
             }
             composable(route = StudyDistractorScreen.CreateDistraction.name)  {
-                CreateDistractionScreen(distractionService)
+                CreateDistractionScreen(
+                    createDistractionViewModel = createDistractionViewModel,
+                    onDistractionCreated = {
+                        distractionListViewModel.showFilteredDistractions()
+                        navController.navigate(StudyDistractorScreen.DistractionList.name)
+                    }
+                )
             }
             composable(route = StudyDistractorScreen.History.name) {
-                HistoryScreen(historyInterface)
+                HistoryScreen(
+                    historyViewModel = historyViewModel
+                )
             }
         }
     }
