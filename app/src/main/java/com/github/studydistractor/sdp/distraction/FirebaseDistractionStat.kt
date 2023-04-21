@@ -10,7 +10,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class FirebaseDistractionStat : DistractionStatInterface {
+class FirebaseDistractionStat constructor(did: String): DistractionStatInterface {
 
     private val pathFeedback = "Feedback"
     private val pathLikes = "Likes"
@@ -18,11 +18,27 @@ class FirebaseDistractionStat : DistractionStatInterface {
     private val pathTags = "Tags"
     private val db = FirebaseDatabase.getInstance()
 
-    override fun fetchDistractionFeedback(did: String): SnapshotStateList<String> {
-        if(did.isEmpty()) throw  IllegalArgumentException()
-        val databaseRef = db.getReference(pathFeedback).child(did)
+    private val feedbacks = mutableStateListOf<String>()
+    private val tags = mutableStateListOf<String>()
+    init{
+        val feedbackRef = db.getReference(pathFeedback).child(did)
+        feedbackRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            val newFeedback =  mutableStateListOf<String>()
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(id in snapshot.children) {
+                    val feedback = id.getValue(String::class.java)
+                    if(feedback != null) {
+                        newFeedback.add(feedback)
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("Firebase", "loadPost:onCancelled " + error.toException().toString())
+            }
+        })
+        val tagsRef = db.getReference(pathTags).child(did)
         val result =  mutableStateListOf<String>()
-        databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
+        tagsRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for(id in snapshot.children) {
                     val tag = id.getValue(String::class.java)
@@ -36,28 +52,15 @@ class FirebaseDistractionStat : DistractionStatInterface {
             }
         })
 
-        return result
+    }
+    override fun fetchDistractionFeedback(did: String): SnapshotStateList<String> {
+        if(did.isEmpty()) throw  IllegalArgumentException()
+        return feedbacks
     }
 
     override fun fetchDistractionTags(did: String): SnapshotStateList<String> {
         if(did.isEmpty()) throw  IllegalArgumentException()
-        val databaseRef = db.getReference(pathTags).child(did)
-        val result =  mutableStateListOf<String>()
-        databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for(id in snapshot.children) {
-                    val tag = id.getValue(String::class.java)
-                    if(tag != null) {
-                        result.add(tag)
-                    }
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {
-                Log.d("Firebase", "loadPost:onCancelled " + error.toException().toString())
-            }
-        })
-
-        return result
+        return tags
     }
 
     override fun fetchLikeCount(did: String): MutableState<Int> {

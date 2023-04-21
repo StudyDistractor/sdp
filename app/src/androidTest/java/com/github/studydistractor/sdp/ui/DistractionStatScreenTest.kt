@@ -63,7 +63,7 @@ class DistractionStatScreenTest {
     @Test
     fun testEmptyAddTag(){
 
-        val distractionStat = FirebaseDistractionStat()
+        val distractionStat = FirebaseDistractionStat("did")
         assertThrows(IllegalArgumentException::class.java) {
             distractionStat.addTag("", "tag")
         }
@@ -73,7 +73,7 @@ class DistractionStatScreenTest {
     }
     @Test
     fun testEmptyAddFeedback(){
-        val distractionStat = FirebaseDistractionStat()
+        val distractionStat = FirebaseDistractionStat("did")
         assertThrows(IllegalArgumentException::class.java) {
             distractionStat.postNewFeedback("did", "uid", "")
         }
@@ -86,7 +86,7 @@ class DistractionStatScreenTest {
     }
     @Test
     fun testEmptyFetch(){
-        val distractionStat = FirebaseDistractionStat()
+        val distractionStat = FirebaseDistractionStat("did")
         assertThrows(IllegalArgumentException::class.java) {
             distractionStat.fetchDistractionFeedback("")
         }
@@ -102,7 +102,7 @@ class DistractionStatScreenTest {
     }
     @Test
     fun testEmptyPost(){
-        val distractionStat = FirebaseDistractionStat()
+        val distractionStat = FirebaseDistractionStat("did")
         assertThrows(IllegalArgumentException::class.java) {
             distractionStat.postDislike("did", "")
             distractionStat.postDislike("", "uid")

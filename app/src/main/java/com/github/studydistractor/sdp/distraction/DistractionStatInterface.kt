@@ -3,6 +3,10 @@ package com.github.studydistractor.sdp.procrastinationActivity
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.snapshots.SnapshotStateList
 
+/**
+ * A interface that fetch the stats (feedback, like, dislike and tags)
+ * And can add and remove like and dislike to a given Distraction
+ */
 interface DistractionStatInterface {
     /**
      * Fetch feedback of the did Distraction a list of feedback of user.
