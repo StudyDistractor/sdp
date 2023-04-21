@@ -1,10 +1,10 @@
 package com.github.studydistractor.sdp.ui
 
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.studydistractor.sdp.distraction.Distraction
 import com.github.studydistractor.sdp.distraction.DistractionViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -42,5 +42,36 @@ class DistractionScreenTest {
         composeRule.onNodeWithTag("name").assert(hasText(name))
         composeRule.onNodeWithTag("description").assertExists()
         composeRule.onNodeWithTag("description").assert(hasText(description))
+    }
+
+    @Test
+    fun buttonToCompleteActivityExistsAndHasCorrectText() {
+        val distraction = Distraction("test", "test description")
+        distractionViewModel.addDistraction(distraction)
+        composeRule.setContent {
+            DistractionScreen(distractionViewModel)
+        }
+        composeRule.onNodeWithTag("completeButton").assertExists()
+        composeRule.onNodeWithTag("completeButton").assert(hasText("Activity completed!"))
+    }
+
+    @Test
+    fun iconIsNotDisplayedIfActivityHasNoIcon() {
+        val distraction = Distraction("test", "test description")
+        distractionViewModel.addDistraction(distraction)
+        composeRule.setContent {
+            DistractionScreen(distractionViewModel)
+        }
+        composeRule.onNodeWithTag("icon").assertDoesNotExist()
+    }
+
+    @Test
+    fun iconIsDisplayedIfActivityHasIcon() {
+        val distraction = Distraction("test", "test description", null, null, null, null, "bathtub_fill0_wght200_grad0_opsz48")
+        distractionViewModel.addDistraction(distraction)
+        composeRule.setContent {
+            DistractionScreen(distractionViewModel)
+        }
+        composeRule.onNodeWithTag("icon").assertContentDescriptionEquals("bathtub_fill0_wght200_grad0_opsz48")
     }
 }
