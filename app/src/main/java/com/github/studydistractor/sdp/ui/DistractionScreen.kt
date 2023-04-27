@@ -2,9 +2,12 @@ package com.github.studydistractor.sdp.ui
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.MonitorHeart
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,10 +20,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.studydistractor.sdp.R
+import com.github.studydistractor.sdp.bookmark.BookmarksViewModel
 import com.github.studydistractor.sdp.distraction.DistractionViewModel
+import com.github.studydistractor.sdp.history.HistoryInterface
+import com.google.firebase.auth.FirebaseAuth
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @Composable
-fun DistractionScreen(distractionViewModel : DistractionViewModel) {
+fun DistractionScreen(
+    distractionViewModel: DistractionViewModel,
+    historyInterface: HistoryInterface,
+    bookmarksViewModel: BookmarksViewModel
+) {
     val context = LocalContext.current
     Column(
         modifier = Modifier
@@ -30,13 +42,32 @@ fun DistractionScreen(distractionViewModel : DistractionViewModel) {
         verticalArrangement = Arrangement.SpaceAround,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        Text(
-            text = distractionViewModel.distraction!!.name!!,
-            fontWeight = FontWeight.Thin,
-            fontSize = 45.sp,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.testTag("name"),
-        )
+        Row(
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Button(
+                onClick = {
+                    bookmarksViewModel.addToBookmark(
+                        distractionViewModel.distraction!!,
+                        {},
+                        {}
+                    )
+                },
+                modifier = Modifier.padding(8.dp)
+            ) {
+                Icon(Icons.Outlined.Favorite, contentDescription = null)
+            }
+            Spacer(modifier = Modifier.padding(8.dp))
+            Text(
+                text = distractionViewModel.distraction!!.name!!,
+                fontWeight = FontWeight.Thin,
+                fontSize = 45.sp,
+                modifier = Modifier.testTag("name"),
+                lineHeight = 45.sp
+            )
+        }
+
         if (activityHasIcon(distractionViewModel.distraction!!.iconName)) {
             Icon(
                 painter = painterResource(
@@ -69,7 +100,6 @@ fun DistractionScreen(distractionViewModel : DistractionViewModel) {
             ).show()
         }, modifier = Modifier.testTag("completeButton")) {
             Text(text = "Activity completed!", color = Color.White)
-
         }
     }
 }

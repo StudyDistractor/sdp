@@ -3,6 +3,7 @@ package com.github.studydistractor.sdp.bookmark
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import com.github.studydistractor.sdp.distraction.Distraction
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -37,17 +38,12 @@ class FirebaseBookmarks @Inject constructor() : Bookmarks {
         databaseRef.addListenerForSingleValueEvent(bookmarksListener)
     }
 
-    override fun getCurrentUid(): String? {
-        return auth.uid
-    }
-
     override fun addDistractionToBookmark(
-        uid: String,
-        distractionId: String,
+        distraction: Distraction,
         onSuccess: () -> Unit,
         onFailed: () -> Unit
     ) {
-        db.getReference(BOOKMARKSPATH).child(uid).setValue(distractionId)
+        db.getReference(BOOKMARKSPATH).child(auth.uid!!).push().setValue(distraction.distractionId)
             .addOnCompleteListener { t ->
                 if (t.isSuccessful){
                     onSuccess()
@@ -58,12 +54,11 @@ class FirebaseBookmarks @Inject constructor() : Bookmarks {
     }
 
     override fun removeDistractionFromBookmark(
-        uid: String,
-        distractionId: String,
+        distraction: Distraction,
         onSuccess: () -> Unit,
         onFailed: () -> Unit
     ) {
-        db.getReference(BOOKMARKSPATH).child(uid).child(distractionId).removeValue()
+        db.getReference(BOOKMARKSPATH).child(auth.uid!!).child(distraction.distractionId!!).removeValue()
             .addOnCompleteListener { t ->
                 if (t.isSuccessful){
                     onSuccess()
@@ -73,7 +68,7 @@ class FirebaseBookmarks @Inject constructor() : Bookmarks {
             }
     }
 
-    override fun fetchBookmarks(uid: String): SnapshotStateList<String> {
+    override fun fetchBookmarks(): SnapshotStateList<String> {
         return bookmarks
     }
 }

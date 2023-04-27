@@ -25,10 +25,8 @@ class FireBaseDistractionService @Inject constructor(): DistractionService {
                 distractions.clear()
                 for(distraction in snapshot.children) {
                     val distractionItem = distraction.getValue(Distraction::class.java)
-                    val key = distraction.key
-                    if(distractionItem != null) {
-                        distractions.add(distractionItem)
-                    }
+                    distractionItem!!.distractionId = distraction.key
+                    distractions.add(distractionItem)
                 }
             }
             override fun onCancelled(error: DatabaseError) {

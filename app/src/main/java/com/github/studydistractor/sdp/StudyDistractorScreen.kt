@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.github.studydistractor.sdp.bookmark.BookmarksViewModel
 import com.github.studydistractor.sdp.login.FirebaseLoginAuth
 import com.github.studydistractor.sdp.maps.MapsActivity
 import com.github.studydistractor.sdp.distraction.DistractionViewModel
@@ -136,7 +137,7 @@ fun StudyDistractorApp(
                 )
             }
             composable(route = StudyDistractorScreen.Distraction.name)  {
-                DistractionScreen(distractionViewModel)
+                DistractionScreen(distractionViewModel, historyInterface, BookmarksViewModel())
             }
             composable(route = StudyDistractorScreen.CreateDistraction.name)  {
                 CreateDistractionScreen(distractionService)
