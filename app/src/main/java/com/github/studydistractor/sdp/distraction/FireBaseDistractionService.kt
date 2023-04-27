@@ -39,7 +39,7 @@ class FireBaseDistractionService @Inject constructor(): DistractionService {
     }
 
     override fun postDistraction(activity: Distraction, onSuccess: () -> Unit, onFailure: () -> Unit) {
-        databaseRef.child(activity.name!!).setValue(activity).addOnCompleteListener { task ->
+        databaseRef.push().setValue(activity).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 onSuccess()
             } else {
