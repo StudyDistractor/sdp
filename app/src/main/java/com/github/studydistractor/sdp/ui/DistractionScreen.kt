@@ -2,6 +2,9 @@ package com.github.studydistractor.sdp.ui
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,7 +23,10 @@ import com.github.studydistractor.sdp.distraction.DistractionViewModel
 fun DistractionScreen(distractionViewModel : DistractionViewModel) {
     val context = LocalContext.current
     Column(
-        modifier = Modifier.fillMaxWidth().fillMaxHeight().padding(26.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.SpaceAround,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
