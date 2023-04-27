@@ -56,7 +56,7 @@ class CreateDistractionScreenTest {
 
         composeRule.onNodeWithTag("addActivity").performClick()
 
-        Thread.sleep(100) // bad but does the job.
+        Thread.sleep(200) // bad but does the job.
         assertEquals(1, successCount)
     }
 

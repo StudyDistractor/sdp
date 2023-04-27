@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -21,9 +22,7 @@ import com.github.studydistractor.sdp.createDistraction.CreateDistractionService
 import com.github.studydistractor.sdp.createDistraction.CreateDistractionViewModel
 import com.github.studydistractor.sdp.createUser.CreateUserServiceFirebase
 import com.github.studydistractor.sdp.createUser.CreateUserViewModel
-import com.github.studydistractor.sdp.distraction.DistractionServiceFirebase
 import com.github.studydistractor.sdp.distraction.DistractionViewModel
-import com.github.studydistractor.sdp.distractionList.DistractionListServiceFirebase
 import com.github.studydistractor.sdp.distractionList.DistractionListViewModel
 import com.github.studydistractor.sdp.friends.FriendsServiceFirebase
 import com.github.studydistractor.sdp.friends.FriendsViewModel
@@ -52,7 +51,6 @@ enum class StudyDistractorScreen(@StringRes val title: Int) {
     CreateUser(title = R.string.screen_name_create_user)
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StudyDistractorApp(
@@ -72,10 +70,6 @@ fun StudyDistractorApp(
         remember { CreateDistractionViewModel(CreateDistractionServiceFirebase()) }
     val createUserViewModel        =
         remember { CreateUserViewModel(CreateUserServiceFirebase()) }
-    val distractionListViewModel   =
-        remember { DistractionListViewModel(DistractionListServiceFirebase()) }
-    val distractionViewModel       =
-        remember { DistractionViewModel(DistractionServiceFirebase()) }
     val friendsViewModel           =
         remember { FriendsViewModel(FriendsServiceFirebase()) }
     val historyViewModel           =
@@ -84,6 +78,9 @@ fun StudyDistractorApp(
         remember { LoginViewModel(LoginServiceFirebase()) }
     val registerViewModel          =
         remember { RegisterViewModel(RegisterServiceFirebase()) }
+    val distractionViewModel: DistractionViewModel = viewModel()
+    val distractionListViewModel   =
+        remember { DistractionListViewModel() }
 
     Scaffold(
         topBar = { AppBarTop(
@@ -166,7 +163,7 @@ fun StudyDistractorApp(
                 CreateDistractionScreen(
                     createDistractionViewModel = createDistractionViewModel,
                     onDistractionCreated = {
-                        distractionListViewModel.showFilteredDistractions()
+                        distractionListViewModel.allDistractions()
                         navController.navigate(StudyDistractorScreen.DistractionList.name)
                     }
                 )

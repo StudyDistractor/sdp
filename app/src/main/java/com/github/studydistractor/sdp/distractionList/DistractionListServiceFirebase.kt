@@ -2,9 +2,8 @@ package com.github.studydistractor.sdp.distractionList
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.github.studydistractor.sdp.data.Distraction
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -14,18 +13,21 @@ import javax.inject.Inject
 
 class DistractionListServiceFirebase @Inject constructor() : DistractionListModel {
     private val pathStringProcrastinationActivity = "ProcrastinationActivities"
-    private val databaseRef : DatabaseReference = FirebaseDatabase.getInstance().getReference(pathStringProcrastinationActivity)
+    private val pathStringTags = "Tags"
+    private val distractionDatabaseRef : DatabaseReference = FirebaseDatabase.getInstance().getReference(pathStringProcrastinationActivity)
+    private val tagsDatabaseRef : DatabaseReference = FirebaseDatabase.getInstance().getReference(pathStringTags)
     val distractions =  mutableStateListOf<Distraction>()
-
-    private val availableTags = listOf<String>("Food", "Drink", "Sport")
+    val tags = mutableStateListOf<String>()
 
     init {
-        databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
+        distractionDatabaseRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                for(activity in snapshot.children) {
-                    val activityItem = activity.getValue(Distraction::class.java)
-                    if(activityItem != null) {
-                        distractions.add(activityItem)
+                distractions.clear()
+                for(distraction in snapshot.children) {
+                    val distractionItem = distraction.getValue(Distraction::class.java)
+                    if(distractionItem != null){
+                        distractionItem.distractionId = distraction.key
+                        distractions.add(distractionItem)
                     }
                 }
             }
@@ -33,37 +35,29 @@ class DistractionListServiceFirebase @Inject constructor() : DistractionListMode
                 Log.d("Firebase", "loadPost:onCancelled " + error.toException().toString())
             }
         })
-    }
 
-    override fun getAllDistractions(): Task<List<Distraction>> {
-        return if(distractions.isNotEmpty()) {
-            Tasks.forResult(distractions)
-        } else {
-            databaseRef.get().onSuccessTask { data ->
-                Tasks.forResult(
-                    data.children
-                        .mapNotNull { it.getValue(Distraction::class.java) }
-                )
-            }
-        }
-    }
-
-    override fun getFilteredDistractions(
-        length: Distraction.Length?,
-        tags: Set<String>
-    ): Task<List<Distraction>> {
-        return getAllDistractions().onSuccessTask { list ->
-            Tasks.forResult(
-                list.filter {
-                    (length == null || it.length == length)
-                        && (tags.isEmpty() || tags.containsAll(it.tags.orEmpty()))
+        tagsDatabaseRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(id in snapshot.children) {
+                    val tag = id.getValue(String::class.java)
+                    if(tag != null) {
+                        tags.add(tag)
+                    }
                 }
-            )
-        }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("Firebase", "loadPost:onCancelled " + error.toException().toString())
+            }
+        })
+
     }
 
-    override fun getAvailableTags(): List<String> {
-        return availableTags
+    override fun getAllDistractions(): SnapshotStateList<Distraction> {
+        return distractions
+    }
+
+    override fun getTags(): List<String> {
+        return tags
     }
 
     /**
@@ -72,7 +66,7 @@ class DistractionListServiceFirebase @Inject constructor() : DistractionListMode
      */
     fun fetchDistractionsCallBack(callback: (List<Distraction>) -> Unit) {
         val result =  mutableStateListOf<Distraction>()
-        databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
+        distractionDatabaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for(activity in snapshot.children) {
                     val activityItem = activity.getValue(Distraction::class.java)

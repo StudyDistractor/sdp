@@ -51,7 +51,6 @@ class FirebaseDistractionStat constructor(did: String): DistractionStatInterface
                 Log.d("Firebase", "loadPost:onCancelled " + error.toException().toString())
             }
         })
-
     }
     override fun fetchDistractionFeedback(did: String): SnapshotStateList<String> {
         if(did.isEmpty()) throw  IllegalArgumentException()

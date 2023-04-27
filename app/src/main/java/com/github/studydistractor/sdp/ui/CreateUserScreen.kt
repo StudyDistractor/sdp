@@ -43,7 +43,6 @@ object Constants{
  * the LocalContext.current property to access the current context of the application.
  * @return A composable UI screen for creating a new account
  */
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateUserScreen(
