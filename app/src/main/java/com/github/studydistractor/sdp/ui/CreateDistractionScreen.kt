@@ -4,10 +4,7 @@ import android.content.Context
 import android.text.TextUtils
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,10 +17,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.github.studydistractor.sdp.distraction.Distraction
 import com.github.studydistractor.sdp.distraction.DistractionService
+import com.github.studydistractor.sdp.ui.DistractionScreenConstants.MAX_LATITUDE
+import com.github.studydistractor.sdp.ui.DistractionScreenConstants.MAX_LONGITUDE
+import com.github.studydistractor.sdp.ui.DistractionScreenConstants.MIN_LATITUDE
+import com.github.studydistractor.sdp.ui.DistractionScreenConstants.MIN_LONGITUDE
 
 object DistractionScreenConstants {
     const val MAX_NAME_LENGTH = 20
     const val MAX_DESCRIPTION_LENGTH = 200
+    const val MAX_LATITUDE = 90.0
+    const val MIN_LATITUDE = -90.0
+    const val MAX_LONGITUDE = 180.0
+    const val MIN_LONGITUDE = -180.0
 }
 /**
  * Screen to create distraction
@@ -49,6 +54,9 @@ fun CreateDistractionScreen(distractionService: DistractionService) {
         ) {
             val name = remember { mutableStateOf(TextFieldValue("")) }
             val description = remember { mutableStateOf(TextFieldValue("")) }
+            val latitude = remember { mutableStateOf(TextFieldValue("")) }
+            val longitude = remember { mutableStateOf(TextFieldValue("")) }
+            val locationFieldIsVisible = remember { mutableStateOf(false) }
 
             OutlinedTextField(
                 value = name.value,
@@ -82,7 +90,50 @@ fun CreateDistractionScreen(distractionService: DistractionService) {
                 },
             )
 
-            Button(onClick = {createDistraction(name.value.text, description.value.text, context, distractionService)},
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("locationRow"),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Checkbox(
+                    checked = locationFieldIsVisible.value,
+                    modifier = Modifier.testTag("checkbox"),
+                    onCheckedChange = {
+                        locationFieldIsVisible.value = it
+                    }
+                )
+                Text(text = "Add location to activity")
+            }
+
+            if (locationFieldIsVisible.value) {
+                OutlinedTextField(
+                    value = latitude.value,
+                    label = {Text("latitude")},
+                    onValueChange = { latitude.value = it },
+                    modifier = Modifier
+                        .testTag("latitude")
+                        .fillMaxWidth().padding(top = 16.dp)
+                )
+
+                OutlinedTextField(
+                    value = longitude.value,
+                    label = {Text("longitude")},
+                    onValueChange = {
+                        longitude.value = it
+                    },
+                    modifier = Modifier
+                        .testTag("longitude")
+                        .fillMaxWidth().padding(top = 16.dp, bottom = 16.dp),
+                )
+            } else {
+                latitude.value = TextFieldValue("")
+                longitude.value = TextFieldValue("")
+            }
+
+            Button(onClick = {createDistraction(name.value.text, description.value.text, latitude.value.text, longitude.value.text, context, distractionService)},
                 modifier = Modifier.testTag("addActivity")
             ) {
                 Text("Create new distraction")
@@ -101,6 +152,8 @@ fun CreateDistractionScreen(distractionService: DistractionService) {
 private fun createDistraction(
     name: String,
     description: String,
+    latitude: String,
+    longitude: String,
     context: Context,
     service: DistractionService
 ) {
@@ -109,7 +162,32 @@ private fun createDistraction(
         return
     }
 
-    val activity = Distraction(name, description, null, null)
+    val activity: Distraction
+    if (latitude != "" && longitude != "") {
+        try {
+            val lat = latitude.toDouble()
+            val long = longitude.toDouble()
+            if (lat !in MIN_LATITUDE..MAX_LATITUDE) {
+                Toast.makeText(context, "Latitude must be between $MIN_LATITUDE and $MAX_LATITUDE", Toast.LENGTH_SHORT).show()
+                return
+            }
+
+            if (long !in MIN_LONGITUDE..MAX_LONGITUDE) {
+                Toast.makeText(context, "Longitude must be between $MIN_LONGITUDE and $MAX_LONGITUDE", Toast.LENGTH_SHORT).show()
+                return
+            }
+            activity = Distraction(name, description, lat, long)
+        } catch (e: NumberFormatException) {
+            Toast.makeText(context, "Invalid latitude or longitude", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+    } else if ((latitude != "") xor (longitude != "")) {
+        Toast.makeText(context, "Please fill both latitude and longitude", Toast.LENGTH_SHORT).show()
+        return
+    } else {
+        activity = Distraction(name, description)
+    }
     service.postDistraction(activity,
         {
             displayMessage(context, "Distraction added")

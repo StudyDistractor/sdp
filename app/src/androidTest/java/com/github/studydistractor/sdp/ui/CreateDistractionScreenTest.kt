@@ -57,7 +57,7 @@ class CreateDistractionScreenTest {
     }
 
     @Test
-    fun addImcompleteActivityDoesNotAddItToService1() {
+    fun addIncompleteActivityDoesNotAddItToService1() {
         val name = "test"
         composeRule.onNodeWithTag("name").performTextInput(name)
         composeRule.onNodeWithTag("name").assert(hasText(name))
@@ -68,7 +68,7 @@ class CreateDistractionScreenTest {
     }
 
     @Test
-    fun addImcompleteActivityDoesNotAddItToService2() {
+    fun addIncompleteActivityDoesNotAddItToService2() {
         val description = "test"
         composeRule.onNodeWithTag("description").performTextInput(description)
         composeRule.onNodeWithTag("description").assert(hasText(description))
@@ -135,5 +135,159 @@ class CreateDistractionScreenTest {
         composeRule.onNodeWithTag("name").assert(hasText("${name.length}/20"))
         composeRule.onNodeWithTag("description").assert(hasText(description))
         composeRule.onNodeWithTag("description").assert(hasText("${description.length}/200"))
+    }
+
+    @Test
+    fun checkBoxIsDisplayed() {
+        composeRule.onNodeWithTag("checkbox").assertExists()
+    }
+
+    @Test
+    fun locationRowIsDisplayed() {
+        composeRule.onNodeWithTag("locationRow").assertExists()
+    }
+
+    @Test
+    fun checkBoxIsNotCheckedByDefault() {
+        composeRule.onNodeWithTag("checkbox").assertIsOff()
+    }
+
+    @Test
+    fun checkBoxIsCheckedWhenClicked() {
+        composeRule.onNodeWithTag("checkbox").assertIsOff()
+        composeRule.onNodeWithTag("checkbox").performClick()
+        composeRule.onNodeWithTag("checkbox").assertIsOn()
+    }
+
+    @Test
+    fun checkBoxIsNotCheckedWhenClickedTwice() {
+        composeRule.onNodeWithTag("checkbox").assertIsOff()
+        composeRule.onNodeWithTag("checkbox").performClick()
+        composeRule.onNodeWithTag("checkbox").assertIsOn()
+        composeRule.onNodeWithTag("checkbox").performClick()
+        composeRule.onNodeWithTag("checkbox").assertIsOff()
+    }
+
+    @Test
+    fun latitudeAndLongitudeAreDisplayedWhenCheckBoxIsChecked() {
+        composeRule.onNodeWithTag("checkbox").performClick()
+        composeRule.onNodeWithTag("latitude").assertExists()
+        composeRule.onNodeWithTag("longitude").assertExists()
+    }
+
+    @Test
+    fun latitudeAndLongitudeAreNotDisplayedWhenCheckBoxIsNotChecked() {
+        composeRule.onNodeWithTag("latitude").assertDoesNotExist()
+        composeRule.onNodeWithTag("longitude").assertDoesNotExist()
+    }
+
+    @Test
+    fun latitudeAndLongitudeAreNotDisplayedWhenCheckBoxIsCheckedAndUnchecked() {
+        composeRule.onNodeWithTag("checkbox").performClick()
+        composeRule.onNodeWithTag("latitude").assertExists()
+        composeRule.onNodeWithTag("longitude").assertExists()
+        composeRule.onNodeWithTag("checkbox").performClick()
+        composeRule.onNodeWithTag("latitude").assertDoesNotExist()
+        composeRule.onNodeWithTag("longitude").assertDoesNotExist()
+    }
+
+    @Test
+    fun activityWithInvalidLatitudeIsNotInserted() {
+        val name = "test"
+        val description = "test description"
+        composeRule.onNodeWithTag("name").performTextInput(name)
+        composeRule.onNodeWithTag("description").performTextInput(description)
+        composeRule.onNodeWithTag("checkbox").performClick()
+        composeRule.onNodeWithTag("latitude").performTextInput("91")
+        composeRule.onNodeWithTag("longitude").performTextInput("0")
+        composeRule.onNodeWithTag("addActivity").performClick()
+        val addedActivityList = fakeService.fetchDistractions()
+        Assert.assertEquals(0, addedActivityList.size)
+        composeRule.onNodeWithTag("latitude").performTextInput("invalid")
+        val addedActivityList2 = fakeService.fetchDistractions()
+        Assert.assertEquals(0, addedActivityList2.size)
+    }
+
+    @Test
+    fun activityWithInvalidLongitudeIsNotInserted() {
+        val name = "test"
+        val description = "test description"
+        composeRule.onNodeWithTag("name").performTextInput(name)
+        composeRule.onNodeWithTag("description").performTextInput(description)
+        composeRule.onNodeWithTag("checkbox").performClick()
+        composeRule.onNodeWithTag("latitude").performTextInput("0")
+        composeRule.onNodeWithTag("longitude").performTextInput("181")
+        composeRule.onNodeWithTag("addActivity").performClick()
+        val addedActivityList = fakeService.fetchDistractions()
+        Assert.assertEquals(0, addedActivityList.size)
+        composeRule.onNodeWithTag("longitude").performTextInput("invalid")
+        val addedActivityList2 = fakeService.fetchDistractions()
+        Assert.assertEquals(0, addedActivityList2.size)
+    }
+
+    @Test
+    fun activityWithValidLatitudeAndLongitudeIsInserted() {
+        val name = "test"
+        val description = "test description"
+        composeRule.onNodeWithTag("name").performTextInput(name)
+        composeRule.onNodeWithTag("description").performTextInput(description)
+        composeRule.onNodeWithTag("checkbox").performClick()
+        composeRule.onNodeWithTag("latitude").performTextInput("0")
+        composeRule.onNodeWithTag("longitude").performTextInput("0")
+        composeRule.onNodeWithTag("addActivity").performClick()
+        val addedActivityList = fakeService.fetchDistractions()
+        Assert.assertEquals(1, addedActivityList.size)
+        val addedActivity = addedActivityList[0]
+        Assert.assertEquals(name, addedActivity.name)
+        Assert.assertEquals(description, addedActivity.description)
+        Assert.assertEquals(0.0, addedActivity.lat)
+        Assert.assertEquals(0.0, addedActivity.long)
+    }
+
+    @Test
+    fun validLatitudeAndLongitudeAreNotInsertedWhenCheckBoxIsNotChecked() {
+        val name = "test"
+        val description = "test description"
+        composeRule.onNodeWithTag("name").performTextInput(name)
+        composeRule.onNodeWithTag("description").performTextInput(description)
+        composeRule.onNodeWithTag("checkbox").performClick()
+        composeRule.onNodeWithTag("latitude").performTextInput("0")
+        composeRule.onNodeWithTag("longitude").performTextInput("0")
+        composeRule.onNodeWithTag("checkbox").performClick()
+        composeRule.onNodeWithTag("addActivity").performClick()
+        val addedActivityList = fakeService.fetchDistractions()
+
+        Assert.assertEquals(1, addedActivityList.size)
+        val addedActivity = addedActivityList[0]
+        Assert.assertEquals(name, addedActivity.name)
+        Assert.assertEquals(description, addedActivity.description)
+        Assert.assertEquals(null, addedActivity.lat)
+        Assert.assertEquals(null, addedActivity.long)
+    }
+
+    @Test
+    fun activityWithOnlyLatitudeIsNotInserted() {
+        val name = "test"
+        val description = "test description"
+        composeRule.onNodeWithTag("name").performTextInput(name)
+        composeRule.onNodeWithTag("description").performTextInput(description)
+        composeRule.onNodeWithTag("checkbox").performClick()
+        composeRule.onNodeWithTag("latitude").performTextInput("0")
+        composeRule.onNodeWithTag("addActivity").performClick()
+        val addedActivityList = fakeService.fetchDistractions()
+        Assert.assertEquals(0, addedActivityList.size)
+    }
+
+    @Test
+    fun activityWithOnlyLongitudeIsNotInserted() {
+        val name = "test"
+        val description = "test description"
+        composeRule.onNodeWithTag("name").performTextInput(name)
+        composeRule.onNodeWithTag("description").performTextInput(description)
+        composeRule.onNodeWithTag("checkbox").performClick()
+        composeRule.onNodeWithTag("longitude").performTextInput("0")
+        composeRule.onNodeWithTag("addActivity").performClick()
+        val addedActivityList = fakeService.fetchDistractions()
+        Assert.assertEquals(0, addedActivityList.size)
     }
 }
