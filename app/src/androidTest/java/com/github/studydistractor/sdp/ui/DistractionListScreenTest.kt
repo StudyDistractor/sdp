@@ -6,7 +6,6 @@ import com.github.studydistractor.sdp.distraction.Distraction
 import com.github.studydistractor.sdp.distraction.DistractionListViewModel
 import com.github.studydistractor.sdp.distraction.DistractionService
 import com.github.studydistractor.sdp.distraction.DistractionViewModel
-import com.github.studydistractor.sdp.ui.DistractionListScreen
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Assert.assertEquals
@@ -17,10 +16,10 @@ import javax.inject.Inject
 
 @HiltAndroidTest
 class DistractionListScreenTestTest {
-    val name = "test"
-    val description = "desc"
-    val distractionViewmodel = DistractionViewModel()
-    lateinit var distractionListViewModel: DistractionListViewModel
+    private val name = "test"
+    private val description = "desc"
+    private val distractionViewModel = DistractionViewModel()
+    private lateinit var distractionListViewModel: DistractionListViewModel
 
     @get:Rule(order = 0)
     var rule = HiltAndroidRule(this)
@@ -38,7 +37,7 @@ class DistractionListScreenTestTest {
         val distraction = Distraction(name, description)
         fakeService.postDistraction(distraction, {}, {})
         composeTestRule.setContent {
-            DistractionListScreen({}, distractionViewmodel, distractionListViewModel)
+            DistractionListScreen({}, distractionViewModel, distractionListViewModel)
         }
     }
 
@@ -49,8 +48,8 @@ class DistractionListScreenTestTest {
         composeTestRule.onNodeWithTag("name", useUnmergedTree = true).assert(hasText(name))
         composeTestRule.onNodeWithTag("distraction-list-screen__box-distraction").performClick()
 
-        assertEquals(name, distractionViewmodel.distraction!!.name)
-        assertEquals(description, distractionViewmodel.distraction!!.description)
+        assertEquals(name, distractionViewModel.distraction!!.name)
+        assertEquals(description, distractionViewModel.distraction!!.description)
     }
 
     @Test
@@ -100,14 +99,14 @@ class DistractionListScreenTestTest {
     @Test
     fun applyTagsWorks() {
         composeTestRule.onNodeWithTag("distraction-list-screen__filter-Button").performClick()
-        composeTestRule.onNodeWithText("Food").assertExists()
-        composeTestRule.onNodeWithText("Food").performClick()
+        composeTestRule.onNodeWithText("Outdoors").assertExists()
+        composeTestRule.onNodeWithText("Outdoors").performClick()
         composeTestRule.onNodeWithTag("distraction-list-screen__button-apply-button").performClick()
-        assert(distractionListViewModel.filterTags.contains("Food"))
+        assert(distractionListViewModel.filterTags.contains("Outdoors"))
 
         composeTestRule.onNodeWithTag("distraction-list-screen__filter-Button").performClick()
-        composeTestRule.onNodeWithText("Food").assertExists()
-        composeTestRule.onNodeWithText("Food").performClick()
+        composeTestRule.onNodeWithText("Outdoors").assertExists()
+        composeTestRule.onNodeWithText("Outdoors").performClick()
         composeTestRule.onNodeWithTag("distraction-list-screen__button-apply-button").performClick()
         assert(!distractionListViewModel.filterTags.contains("Food"))
     }

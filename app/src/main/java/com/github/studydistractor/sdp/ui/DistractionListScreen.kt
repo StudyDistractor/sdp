@@ -13,7 +13,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.studydistractor.sdp.distraction.Distraction
 import com.github.studydistractor.sdp.distraction.DistractionListViewModel
+import com.github.studydistractor.sdp.distraction.DistractionTags
 import com.github.studydistractor.sdp.distraction.DistractionViewModel
 
 /**
@@ -37,9 +41,9 @@ fun DistractionListScreen(
 ) {
     distractionListViewModel.allDistractions()
     val distractions = distractionListViewModel.distractions
-    Column() {
+    Column {
         FilterPanel(distractionListViewModel)
-        LazyColumn(){
+        LazyColumn {
             items(distractions) {distraction->
                 DistractionLayout(distraction, onClickingDistraction, distractionViewModel)
             }
@@ -117,7 +121,7 @@ fun FilterPanel(
             }
         }
         if (isExpanded) {
-            val tags = listOf("Food", "Drink", "Sport")
+            val tags = DistractionTags.values().map { it.toString() }
             var selectedTags by remember { mutableStateOf(distractionListViewModel.filterTags) }
             val selectedLength = remember { mutableStateOf(distractionListViewModel.filterLength) }
 
@@ -130,10 +134,10 @@ fun FilterPanel(
                     Text(
                         "Tags",
                         style = MaterialTheme.typography.subtitle1,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f, true).testTag("distraction-list-screen__text-tags")
                     )
 
-                    LazyRow(modifier = Modifier.padding(horizontal = 16.dp)) {
+                    LazyRow(modifier = Modifier.padding(horizontal = 16.dp).testTag("distraction-list-screen__lazy-row-tags")) {
                         items(tags) { tag ->
                             val selected = selectedTags.contains(tag)
                             Button(
@@ -147,9 +151,9 @@ fun FilterPanel(
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = if (selected) MaterialTheme.colors.primary else MaterialTheme.colors.surface
                                 ),
-                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                                contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
                                 shape = RoundedCornerShape(16.dp),
-                                modifier = Modifier.padding(end = 8.dp).testTag("distraction-list-screen__button-select-tag")
+                                modifier = Modifier.padding(end = 2.dp).testTag("distraction-list-screen__button-select-tag")
                             ) {
                                 Text(
                                     tag,
