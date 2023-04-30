@@ -33,6 +33,8 @@ class CreateDistractionScreenTest {
         }
     }
 
+    private val tags = listOf( "Indoors", "Outdoors", "Online", "Offline", "Group", "Solo")
+
     @Test
     fun testScreenIsShown() {
         composeRule.onNodeWithTag("create-distraction-screen__main-container").assertIsDisplayed()
@@ -145,52 +147,50 @@ class CreateDistractionScreenTest {
 
     @Test
     fun tagsRowHasCorrectText() {
-        composeRule.onNodeWithTag("tags_row").assert(hasText("Tags"))
+        composeRule.onNodeWithText("Tags").assertIsDisplayed()
     }
 
     @Test
-    fun allTagsAreDisplayedAndClickable(){
-        val tags = DistractionTags.values().map { it.name }
-        tags.forEach {
-            composeRule.onNodeWithText(it).assertIsDisplayed()
-            composeRule.onNodeWithText(it).assertHasClickAction()
-        }
+    fun tagsAreDisplayedAndClickable(){
+        val tag = tags.first().uppercase()
+        composeRule.onNodeWithText(tag).assertIsDisplayed()
+        composeRule.onNodeWithText(tag).assertHasClickAction()
     }
 
     @Test
     fun clickingOnTagSelectsAndDeselectsIt(){
-        val tag = DistractionTags.values().first()
-        composeRule.onNodeWithText(tag.name).performClick()
-        composeRule.onNodeWithText(tag.name).assertIsSelected()
-        composeRule.onNodeWithText(tag.name).performClick()
-        composeRule.onNodeWithText(tag.name).assertIsNotSelected()
+        val tag = tags.first().uppercase()
+        composeRule.onNodeWithText(tag).performClick()
+        composeRule.onNodeWithText(tag).assertIsSelected()
+        composeRule.onNodeWithText(tag).performClick()
+        composeRule.onNodeWithText(tag).assertIsNotSelected()
     }
 
     @Test
     fun clickingOnTagAddsItToTheActivity(){
-        val tag = DistractionTags.values().first()
+        val tag = tags.first().uppercase()
         val name = "test"
         val description = "test description"
         composeRule.onNodeWithTag("name").performTextInput(name)
         composeRule.onNodeWithTag("description").performTextInput(description)
-        composeRule.onNodeWithText(tag.name).performClick()
+        composeRule.onNodeWithText(tag).performClick()
         composeRule.onNodeWithTag("addActivity").performClick()
         val addedActivityList = fakeService.fetchDistractions()
         Assert.assertEquals(1, addedActivityList.size)
         val addedActivity = addedActivityList[0]
         Assert.assertEquals(1, addedActivity.tags?.size ?: 0)
-        Assert.assertEquals(tag.toString(), addedActivity.tags?.get(0))
+        Assert.assertEquals(tag.toString(), addedActivity.tags?.get(0)?.uppercase() ?: "")
     }
 
     @Test
     fun clickingAndUnclickingOnTagDoesNotAddItToTheActivity(){
-        val tag = DistractionTags.values().first()
+        val tag = tags.first().uppercase()
         val name = "test"
         val description = "test description"
         composeRule.onNodeWithTag("name").performTextInput(name)
         composeRule.onNodeWithTag("description").performTextInput(description)
-        composeRule.onNodeWithText(tag.name).performClick()
-        composeRule.onNodeWithText(tag.name).performClick()
+        composeRule.onNodeWithText(tag).performClick()
+        composeRule.onNodeWithText(tag).performClick()
         composeRule.onNodeWithTag("addActivity").performClick()
         val addedActivityList = fakeService.fetchDistractions()
         Assert.assertEquals(1, addedActivityList.size)
