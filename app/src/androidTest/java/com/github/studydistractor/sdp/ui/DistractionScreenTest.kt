@@ -14,7 +14,6 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import javax.inject.Inject
 
 @HiltAndroidTest
 class DistractionScreenTest {
@@ -42,7 +41,7 @@ class DistractionScreenTest {
         val distraction = Distraction(name, description)
         distractionViewModel.addDistraction(distraction)
         composeRule.setContent {
-            DistractionScreen(distractionViewModel, historyInterface)
+            DistractionScreen(distractionViewModel)
         }
         composeRule.onNodeWithTag("name").assertExists()
         composeRule.onNodeWithTag("name").assert(hasText(name))
@@ -55,7 +54,7 @@ class DistractionScreenTest {
         val distraction = Distraction("test", "test description")
         distractionViewModel.addDistraction(distraction)
         composeRule.setContent {
-            DistractionScreen(distractionViewModel, historyInterface)
+            DistractionScreen(distractionViewModel)
         }
         composeRule.onNodeWithTag("completeButton").assertExists()
         composeRule.onNodeWithTag("completeButton").assert(hasText("Activity completed!"))
@@ -66,7 +65,7 @@ class DistractionScreenTest {
         val distraction = Distraction("test", "test description")
         distractionViewModel.addDistraction(distraction)
         composeRule.setContent {
-            DistractionScreen(distractionViewModel, historyInterface)
+            DistractionScreen(distractionViewModel)
         }
         composeRule.onNodeWithTag("icon").assertDoesNotExist()
     }
@@ -76,7 +75,7 @@ class DistractionScreenTest {
         val distraction = Distraction("test", "test description", null, null, null, null, "bathtub_fill0_wght200_grad0_opsz48")
         distractionViewModel.addDistraction(distraction)
         composeRule.setContent {
-            DistractionScreen(distractionViewModel, historyInterface)
+            DistractionScreen(distractionViewModel)
         }
         composeRule.onNodeWithTag("icon").assertContentDescriptionEquals("bathtub_fill0_wght200_grad0_opsz48")
     }

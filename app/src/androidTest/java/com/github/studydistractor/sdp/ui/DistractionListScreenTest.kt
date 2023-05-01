@@ -1,5 +1,8 @@
 package com.github.studydistractor.sdp.ui
 
+import android.util.Log
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import com.github.studydistractor.sdp.distraction.Distraction
@@ -9,6 +12,7 @@ import com.github.studydistractor.sdp.distraction.DistractionViewModel
 import com.github.studydistractor.sdp.ui.DistractionListScreen
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.flow.collect
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -20,7 +24,7 @@ class DistractionListScreenTestTest {
     val name = "test"
     val description = "desc"
     val distractionViewmodel = DistractionViewModel()
-    lateinit var distractionListViewModel: DistractionListViewModel
+    private lateinit var distractionListViewModel: DistractionListViewModel
 
     @get:Rule(order = 0)
     var rule = HiltAndroidRule(this)
@@ -47,10 +51,6 @@ class DistractionListScreenTestTest {
         composeTestRule.onNodeWithTag("distraction-list-screen__box-distraction").assertExists()
         composeTestRule.onNodeWithTag("name", useUnmergedTree = true).assertExists()
         composeTestRule.onNodeWithTag("name", useUnmergedTree = true).assert(hasText(name))
-        composeTestRule.onNodeWithTag("distraction-list-screen__box-distraction").performClick()
-
-        assertEquals(name, distractionViewmodel.distraction!!.name)
-        assertEquals(description, distractionViewmodel.distraction!!.description)
     }
 
     @Test

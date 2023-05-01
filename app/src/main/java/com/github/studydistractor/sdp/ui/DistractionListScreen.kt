@@ -13,6 +13,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -41,7 +42,9 @@ fun DistractionListScreen(
         FilterPanel(distractionListViewModel)
         LazyColumn(){
             items(distractions) {distraction->
-                DistractionLayout(distraction, onClickingDistraction, distractionViewModel)
+                DistractionLayout(distraction,
+                    onClickingDistraction,
+                    distractionViewModel)
             }
         }
     }
@@ -51,15 +54,16 @@ fun DistractionListScreen(
  * layout to display a distraction in the list
  */
 @Composable
-fun DistractionLayout(activity : Distraction,
+fun DistractionLayout(distraction : Distraction,
                       onClickingDistraction : () -> Unit = {},
-                      distractionViewModel : DistractionViewModel) {
+                      distractionViewModel : DistractionViewModel
+) {
     Column {
         Box(
             modifier = Modifier
                 .clickable {
                     Log.d("box", "detect click")
-                    distractionViewModel.addDistraction(activity)
+                    distractionViewModel.addDistraction(distraction)
                     onClickingDistraction()
                 }
                 .testTag("distraction-list-screen__box-distraction")
@@ -68,13 +72,20 @@ fun DistractionLayout(activity : Distraction,
                 modifier = Modifier
                     .padding(all = 14.dp)
                     .fillMaxWidth()
-                    .fillMaxHeight()
+                    .fillMaxHeight(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = activity.name!!,
+                    text = distraction.name!!,
                     style = MaterialTheme.typography.subtitle2,
                     modifier = Modifier.testTag("name")
                 )
+                if(distractionViewModel.isBookmarked(distraction)) {
+                    Icon(Icons.Filled.Favorite,
+                        contentDescription = "Bookmark button",
+                        tint = Color.Red
+                    )
+                }
             }
         }
         Divider(

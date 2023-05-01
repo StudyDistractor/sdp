@@ -5,11 +5,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.MonitorHeart
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,19 +22,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.studydistractor.sdp.R
-import com.github.studydistractor.sdp.bookmark.BookmarksViewModel
 import com.github.studydistractor.sdp.distraction.DistractionViewModel
-import com.github.studydistractor.sdp.history.HistoryInterface
-import com.google.firebase.auth.FirebaseAuth
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @Composable
 fun DistractionScreen(
-    distractionViewModel: DistractionViewModel,
-    historyInterface: HistoryInterface,
-    bookmarksViewModel: BookmarksViewModel
+    distractionViewModel: DistractionViewModel
 ) {
+    val uiState by distractionViewModel.uiState.collectAsState()
     val context = LocalContext.current
     Column(
         modifier = Modifier
@@ -48,19 +44,25 @@ fun DistractionScreen(
         ) {
             Button(
                 onClick = {
-                    bookmarksViewModel.addToBookmark(
-                        distractionViewModel.distraction!!,
-                        {},
-                        {}
-                    )
+                    distractionViewModel.handleBookmark()
                 },
                 modifier = Modifier.padding(8.dp)
             ) {
-                Icon(Icons.Outlined.Favorite, contentDescription = null)
+                if(uiState.isBookmarked) {
+                    Icon(Icons.Filled.Favorite,
+                        contentDescription = "Bookmark button",
+                        tint = Color.Red
+                    )
+                } else {
+                    Icon(Icons.Filled.Favorite,
+                        contentDescription = "Bookmark button",
+                        tint = Color.White
+                    )
+                }
             }
             Spacer(modifier = Modifier.padding(8.dp))
             Text(
-                text = distractionViewModel.distraction!!.name!!,
+                text = uiState.distraction.name.orEmpty(),
                 fontWeight = FontWeight.Thin,
                 fontSize = 45.sp,
                 modifier = Modifier.testTag("name"),
@@ -68,11 +70,11 @@ fun DistractionScreen(
             )
         }
 
-        if (activityHasIcon(distractionViewModel.distraction!!.iconName)) {
+        if (activityHasIcon(uiState.distraction.iconName)) {
             Icon(
                 painter = painterResource(
                     LocalContext.current.resources.getIdentifier(
-                        distractionViewModel.distraction!!.iconName!!,
+                        uiState.distraction.iconName,
                         "drawable",
                         "com.github.studydistractor.sdp"
                     )
@@ -81,11 +83,11 @@ fun DistractionScreen(
                 modifier = Modifier
                     .size(350.dp)
                     .testTag("icon"),
-                contentDescription = distractionViewModel.distraction!!.iconName!!,
+                contentDescription = uiState.distraction.iconName,
             )
         }
         Text(
-            text = distractionViewModel.distraction!!.description!!,
+            text = uiState.distraction.description.orEmpty(),
             fontSize = 24.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier

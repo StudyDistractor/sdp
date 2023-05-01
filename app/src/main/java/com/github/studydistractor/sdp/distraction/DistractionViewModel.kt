@@ -1,24 +1,54 @@
 package com.github.studydistractor.sdp.distraction
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.github.studydistractor.sdp.bookmark.BookmarkModel
+import com.github.studydistractor.sdp.bookmark.FirebaseBookmarks
+import com.github.studydistractor.sdp.ui.state.DistractionUiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 /**
  * This class help passing distraction data between views
  */
-class DistractionViewModel : ViewModel(){
+class DistractionViewModel(
+    private val bookmarksService : BookmarkModel = FirebaseBookmarks()
+) : ViewModel(){
 
-    var distraction by mutableStateOf<Distraction?>(null)
+    private val _uiState = MutableStateFlow(DistractionUiState())
+    val uiState: StateFlow<DistractionUiState> = _uiState.asStateFlow()
 
     /**
      * Add distraction
      *
      * @param newDistraction distraction to be added
      */
-    fun addDistraction(newDistraction: Distraction) {
-        distraction = newDistraction
+    fun addDistraction(distraction: Distraction) {
+        _uiState.update { it.copy(distraction = distraction) }
+        if(isBookmarked(distraction)) {
+            Log.d("Bookmark update", "value is true")
+            _uiState.update { it.copy(isBookmarked = true) }
+        } else {
+            Log.d("Bookmark update", "value is false")
+            _uiState.update { it.copy(isBookmarked = false) }
+        }
+    }
+
+    fun isBookmarked(distraction: Distraction): Boolean {
+        return bookmarksService.isBookmarked(distraction)
+    }
+
+    fun handleBookmark() {
+        if(isBookmarked(_uiState.value.distraction)) {
+            Log.d("Bookmark update", "removed")
+            bookmarksService.removeDistractionFromBookmark(_uiState.value.distraction)
+            _uiState.update { it.copy(isBookmarked = false) }
+        } else {
+            Log.d("Bookmark update", "added")
+            bookmarksService.addDistractionToBookmark(_uiState.value.distraction)
+            _uiState.update { it.copy(isBookmarked = true) }
+        }
     }
 }

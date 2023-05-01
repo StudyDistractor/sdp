@@ -4,13 +4,11 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import com.github.studydistractor.sdp.bookmark.BookmarksViewModel
 import com.github.studydistractor.sdp.distraction.Distraction
 import com.github.studydistractor.sdp.distraction.DistractionViewModel
 import com.github.studydistractor.sdp.history.HistoryInterface
 import com.github.studydistractor.sdp.ui.DistractionScreen
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
 @AndroidEntryPoint(AppCompatActivity::class)
@@ -33,9 +31,7 @@ class DistractionActivityWrapper: Hilt_DistractionActivityWrapper() {
 
         setContent {
             DistractionScreen(
-                distractionViewModel = distractionViewModel,
-                historyInterface = historyInterface,
-                bookmarksViewModel = BookmarksViewModel()
+                distractionViewModel = distractionViewModel
             )
         }
     }

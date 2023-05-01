@@ -9,7 +9,7 @@ import dagger.hilt.android.components.ActivityComponent
 @InstallIn(ActivityComponent::class)
 object BookmarksModule {
     @Provides
-    fun provideBookmarkInterface() : Bookmarks {
+    fun provideBookmarkInterface() : BookmarkModel {
         return FirebaseBookmarks()
     }
 }
