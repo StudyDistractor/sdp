@@ -83,7 +83,8 @@ fun DistractionLayout(distraction : Distraction,
                 if(distractionViewModel.isBookmarked(distraction)) {
                     Icon(Icons.Filled.Favorite,
                         contentDescription = "Bookmark button",
-                        tint = Color.Red
+                        tint = Color.Red,
+                        modifier = Modifier.testTag("distraction-list-screen__bookmarked-icon")
                     )
                 }
             }
