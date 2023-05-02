@@ -24,7 +24,7 @@ class DistractionActivityWrapper: AppCompatActivity() {
         distractionViewModel.updateDistraction(procrastinationData!!)
 
         setContent {
-            DistractionScreen(distractionViewModel = distractionViewModel)
+            DistractionScreen(distractionViewModel = distractionViewModel, {})
         }
     }
 }

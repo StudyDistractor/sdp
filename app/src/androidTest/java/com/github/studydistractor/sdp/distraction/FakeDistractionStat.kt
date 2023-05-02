@@ -1,48 +1,57 @@
 package com.github.studydistractor.sdp.procrastinationActivity
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
+import com.github.studydistractor.sdp.distractionStat.DistractionStatModel
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 
-class FakeDistractionStat : DistractionStatInterface {
+class FakeDistractionStat : DistractionStatModel {
     var feedbacks = mutableStateListOf("Super", "Top")
     var tags = mutableStateListOf("Games", "Music")
-    var likes = mutableStateOf(0)
-    var dislike = mutableStateOf(0)
-    override fun fetchDistractionFeedback(did: String): SnapshotStateList<String> {
-        return feedbacks
+    var likes = 0
+    var dislike = 0
+    override fun fetchDistractionFeedback(did: String): Task<List<String>> {
+        return Tasks.forResult(feedbacks)
     }
 
-    override fun fetchDistractionTags(did: String): SnapshotStateList<String> {
-        return tags
+    override fun fetchDistractionTags(did: String): Task<List<String>> {
+        return Tasks.forResult(tags)
     }
 
-    override fun fetchLikeCount(did: String): MutableState<Int> {
-        return likes
+    override fun fetchLikeCount(did: String): Task<Int> {
+        return Tasks.forResult(likes)
     }
 
-    override fun fetchDislikeCount(did: String): MutableState<Int> {
-        return dislike
+    override fun fetchDislikeCount(did: String): Task<Int> {
+        return Tasks.forResult(dislike)
     }
 
-    override fun postNewFeedback(did: String, uid: String, feedback: String) {
+    override fun postNewFeedback(did: String, feedback: String) : Task<Void> {
         feedbacks.add(feedback)
+        return Tasks.whenAll(setOf(Tasks.forResult("")))
     }
 
-    override fun postLike(did: String, uid: String) {
-        likes.value += 1
+    override fun postLike(did: String) : Task<Void>{
+        likes += 1
+        return Tasks.whenAll(setOf(Tasks.forResult("")))
     }
 
-    override fun postDislike(did: String, uid: String) {
-        dislike.value += 1
+    override fun postDislike(did: String) : Task<Void>{
+        dislike += 1
+        return Tasks.whenAll(setOf(Tasks.forResult("")))
     }
 
-    override fun addTag(did: String, tag: String) {
+    override fun addTag(did: String, tag: String): Task<Void> {
         tags.add(tag)
+        return Tasks.whenAll(setOf(Tasks.forResult("")))
     }
 
-    override fun removeTag(did: String, tag: String) {
+    override fun removeTag(did: String, tag: String) : Task<Void>{
         tags.remove(tag)
+        return Tasks.whenAll(setOf(Tasks.forResult("")))
+    }
+
+    override fun updateCurrentDistraction(did: String) {
+        TODO("Not yet implemented")
     }
 }

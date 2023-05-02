@@ -1,6 +1,8 @@
 package com.github.studydistractor.sdp
 
 import android.content.Intent
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -44,8 +46,10 @@ enum class StudyDistractorScreen(@StringRes val title: Int) {
     Login(title = R.string.screen_name_login),
     Register(title = R.string.screen_name_register),
     Maps(title = R.string.screen_name_maps),
+    Friends(title = R.string.screen_name_friends),
     DistractionList(title = R.string.screen_name_distraction_list),
     Distraction(title = R.string.screen_name_distraction),
+    DistractionStat(title = R.string.screen_name_distraction_stat),
     CreateDistraction(title = R.string.screen_name_create_distraction),
     History(title = R.string.screen_name_history),
     CreateUser(title = R.string.screen_name_create_user)
@@ -82,6 +86,8 @@ fun StudyDistractorApp(
         remember { DistractionViewModel() }
     val distractionListViewModel   =
         remember { DistractionListViewModel(DistractionListServiceFirebase()) }
+    val distractionStatViewModel          =
+        remember { DistractionStatViewModel(DistractionStatServiceFirebase()) }
 
     Scaffold(
         topBar = { AppBarTop(
@@ -102,6 +108,7 @@ fun StudyDistractorApp(
             onHomeClick = { navController.navigate(StudyDistractorScreen.Login.name) },
             onListClick = { navController.navigate(StudyDistractorScreen.DistractionList.name) },
             onMapClick = { navController.navigate(StudyDistractorScreen.Maps.name) },
+            onFriendsClick = { navController.navigate(StudyDistractorScreen.Friends.name) },
             onMagicClick = { navController.navigate(StudyDistractorScreen.CreateDistraction.name) }
         ) }
     ) {
@@ -156,9 +163,10 @@ fun StudyDistractorApp(
                 )
             }
             composable(route = StudyDistractorScreen.Distraction.name)  {
-                DistractionScreen(
-                    distractionViewModel = distractionViewModel
-                )
+                DistractionScreen(distractionViewModel, onDistractionState = { it ->
+                    distractionStatViewModel.updateDid(it)
+                   navController.navigate(StudyDistractorScreen.DistractionStat.name)
+                })
             }
             composable(route = StudyDistractorScreen.CreateDistraction.name)  {
                 CreateDistractionScreen(
@@ -173,6 +181,14 @@ fun StudyDistractorApp(
                 HistoryScreen(
                     historyViewModel = historyViewModel
                 )
+            }
+            composable(route = StudyDistractorScreen.DistractionStat.name){
+                DistractionStatScreen(
+                    distractionStatViewModel,
+                )
+            }
+            composable(route = StudyDistractorScreen.Friends.name){
+                FriendsScreen(friendsViewModel)
             }
         }
     }
