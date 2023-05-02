@@ -20,15 +20,18 @@ class FirebaseDistractionStat constructor(did: String): DistractionStatInterface
 
     private val feedbacks = mutableStateListOf<String>()
     private val tags = mutableStateListOf<String>()
+    private val likes = mutableStateOf(0)
+    private val dislikes = mutableStateOf(0)
+
     init{
         val feedbackRef = db.getReference(pathFeedback).child(did)
-        feedbackRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            val newFeedback =  mutableStateListOf<String>()
+        feedbackRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                feedbacks.clear()
                 for(id in snapshot.children) {
                     val feedback = id.getValue(String::class.java)
                     if(feedback != null) {
-                        newFeedback.add(feedback)
+                        feedbacks.add(feedback)
                     }
                 }
             }
@@ -37,15 +40,34 @@ class FirebaseDistractionStat constructor(did: String): DistractionStatInterface
             }
         })
         val tagsRef = db.getReference(pathTags).child(did)
-        val result =  mutableStateListOf<String>()
-        tagsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+        tagsRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                tags.clear()
                 for(id in snapshot.children) {
                     val tag = id.getValue(String::class.java)
                     if(tag != null) {
-                        result.add(tag)
+                        tags.add(tag)
                     }
                 }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("Firebase", "loadPost:onCancelled " + error.toException().toString())
+            }
+        })
+
+        val likesRef = db.getReference(pathLikes).child(did)
+        likesRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                likes.value = snapshot.children.count()
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("Firebase", "loadPost:onCancelled " + error.toException().toString())
+            }
+        })
+        val dislikesRef = db.getReference(pathDislikes).child(did)
+        dislikesRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                dislikes.value = snapshot.children.count()
             }
             override fun onCancelled(error: DatabaseError) {
                 Log.d("Firebase", "loadPost:onCancelled " + error.toException().toString())
@@ -65,34 +87,12 @@ class FirebaseDistractionStat constructor(did: String): DistractionStatInterface
 
     override fun fetchLikeCount(did: String): MutableState<Int> {
         if(did.isEmpty()) throw  IllegalArgumentException()
-        val c = mutableStateOf(0)
-        val databaseRef = db.getReference(pathLikes).child(did)
-        databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                c.value = snapshot.children.count()
-            }
-            override fun onCancelled(error: DatabaseError) {
-                Log.d("Firebase", "loadPost:onCancelled " + error.toException().toString())
-            }
-        })
-
-        return c
+        return likes
     }
 
     override fun fetchDislikeCount(did: String): MutableState<Int> {
         if(did.isEmpty()) throw  IllegalArgumentException()
-        val c = mutableStateOf(0)
-        val databaseRef = db.getReference(pathDislikes).child(did)
-        databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                c.value = snapshot.children.count()
-            }
-            override fun onCancelled(error: DatabaseError) {
-                Log.d("Firebase", "loadPost:onCancelled " + error.toException().toString())
-            }
-        })
-
-        return c
+        return dislikes
     }
 
     override fun postNewFeedback(did: String, uid: String, feedback: String) {
@@ -105,20 +105,19 @@ class FirebaseDistractionStat constructor(did: String): DistractionStatInterface
     override fun postLike(did: String, uid: String) {
         if(did.isEmpty()) throw  IllegalArgumentException()
         if(uid.isEmpty()) throw  IllegalArgumentException()
-        db.getReference(pathLikes).child(did).setValue(uid)
+        db.getReference(pathLikes).child(did).child(uid).setValue(uid)
     }
 
     override fun postDislike(did: String, uid: String) {
         if(did.isEmpty()) throw  IllegalArgumentException()
         if(uid.isEmpty()) throw  IllegalArgumentException()
-        db.getReference(pathDislikes).child(did).setValue(uid)
+        db.getReference(pathDislikes).child(did).child(uid).setValue(uid)
     }
 
     override fun addTag(did: String, tag: String) {
         if(did.isEmpty()) throw  IllegalArgumentException()
         if(tag.isEmpty()) throw  IllegalArgumentException()
-        val key = db.getReference(pathTags).child(did).key ?: return
-        db.getReference(pathTags).child(did).child(key).setValue(tag)
+        db.getReference(pathTags).child(did).child(tag).setValue(tag)
     }
 
     override fun removeTag(did: String, tag: String) {

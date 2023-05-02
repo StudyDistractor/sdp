@@ -14,15 +14,18 @@ import javax.inject.Inject
 class FriendsServiceFirebase @Inject constructor(): FriendsModel {
     private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseDatabase.getInstance()
+    private val FRIENDSPATH = "Friends"
+
+    private var friends = mutableStateListOf<String>()
 
     private var friendListener =  object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
-            val newFriend =  mutableStateListOf<String>()
-            for (id in snapshot.children) {
-                if (id.exists()) {
-                    newFriend.add(id.getValue(String::class.java)!!)
+            friends.clear()
+            for (child in snapshot.children) {
+                if (child.exists()) {
+                    val id = child.getValue(String::class.java)!!
+                    friends.add(id)
                 }
-                friends = newFriend
 
             }
         }
@@ -31,13 +34,10 @@ class FriendsServiceFirebase @Inject constructor(): FriendsModel {
         }
     }
 
-    private val FRIENDSPATH = "Friends"
-
-    private var friends = SnapshotStateList<String>()
 
     init {
         val databaseRef = db.getReference(FRIENDSPATH).child(auth.uid!!)
-        databaseRef.addListenerForSingleValueEvent(friendListener)
+        databaseRef.addValueEventListener(friendListener)
     }
     override fun getCurrentUid(): String? {
         return auth.uid
