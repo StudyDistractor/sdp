@@ -26,6 +26,7 @@ class FriendsServiceFirebase @Inject constructor(): FriendsModel {
                     val id = child.getValue(String::class.java)!!
                     friends.add(id)
                 }
+                friends = newFriend
 
             }
         }
@@ -66,5 +67,24 @@ class FriendsServiceFirebase @Inject constructor(): FriendsModel {
 
     override fun fetchAllFriends(uid: String): SnapshotStateList<String> {
         return friends
+    }
+
+    override fun fetchFriendHistory(uid: String) {
+        db.getReference("History").child(uid).get().addOnCompleteListener {
+            t->
+            friendHistory.clear()
+            for(history in t.result.children){
+                val historyEntry = history.getValue(HistoryEntry::class.java)
+                if(historyEntry != null) {
+                    historyEntry.date = history.key!!.toLong()
+                    friendHistory.add(historyEntry)
+                }
+            }
+
+        }
+    }
+
+    override fun getFriendHistory(): MutableList<HistoryEntry> {
+        return friendHistory
     }
 }

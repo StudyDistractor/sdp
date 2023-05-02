@@ -28,10 +28,33 @@ class FriendListTest {
         composeTestRule.onNodeWithTag("friend-list-screen__friend-text-field").assertIsDisplayed()
     }
     @Test
+    fun testAddButton(){
+        composeTestRule.onNodeWithTag("friend-list-screen__friend-button").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("friend-list-screen__friend-text-field").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("friend-list-screen__friend-text-field").performTextInput("newFriend")
+        composeTestRule.onNodeWithTag("friend-list-screen__friend-button").performClick()
+        assertEquals(3, fakeUser.fetchAllFriends(fakeUser.getCurrentUid()).size)
+    }
+    @Test
     fun testFriendList(){
         for (f in fakeFriends.friendlist){
             composeTestRule.onNodeWithTag("friend-list-screen__friend-$f").assertIsDisplayed()
+            composeTestRule.onNodeWithTag("friend-list-screen__history-$f").assertIsDisplayed()
             composeTestRule.onNodeWithTag("friend-list-screen__delete-$f").assertIsDisplayed()
         }
+        for (f in fakeUser.friendlist){
+            composeTestRule.onNodeWithTag("friend-list-screen__delete-$f").performClick()
+        }
+    }
+    @Test
+    fun testHistoryEmpty(){
+        composeTestRule.onNodeWithTag("friend-list-screen__history-title").assertDoesNotExist()
+    }
+    @Test
+    fun testHistoryIsDisplayed(){
+        composeTestRule.onNodeWithTag(
+            "friend-list-screen__history-${fakeUser.friendlist[0]}")
+            .performClick()
+        composeTestRule.onNodeWithTag("friend-list-screen__history-title").assertIsDisplayed()
     }
 }

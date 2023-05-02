@@ -1,4 +1,4 @@
-package com.github.studydistractor.sdp.friends
+package com.github.studydistractor.sdp.account
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.google.android.gms.tasks.Task
