@@ -9,7 +9,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.github.studydistractor.sdp.distraction.DistractionService
 import com.github.studydistractor.sdp.history.HistoryInterface
-import com.github.studydistractor.sdp.distraction.DistractionListViewModel
 import com.github.studydistractor.sdp.ui.theme.StudyDistractorTheme
 import com.github.studydistractor.sdp.user.UserService
 import dagger.hilt.android.AndroidEntryPoint
