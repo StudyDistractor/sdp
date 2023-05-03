@@ -1,25 +1,32 @@
 package com.github.studydistractor.sdp.bookmarks
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.github.studydistractor.sdp.bookmark.BookmarkModel
 import com.github.studydistractor.sdp.distraction.Distraction
 import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 
-class fakeBookmarksService: BookmarkModel {
+class FakeBookmarksService: BookmarkModel {
+
+    val bookmarks = mutableStateListOf<String>("test")
 
     override fun addDistractionToBookmark(distraction: Distraction): Task<Void> {
-        TODO("Not yet implemented")
+        bookmarks.add(distraction.distractionId!!)
+        return Tasks.forResult(null)
     }
 
     override fun removeDistractionFromBookmark(distraction: Distraction): Task<Void> {
-        TODO("Not yet implemented")
+        bookmarks.remove(distraction.distractionId!!)
+        return Tasks.forResult(null)
     }
 
     override fun fetchBookmarks(): SnapshotStateList<String> {
-        TODO("Not yet implemented")
+        return bookmarks
     }
 
     override fun isBookmarked(distraction: Distraction): Boolean {
-        TODO("Not yet implemented")
+        val distractionId = distraction.distractionId!!
+        return bookmarks.contains(distractionId)
     }
 }

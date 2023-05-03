@@ -1,29 +1,18 @@
 package com.github.studydistractor.sdp.ui
 
-import android.util.Log
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
-import com.github.studydistractor.sdp.distraction.Distraction
-import com.github.studydistractor.sdp.distraction.DistractionListViewModel
-import com.github.studydistractor.sdp.distraction.DistractionService
-import com.github.studydistractor.sdp.distraction.DistractionViewModel
-import com.github.studydistractor.sdp.ui.DistractionListScreen
+import com.github.studydistractor.sdp.bookmarks.FakeBookmarksService
+import com.github.studydistractor.sdp.distractionList.DistractionListViewModel
+import com.github.studydistractor.sdp.distractionList.FakeDistractionListModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.flow.collect
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import javax.inject.Inject
 
 @HiltAndroidTest
 class DistractionListScreenTestTest {
-    val name = "test"
-    val description = "desc"
-    val distractionViewmodel = DistractionViewModel()
     private lateinit var distractionListViewModel: DistractionListViewModel
 
     @get:Rule(order = 0)
@@ -32,25 +21,19 @@ class DistractionListScreenTestTest {
     @get:Rule(order = 1)
     val composeTestRule = createComposeRule()
 
-    @Inject
-    lateinit var fakeService : DistractionService
-
     @Before
     fun setup() {
         rule.inject()
-        distractionListViewModel = DistractionListViewModel(fakeService)
-        val distraction = Distraction(name, description)
-        fakeService.postDistraction(distraction, {}, {})
+        distractionListViewModel = DistractionListViewModel(bookmarkService = FakeBookmarksService(), distractionListModel = FakeDistractionListModel())
         composeTestRule.setContent {
-            DistractionListScreen({}, distractionViewmodel, distractionListViewModel)
+            DistractionListScreen({}, distractionListViewModel)
         }
     }
 
     @Test
     fun distractionsAreDisplayedCorrectly() {
-        composeTestRule.onNodeWithTag("distraction-list-screen__box-distraction").assertExists()
-        composeTestRule.onNodeWithTag("name", useUnmergedTree = true).assertExists()
-        composeTestRule.onNodeWithTag("name", useUnmergedTree = true).assert(hasText(name))
+        composeTestRule.onNodeWithText("testDistraction", useUnmergedTree = true).assertExists()
+        composeTestRule.onNodeWithText("testDistraction", useUnmergedTree = true).performClick()
     }
 
     @Test
@@ -72,29 +55,26 @@ class DistractionListScreenTestTest {
         composeTestRule.onNodeWithTag("distraction-list-screen__filter-Button").performClick()
         composeTestRule.onNodeWithText("Short").performClick()
         composeTestRule.onNodeWithTag("distraction-list-screen__button-apply-button").performClick()
-        assertEquals(Distraction.Length.SHORT, distractionListViewModel.filterLength)
+        composeTestRule.onAllNodesWithText("shortDistraction", useUnmergedTree = true)[0].assertExists()
         composeTestRule.onNodeWithTag("distraction-list-screen__filter-Button").performClick()
         composeTestRule.onNodeWithText("Short").performClick()
         composeTestRule.onNodeWithTag("distraction-list-screen__button-apply-button").performClick()
-        assertEquals(null, distractionListViewModel.filterLength)
 
         composeTestRule.onNodeWithTag("distraction-list-screen__filter-Button").performClick()
         composeTestRule.onNodeWithText("Medium").performClick()
         composeTestRule.onNodeWithTag("distraction-list-screen__button-apply-button").performClick()
-        assertEquals(Distraction.Length.MEDIUM, distractionListViewModel.filterLength)
+        composeTestRule.onAllNodesWithText("mediumDistraction", useUnmergedTree = true)[0].assertIsDisplayed()
         composeTestRule.onNodeWithTag("distraction-list-screen__filter-Button").performClick()
         composeTestRule.onNodeWithText("Medium").performClick()
         composeTestRule.onNodeWithTag("distraction-list-screen__button-apply-button").performClick()
-        assertEquals(null, distractionListViewModel.filterLength)
 
         composeTestRule.onNodeWithTag("distraction-list-screen__filter-Button").performClick()
         composeTestRule.onNodeWithText("Long").performClick()
         composeTestRule.onNodeWithTag("distraction-list-screen__button-apply-button").performClick()
-        assertEquals(Distraction.Length.LONG, distractionListViewModel.filterLength)
+        composeTestRule.onAllNodesWithText("longDistraction", useUnmergedTree = true)[0].assertIsDisplayed()
         composeTestRule.onNodeWithTag("distraction-list-screen__filter-Button").performClick()
         composeTestRule.onNodeWithText("Long").performClick()
         composeTestRule.onNodeWithTag("distraction-list-screen__button-apply-button").performClick()
-        assertEquals(null, distractionListViewModel.filterLength)
     }
 
     @Test
@@ -103,12 +83,12 @@ class DistractionListScreenTestTest {
         composeTestRule.onNodeWithText("Food").assertExists()
         composeTestRule.onNodeWithText("Food").performClick()
         composeTestRule.onNodeWithTag("distraction-list-screen__button-apply-button").performClick()
-        assert(distractionListViewModel.filterTags.contains("Food"))
-
-        composeTestRule.onNodeWithTag("distraction-list-screen__filter-Button").performClick()
-        composeTestRule.onNodeWithText("Food").assertExists()
-        composeTestRule.onNodeWithText("Food").performClick()
-        composeTestRule.onNodeWithTag("distraction-list-screen__button-apply-button").performClick()
-        assert(!distractionListViewModel.filterTags.contains("Food"))
+        composeTestRule.onAllNodesWithText("foodDistraction")[0].assertExists()
     }
+
+    @Test
+    fun bookmarksIsDisplayed() {
+        composeTestRule.onNodeWithTag("distraction-list-screen__bookmarked-icon", useUnmergedTree = true).assertExists()
+    }
+
 }

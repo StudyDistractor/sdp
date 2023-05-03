@@ -1,5 +1,8 @@
 package com.github.studydistractor.sdp.distraction
 
+import com.github.studydistractor.sdp.bookmarks.FakeBookmarksService
+import com.github.studydistractor.sdp.distractionList.DistractionListViewModel
+import com.github.studydistractor.sdp.distractionList.FakeDistractionListModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Assert.assertEquals
@@ -7,88 +10,46 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import javax.inject.Inject
 
 @HiltAndroidTest
 class DistractionListViewModelTest {
-    private val distractions = listOf(
-        Distraction("test", "test"),
-        Distraction("short", "test", length = Distraction.Length.SHORT),
-        Distraction("medium", "test", length = Distraction.Length.MEDIUM),
-        Distraction("tags", "test", tags = listOf("testTag")),
-        Distraction("mix", "test", length = Distraction.Length.MEDIUM, tags = listOf("testTag"))
-    )
+
+    private val distractionListModel = FakeDistractionListModel()
+    private val bookmarksService = FakeBookmarksService()
+    private val viewModel = DistractionListViewModel(bookmarksService, distractionListModel)
 
     @get:Rule(order = 0)
     var rule = HiltAndroidRule(this)
 
-    @Inject
-    lateinit var fakeService: DistractionService
-
     @Before
     fun setup() {
         rule.inject()
-        for (distraction in distractions) {
-            fakeService.postDistraction(distraction, {}, {})
-        }
     }
 
     @Test
     fun allDistractionsAreAddedAtInit() {
-        val viewModel = DistractionListViewModel(fakeService)
-        assertEquals(distractions.size, viewModel.distractions.size)
-        assert(viewModel.distractions.containsAll(distractions))
+        assertEquals(distractionListModel.getAllDistractions().size, viewModel.distractions.size)
     }
 
     @Test
-    fun filterWithTagsReturnEmptyIfNoMatching() {
-        val viewModel = DistractionListViewModel(fakeService)
-        viewModel.filterTags = setOf("nosuchtag")
+    fun filterDistractionsByLength() {
+        viewModel.updateFiltersSelectedLength(Distraction.Length.SHORT)
         viewModel.filterDistractions()
-        assertEquals(0, viewModel.distractions.size)
+        assertTrue(viewModel.distractions.all { it.length == Distraction.Length.SHORT })
     }
 
     @Test
-    fun filterWithTagsReturnFilteredDistraction() {
-        val viewModel = DistractionListViewModel(fakeService)
-        viewModel.filterTags = setOf("testTag")
+    fun filterDistractionsByTags() {
+        val tag = "testTag"
+        viewModel.addFiltersSelectedTag(tag)
         viewModel.filterDistractions()
-        assertEquals(2, viewModel.distractions.size)
-        assertTrue(viewModel.distractions.contains(distractions[3]))
+        assertTrue(viewModel.distractions.all { it.tags?.contains(tag) ?: false })
     }
 
     @Test
-    fun filterWithLengthWorks() {
-        val viewModel = DistractionListViewModel(fakeService)
-        viewModel.filterLength = Distraction.Length.SHORT
+    fun filterDistractionsByBookmarks() {
+        viewModel.updateBookmarksFilter(true)
         viewModel.filterDistractions()
-        assertEquals(1, viewModel.distractions.size)
-        assertTrue(viewModel.distractions.contains(distractions[1]))
-    }
-
-    @Test
-    fun nothingIsFilteredIfNullLengthAndEmptyTags() {
-        val viewModel = DistractionListViewModel(fakeService)
-        viewModel.filterDistractions()
-        assertEquals(distractions.size, viewModel.distractions.size)
-        assertTrue(viewModel.distractions.containsAll(distractions))
-    }
-
-    @Test
-    fun filterAllThenAllDistractionsCallWorks() {
-        val viewModel = DistractionListViewModel(fakeService)
-        viewModel.filterTags = setOf("nosuchtag")
-        viewModel.filterDistractions()
-        assertEquals(0, viewModel.distractions.size)
-        viewModel.allDistractions()
-        assertEquals(distractions.size, viewModel.distractions.size)
-        assertTrue(viewModel.distractions.containsAll(distractions))
-    }
-
-    @Test
-    fun checkingDefaultValue() {
-        val viewModel = DistractionListViewModel(fakeService)
-        assertEquals(null, viewModel.filterLength)
-        assertEquals(0, viewModel.filterTags.size)
+        assertTrue(viewModel.distractions.all { bookmarksService.isBookmarked(it) })
     }
 }

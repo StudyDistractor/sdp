@@ -6,8 +6,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -46,7 +44,7 @@ fun DistractionScreen(
                 onClick = {
                     distractionViewModel.handleBookmark()
                 },
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(8.dp).testTag("distraction-screen__bookmark-button")
             ) {
                 if(uiState.isBookmarked) {
                     Icon(Icons.Filled.Favorite,

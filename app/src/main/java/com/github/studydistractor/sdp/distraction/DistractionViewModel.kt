@@ -23,9 +23,9 @@ class DistractionViewModel(
     /**
      * Add distraction
      *
-     * @param newDistraction distraction to be added
+     * @param distraction distraction to be added
      */
-    fun addDistraction(distraction: Distraction) {
+    fun updateDistraction(distraction: Distraction) {
         _uiState.update { it.copy(distraction = distraction) }
         if(isBookmarked(distraction)) {
             Log.d("Bookmark update", "value is true")

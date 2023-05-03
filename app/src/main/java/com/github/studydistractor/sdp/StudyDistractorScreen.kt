@@ -7,6 +7,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -19,7 +20,7 @@ import com.github.studydistractor.sdp.login.FirebaseLoginAuth
 import com.github.studydistractor.sdp.maps.MapsActivity
 import com.github.studydistractor.sdp.distraction.DistractionViewModel
 import com.github.studydistractor.sdp.distraction.DistractionService
-import com.github.studydistractor.sdp.distraction.DistractionListViewModel
+import com.github.studydistractor.sdp.distractionList.DistractionListViewModel
 import com.github.studydistractor.sdp.history.HistoryInterface
 import com.github.studydistractor.sdp.register.FirebaseRegisterAuth
 import com.github.studydistractor.sdp.ui.*
@@ -61,7 +62,10 @@ fun StudyDistractorApp(
     )
     val context = LocalContext.current
     val distractionViewModel: DistractionViewModel = viewModel()
-    val distractionListViewModel = DistractionListViewModel(distractionService)
+//    val distractionListViewModel = DistractionListViewModel(distractionService)
+    val distractionListViewModel = remember {
+        DistractionListViewModel()
+    }
 
     Scaffold(
         topBar = { AppBarTop(
@@ -128,10 +132,10 @@ fun StudyDistractorApp(
             }
             composable(route = StudyDistractorScreen.DistractionList.name) {
                 DistractionListScreen(
-                    onClickingDistraction = {
+                    onDistractionClicked = { distraction ->
+                        distractionViewModel.updateDistraction(distraction)
                         navController.navigate(StudyDistractorScreen.Distraction.name)
                     },
-                    distractionViewModel,
                     distractionListViewModel
                 )
             }

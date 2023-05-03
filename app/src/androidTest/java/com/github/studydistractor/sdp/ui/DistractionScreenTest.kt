@@ -39,7 +39,7 @@ class DistractionScreenTest {
         val name = "test"
         val description = "test description"
         val distraction = Distraction(name, description)
-        distractionViewModel.addDistraction(distraction)
+        distractionViewModel.updateDistraction(distraction)
         composeRule.setContent {
             DistractionScreen(distractionViewModel)
         }
@@ -52,7 +52,7 @@ class DistractionScreenTest {
     @Test
     fun buttonToCompleteActivityExistsAndHasCorrectText() {
         val distraction = Distraction("test", "test description")
-        distractionViewModel.addDistraction(distraction)
+        distractionViewModel.updateDistraction(distraction)
         composeRule.setContent {
             DistractionScreen(distractionViewModel)
         }
@@ -63,7 +63,7 @@ class DistractionScreenTest {
     @Test
     fun iconIsNotDisplayedIfActivityHasNoIcon() {
         val distraction = Distraction("test", "test description")
-        distractionViewModel.addDistraction(distraction)
+        distractionViewModel.updateDistraction(distraction)
         composeRule.setContent {
             DistractionScreen(distractionViewModel)
         }
@@ -73,7 +73,7 @@ class DistractionScreenTest {
     @Test
     fun iconIsDisplayedIfActivityHasIcon() {
         val distraction = Distraction("test", "test description", null, null, null, null, "bathtub_fill0_wght200_grad0_opsz48")
-        distractionViewModel.addDistraction(distraction)
+        distractionViewModel.updateDistraction(distraction)
         composeRule.setContent {
             DistractionScreen(distractionViewModel)
         }

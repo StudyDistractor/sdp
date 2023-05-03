@@ -27,7 +27,7 @@ class DistractionActivityWrapper: Hilt_DistractionActivityWrapper() {
         } else {
             intent.getParcelableExtra<Distraction>(EXTRA_ACTIVITY)
         }
-        distractionViewModel.addDistraction(procrastinationData!!)
+        distractionViewModel.updateDistraction(procrastinationData!!)
 
         setContent {
             DistractionScreen(
