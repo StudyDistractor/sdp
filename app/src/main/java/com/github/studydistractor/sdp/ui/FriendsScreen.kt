@@ -45,18 +45,14 @@ fun  FriendsScreen(friendsViewModel: FriendsViewModel) {
         ){
             OutlinedTextField(
                 value = uiState.newFriend,
-                label = {Text("Friends uid") },
-                onValueChange = { friendsViewModel.updateNewFriend(it) },
-                modifier = Modifier.testTag("friend-list-screen__friend-text-field")
-                value = newFriend.value,
                 onValueChange = { newFriend.value = it },
-                label = { androidx.compose.material3.Text("Friend uid") },
+                label = { Text("Friend uid") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Email
                 ),
                 leadingIcon = {
-                    androidx.compose.material3.Icon(Icons.Filled.GroupAdd, contentDescription = null)
+                    Icon(Icons.Filled.GroupAdd, contentDescription = null)
                 },
                 modifier = Modifier
                     .padding(vertical = 8.dp)
@@ -67,8 +63,9 @@ fun  FriendsScreen(friendsViewModel: FriendsViewModel) {
                     friendsViewModel.addFriend()
                         .addOnSuccessListener { showSuccessToast(context) }
                         .addOnFailureListener { showFailureToast(context, it.message.orEmpty()) }
-                },
-                modifier = Modifier.align(Alignment.CenterVertically)
+                    ) },
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
                     .testTag("friend-list-screen__friend-button")
             ) {
                 Icon(
