@@ -12,21 +12,24 @@ import javax.inject.Inject
  *
  */
 class HistoryServiceFirebase @Inject constructor(): HistoryModel {
-    private var firebaseDatabase : FirebaseDatabase = FirebaseDatabase.getInstance()
-    private var firebaseAuth : FirebaseAuth = FirebaseAuth.getInstance()
+    private var db : FirebaseDatabase = FirebaseDatabase.getInstance()
+    private var auth : FirebaseAuth = FirebaseAuth.getInstance()
     private val historyPath : String = "History"
     private val history =  mutableStateListOf<HistoryEntry>()
     override fun getHistory(uid: String): SnapshotStateList<HistoryEntry> {
-        firebaseDatabase = FirebaseDatabase.getInstance()
-        val databaseRef = firebaseDatabase.getReference(historyPath).child(uid)
+        db = FirebaseDatabase.getInstance()
+        val databaseRef = db.getReference(historyPath).child(uid)
         databaseRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 history.clear()
                 for(entry in snapshot.children) {
-                    val historyEntry = entry.getValue(HistoryEntry::class.java)
-                    if(historyEntry != null) {
-                        historyEntry.date = entry.key!!.toLong()
-                        history.add(historyEntry)
+                    try {
+                        val historyEntry = entry.getValue(HistoryEntry::class.java)
+                        if(historyEntry != null) {
+                            history.add(historyEntry)
+                        }
+                    } catch (e : DatabaseException){
+                        Log.d("Firebase", "unable to transform to history entry")
                     }
                 }
             }
@@ -45,7 +48,7 @@ class HistoryServiceFirebase @Inject constructor(): HistoryModel {
 
     override fun addHistoryEntry(entry : HistoryEntry, uid: String): Boolean {
         if(uid.isEmpty()) return false
-        val databaseRef = firebaseDatabase.getReference("Users").child(uid).child("history")
+        val databaseRef = db.getReference(historyPath).child(uid)
         databaseRef.child(entry.date.toString()).setValue(entry)
         return true
     }
