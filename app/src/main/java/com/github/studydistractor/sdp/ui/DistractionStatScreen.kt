@@ -4,17 +4,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
@@ -31,8 +26,6 @@ fun DistractionStatScreen(uid : String, did : String, stat : DistractionStatInte
     val dislikes = stat.fetchDislikeCount(did)
     Column(
         modifier = Modifier.fillMaxWidth().fillMaxHeight().padding(26.dp),
-//        verticalArrangement = Arrangement.SpaceAround,
-//        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         /**
          * Like and dislike count
@@ -74,71 +67,62 @@ fun DistractionStatScreen(uid : String, did : String, stat : DistractionStatInte
         /**
          * Feedback text field and button
          */
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement =  Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+        OutlinedTextField(
+            value = feedback.value,
+            onValueChange = { feedback.value = it },
+            label = { Text("Add feedback") },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Email
+            ),
+            leadingIcon = {
+                Icon(Icons.Filled.Forum, contentDescription = null)
+            },
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+                .fillMaxWidth()
+                .testTag("distraction-stat-screen__feedback-text-field")
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Button(
+            onClick = {stat.postNewFeedback(did, uid, feedback.value)},
+            Modifier.fillMaxWidth()
+                .testTag("distraction-stat-screen__feedback-button")
 
-        ){
-            OutlinedTextField(
-                value = feedback.value,
-                onValueChange = { feedback.value = it },
-                label = { androidx.compose.material3.Text("Add feeback") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Email
-                ),
-                leadingIcon = {
-                    androidx.compose.material3.Icon(Icons.Filled.Forum, contentDescription = null)
-                },
-                modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .testTag("distraction-stat-screen__feedback-text-field")
-            )
-            IconButton(
-                onClick = {stat.postNewFeedback(did, uid, feedback.value)},
-                Modifier.testTag("distraction-stat-screen__feedback-button")
-
-            ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add feedback",
-                )
-            }
-
+        ) {
+            Text("Validate")
         }
+
+
 
         Spacer(modifier = Modifier.height(4.dp))
         /**
          * Tags text field and button
          */
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement =  Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            OutlinedTextField(
-                value = tag.value,
-                onValueChange = { tag.value = it },
-                label = { androidx.compose.material3.Text("Add tag") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Email
-                ),
-                leadingIcon = {
-                    androidx.compose.material3.Icon(Icons.Filled.Tag, contentDescription = null)
-                },
-                modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .testTag("distraction-stat-screen__tag-text-field")
-            )
+        OutlinedTextField(
+            value = tag.value,
+            onValueChange = { tag.value = it },
+            label = { Text("Add tag") },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Email
+            ),
+            leadingIcon = {
+                Icon(Icons.Filled.Tag, contentDescription = null)
+            },
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+                .fillMaxWidth()
+                .testTag("distraction-stat-screen__tag-text-field")
+        )
+        Spacer(modifier = Modifier.height(4.dp))
 
-            IconButton(
-                onClick = {stat.addTag(did,tag.value)},
-                Modifier.testTag("distraction-stat-screen__tag-button")
-            ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add tag",
-                )
-            }
-
+        Button(
+            onClick = {stat.addTag(did,tag.value)},
+            Modifier.testTag("distraction-stat-screen__tag-button")
+                .fillMaxWidth()
+        ) {
+            Text("Validate")
         }
         Spacer(modifier = Modifier.height(4.dp))
         /**
