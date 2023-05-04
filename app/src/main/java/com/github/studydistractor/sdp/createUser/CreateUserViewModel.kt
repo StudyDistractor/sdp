@@ -18,7 +18,6 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
-@RequiresApi(Build.VERSION_CODES.O)
 class CreateUserViewModel(
     createUserModel: CreateUserModel
 ) : ViewModel() {
@@ -63,13 +62,18 @@ class CreateUserViewModel(
         return true
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun refreshDateText() {
-        val dateText = LocalDate.of(
-            uiState.value.year,
-            uiState.value.month,
-            uiState.value.dayOfMonth
-        ).format(DateTimeFormatter.ISO_LOCAL_DATE)
+        val y =  uiState.value.year
+        val m =  uiState.value.month
+        val d =  uiState.value.dayOfMonth
+
+        val dateText = "$y-$m-$d"
+
+        //val dateText = LocalDate.of(
+        //            uiState.value.year,
+        //            uiState.value.month,
+        //            uiState.value.dayOfMonth
+        //        ).format(DateTimeFormatter.ISO_LOCAL_DATE)
 
         _uiState.update {
             it.copy(
@@ -78,7 +82,6 @@ class CreateUserViewModel(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun setDate(year: Int, month: Int, dayOfMonth: Int) {
         _uiState.update {
             it.copy(
