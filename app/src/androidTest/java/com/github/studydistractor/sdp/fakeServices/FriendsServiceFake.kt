@@ -28,12 +28,7 @@ class FriendsServiceFake : FriendsModel {
         return list
     }
 
-    override fun getFriendHistory(): MutableList<HistoryEntry> {
-        return mutableStateListOf(
-            HistoryEntry("test_name", "test_description")
-        )
-    }
-
-    override fun fetchFriendHistory(uid: String) {
+    override fun observeFriendHistory(uid: String, onChange: (List<HistoryEntry>) -> Unit) {
+        onChange(listOf(HistoryEntry("test_name", "test_description")))
     }
 }

@@ -1,8 +1,6 @@
 package com.github.studydistractor.sdp
 
 import android.content.Intent
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -52,7 +50,6 @@ enum class StudyDistractorScreen(@StringRes val title: Int) {
     CreateUser(title = R.string.screen_name_create_user)
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StudyDistractorApp(

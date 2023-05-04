@@ -67,22 +67,22 @@ class FriendsServiceFirebase @Inject constructor(): FriendsModel {
         return friends
     }
 
-    override fun fetchFriendHistory(uid: String) {
-        db.getReference("History").child(uid).get().addOnCompleteListener {
-            t->
-            friendHistory.clear()
-            for(history in t.result.children){
-                val historyEntry = history.getValue(HistoryEntry::class.java)
-                if(historyEntry != null) {
-                    historyEntry.date = history.key!!.toLong()
-                    friendHistory.add(historyEntry)
+    override fun observeFriendHistory(uid : String, onChange: (List<HistoryEntry>) -> Unit) {
+        db.getReference("History").child(uid).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                friendHistory.clear()
+                for(history in snapshot.children){
+                    val historyEntry = history.getValue(HistoryEntry::class.java)
+                    if(historyEntry != null) {
+                        friendHistory.add(historyEntry)
+                    }
                 }
+                onChange(friendHistory)
             }
 
-        }
-    }
-
-    override fun getFriendHistory(): MutableList<HistoryEntry> {
-        return friendHistory
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 }

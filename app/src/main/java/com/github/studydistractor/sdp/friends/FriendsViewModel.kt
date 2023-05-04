@@ -56,13 +56,11 @@ class FriendsViewModel(
         return _friendsModel.removeFriend(uid, friendUid)
     }
 
-    fun friendHistory(uid : String){
-        _friendsModel.fetchFriendHistory(uid)
-        val history = _friendsModel.getFriendHistory()
-        _uiState.update {
-            it.copy(friendHistory = history)
-        }
-
+    fun refreshFriendHistory(uid : String){
+        _friendsModel.observeFriendHistory(uid, {t->
+            _uiState.update { it.copy(friendHistory = t) }
+            refreshFriendsList()}
+        )
     }
 
     init {

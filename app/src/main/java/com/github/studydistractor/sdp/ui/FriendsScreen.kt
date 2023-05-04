@@ -75,33 +75,33 @@ fun  FriendsScreen(friendsViewModel: FriendsViewModel) {
                 modifier = Modifier.testTag("friend-list-screen__history-title")
             )
             LazyColumn(){
-                items(uiState.friendHistory){i ->
-                    MessageCard(entry = i)
+                items(uiState.friendHistory){historyEntry ->
+                    MessageCard(entry = historyEntry)
                 }
             }
         }
         Spacer(modifier = Modifier.height(6.dp))
         LazyColumn(){
-            items(uiState.friendsList) {i ->
+            items(uiState.friendsList) {friend ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillParentMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text("Uid : $i",
+                    Text("Uid : $friend",
                         fontSize = 10.sp,
                         modifier = Modifier
                             .padding(6.dp)
                             .align(Alignment.CenterVertically)
-                            .testTag("friend-list-screen__friend-$i")
+                            .testTag("friend-list-screen__friend-$friend")
                     )
                     IconButton(
                         onClick = {
-                                  friendsViewModel.friendHistory(i)
+                                  friendsViewModel.refreshFriendHistory(friend)
                         },
                         modifier = Modifier
-                            .testTag("friend-list-screen__history-$i")
+                            .testTag("friend-list-screen__history-$friend")
                             .padding(8.dp)
                     )
                     {
@@ -114,7 +114,7 @@ fun  FriendsScreen(friendsViewModel: FriendsViewModel) {
                     }
                     IconButton(
                         onClick = {
-                            friendsViewModel.removeFriend(i)
+                            friendsViewModel.removeFriend(friend)
                                 .addOnSuccessListener {
                                     showSuccessToast(context)
                                     friendsViewModel.refreshFriendsList()
@@ -127,7 +127,7 @@ fun  FriendsScreen(friendsViewModel: FriendsViewModel) {
                                   }
                                   },
                         modifier = Modifier
-                            .testTag("friend-list-screen__delete-$i")
+                            .testTag("friend-list-screen__delete-$friend")
                             .padding(8.dp)
                     )
                     {

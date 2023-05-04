@@ -43,11 +43,7 @@ interface FriendsModel {
     fun fetchAllFriends(uid : String) : SnapshotStateList<String>
 
     /**
-     * Get the history of the friend
-     */
-    fun getFriendHistory(): MutableList<HistoryEntry>
-    /**
      * Fetch the history of the friend from the database
      */
-    fun fetchFriendHistory(uid: String)
+    fun observeFriendHistory(uid : String, onChange : (List<HistoryEntry>) -> Unit)
 }
