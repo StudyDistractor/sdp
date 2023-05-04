@@ -1,21 +1,19 @@
 package com.github.studydistractor.sdp.ui
 
 import android.app.DatePickerDialog
-import android.os.Build
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.compose.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CardGiftcard
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Person2
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,8 +27,7 @@ import java.util.*
 
 
 object Constants{
-    const val TAG = "CreateAccountScreen"
-    // TODO add more constants
+    const val TAG = "CreateUserScreen"
 }
 
 /**
@@ -43,7 +40,6 @@ object Constants{
  * the LocalContext.current property to access the current context of the application.
  * @return A composable UI screen for creating a new account
  */
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateUserScreen(
@@ -64,6 +60,8 @@ fun CreateUserScreen(
         uiState.year,
         uiState.month,
         uiState.dayOfMonth
+
+
     )
 
     Column(
@@ -134,7 +132,7 @@ fun CreateUserScreen(
             leadingIcon = {
                 Icon(Icons.Filled.CardGiftcard, contentDescription = null)
             },
-            label = { Text("Birthday") },
+            label = { Text("Birthday (yyyy-mm-dd)") },
             trailingIcon = { Button(
                     onClick = { datePicker.show()},
                     colors = ButtonDefaults.buttonColors(contentColor = Color.White),
