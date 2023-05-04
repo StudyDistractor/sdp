@@ -9,6 +9,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
@@ -67,14 +68,22 @@ fun StudyDistractorApp(
     )
     val context = LocalContext.current
 
-    val createDistractionViewModel = CreateDistractionViewModel(CreateDistractionServiceFirebase())
-    val createUserViewModel        = CreateUserViewModel(CreateUserServiceFirebase())
-    val distractionListViewModel   = DistractionListViewModel(DistractionListServiceFirebase())
-    val distractionViewModel       = DistractionViewModel(DistractionServiceFirebase())
-    val friendsViewModel           = FriendsViewModel(FriendsServiceFirebase())
-    val historyViewModel           = HistoryViewModel(HistoryServiceFirebase())
-    val loginViewModel             = LoginViewModel(LoginServiceFirebase())
-    val registerViewModel          = RegisterViewModel(RegisterServiceFirebase())
+    val createDistractionViewModel =
+        remember { CreateDistractionViewModel(CreateDistractionServiceFirebase()) }
+    val createUserViewModel        =
+        remember { CreateUserViewModel(CreateUserServiceFirebase()) }
+    val distractionListViewModel   =
+        remember { DistractionListViewModel(DistractionListServiceFirebase()) }
+    val distractionViewModel       =
+        remember { DistractionViewModel(DistractionServiceFirebase()) }
+    val friendsViewModel           =
+        remember { FriendsViewModel(FriendsServiceFirebase()) }
+    val historyViewModel           =
+        remember { HistoryViewModel(HistoryServiceFirebase()) }
+    val loginViewModel             =
+        remember { LoginViewModel(LoginServiceFirebase()) }
+    val registerViewModel          =
+        remember { RegisterViewModel(RegisterServiceFirebase()) }
 
     Scaffold(
         topBar = { AppBarTop(
