@@ -16,6 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.github.studydistractor.sdp.account.FriendsServiceFirebase
+import com.github.studydistractor.sdp.bookmark.BookmarkServiceFirebase
 import com.github.studydistractor.sdp.createDistraction.CreateDistractionServiceFirebase
 import com.github.studydistractor.sdp.createDistraction.CreateDistractionViewModel
 import com.github.studydistractor.sdp.createUser.CreateUserServiceFirebase
@@ -69,10 +70,6 @@ fun StudyDistractorApp(
         remember { CreateDistractionViewModel(CreateDistractionServiceFirebase()) }
     val createUserViewModel        =
         remember { CreateUserViewModel(CreateUserServiceFirebase()) }
-    val distractionListViewModel   =
-        remember { DistractionListViewModel(DistractionListServiceFirebase()) }
-    val distractionViewModel       =
-        remember { DistractionViewModel(DistractionServiceFirebase()) }
     val friendsViewModel           =
         remember { FriendsViewModel(FriendsServiceFirebase()) }
     val historyViewModel           =
@@ -81,6 +78,10 @@ fun StudyDistractorApp(
         remember { LoginViewModel(LoginServiceFirebase()) }
     val registerViewModel          =
         remember { RegisterViewModel(RegisterServiceFirebase()) }
+    val distractionViewModel       =
+        remember { DistractionViewModel() }
+    val distractionListViewModel   =
+        remember { DistractionListViewModel(DistractionListServiceFirebase()) }
 
     Scaffold(
         topBar = { AppBarTop(
@@ -163,7 +164,7 @@ fun StudyDistractorApp(
                 CreateDistractionScreen(
                     createDistractionViewModel = createDistractionViewModel,
                     onDistractionCreated = {
-                        distractionListViewModel.showFilteredDistractions()
+                        distractionListViewModel.allDistractions()
                         navController.navigate(StudyDistractorScreen.DistractionList.name)
                     }
                 )
