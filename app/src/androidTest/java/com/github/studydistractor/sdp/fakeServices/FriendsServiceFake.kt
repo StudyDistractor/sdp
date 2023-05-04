@@ -2,7 +2,8 @@ package com.github.studydistractor.sdp.fakeServices
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import com.github.studydistractor.sdp.friends.FriendsModel
+import com.github.studydistractor.sdp.account.FriendsModel
+import com.github.studydistractor.sdp.data.HistoryEntry
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 
@@ -14,7 +15,7 @@ class FriendsServiceFake : FriendsModel {
     }
 
     override fun addNewFriend(uid1: String, uid2: String): Task<Void> {
-        return Tasks.whenAll(setOf(Tasks.forResult(""))) // simply succeeds immediately
+        return Tasks.whenAll(setOf(Tasks.forResult(uid2))) // simply succeeds immediately
     }
 
     override fun removeFriend(uid1: String, uid2: String): Task<Void> {
@@ -25,5 +26,14 @@ class FriendsServiceFake : FriendsModel {
         val list = mutableStateListOf<String>()
         list.addAll(friendlist)
         return list
+    }
+
+    override fun getFriendHistory(): MutableList<HistoryEntry> {
+        return mutableStateListOf(
+            HistoryEntry("test_name", "test_description")
+        )
+    }
+
+    override fun fetchFriendHistory(uid: String) {
     }
 }

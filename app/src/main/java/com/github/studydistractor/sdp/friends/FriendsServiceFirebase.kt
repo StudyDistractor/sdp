@@ -1,8 +1,9 @@
-package com.github.studydistractor.sdp.friends
+package com.github.studydistractor.sdp.account
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import com.github.studydistractor.sdp.data.HistoryEntry
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -20,14 +21,11 @@ class FriendsServiceFirebase @Inject constructor(): FriendsModel {
 
     private var friendListener =  object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
-            friends.clear()
-            for (child in snapshot.children) {
-                if (child.exists()) {
-                    val id = child.getValue(String::class.java)!!
-                    friends.add(id)
+           friends.clear()
+            for (id in snapshot.children) {
+                if (id.exists()) {
+                    friends.add(id.getValue(String::class.java)!!)
                 }
-                friends = newFriend
-
             }
         }
         override fun onCancelled(error: DatabaseError) {
@@ -49,7 +47,7 @@ class FriendsServiceFirebase @Inject constructor(): FriendsModel {
         uid2: String,
     ) : Task<Void> {
         // TODO: what happens if the first update succeeds but not the second?
-        return db.getReference(FRIENDSPATH).child(uid1).child(uid2).setValue(uid2)
+        return db.getReference(FRIENDSPATH).child(uid1).child(uid2).setValue(uid1)
             .continueWithTask {
                 db.getReference(FRIENDSPATH).child(uid2).child(uid1).setValue(uid2)
             }

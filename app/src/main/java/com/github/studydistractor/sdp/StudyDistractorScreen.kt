@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.github.studydistractor.sdp.account.FriendsServiceFirebase
 import com.github.studydistractor.sdp.createDistraction.CreateDistractionServiceFirebase
 import com.github.studydistractor.sdp.createDistraction.CreateDistractionViewModel
 import com.github.studydistractor.sdp.createUser.CreateUserServiceFirebase
@@ -25,7 +26,6 @@ import com.github.studydistractor.sdp.distraction.DistractionServiceFirebase
 import com.github.studydistractor.sdp.distraction.DistractionViewModel
 import com.github.studydistractor.sdp.distractionList.DistractionListServiceFirebase
 import com.github.studydistractor.sdp.distractionList.DistractionListViewModel
-import com.github.studydistractor.sdp.friends.FriendsServiceFirebase
 import com.github.studydistractor.sdp.friends.FriendsViewModel
 import com.github.studydistractor.sdp.history.HistoryServiceFirebase
 import com.github.studydistractor.sdp.history.HistoryViewModel

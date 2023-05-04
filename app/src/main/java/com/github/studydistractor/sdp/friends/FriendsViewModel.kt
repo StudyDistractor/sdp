@@ -1,6 +1,7 @@
 package com.github.studydistractor.sdp.friends
 
 import androidx.lifecycle.ViewModel
+import com.github.studydistractor.sdp.account.FriendsModel
 import com.github.studydistractor.sdp.ui.state.FriendsUiState
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
@@ -27,7 +28,7 @@ class FriendsViewModel(
     }
 
     private fun validateUid(newFriend: String): Boolean {
-        return newFriend.matches(Companion.uidRegex)
+        return newFriend.matches(uidRegex)
     }
 
     fun updateNewFriend(newFriend: String) {
@@ -53,6 +54,15 @@ class FriendsViewModel(
         }
 
         return _friendsModel.removeFriend(uid, friendUid)
+    }
+
+    fun friendHistory(uid : String){
+        _friendsModel.fetchFriendHistory(uid)
+        val history = _friendsModel.getFriendHistory()
+        _uiState.update {
+            it.copy(friendHistory = history)
+        }
+
     }
 
     init {

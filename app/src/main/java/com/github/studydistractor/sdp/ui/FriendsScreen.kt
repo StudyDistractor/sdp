@@ -2,6 +2,7 @@ package com.github.studydistractor.sdp.ui
 
 import android.widget.Toast
 import androidx.compose.Context
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -9,17 +10,21 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.GroupAdd
+import androidx.compose.material.icons.filled.History
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.github.studydistractor.sdp.account.FriendsInterface
+import androidx.compose.ui.unit.sp
+import com.github.studydistractor.sdp.friends.FriendsViewModel
+import com.github.studydistractor.sdp.ui.components.MessageCard
+
 @Composable
 fun  FriendsScreen(friendsViewModel: FriendsViewModel) {
     fun showFailureToast(context: Context, message: String) {
@@ -45,12 +50,9 @@ fun  FriendsScreen(friendsViewModel: FriendsViewModel) {
         ){
             OutlinedTextField(
                 value = uiState.newFriend,
-                onValueChange = { newFriend.value = it },
+                onValueChange = { friendsViewModel.updateNewFriend(it)},
                 label = { Text("Friend uid") },
                 singleLine = true,
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Email
-                ),
                 leadingIcon = {
                     Icon(Icons.Filled.GroupAdd, contentDescription = null)
                 },
@@ -61,9 +63,12 @@ fun  FriendsScreen(friendsViewModel: FriendsViewModel) {
             IconButton(
                 onClick = {
                     friendsViewModel.addFriend()
-                        .addOnSuccessListener { showSuccessToast(context) }
+                        .addOnSuccessListener {
+                            showSuccessToast(context)
+                            friendsViewModel.refreshFriendsList()
+                        }
                         .addOnFailureListener { showFailureToast(context, it.message.orEmpty()) }
-                    ) },
+                          },
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .testTag("friend-list-screen__friend-button")
@@ -74,14 +79,14 @@ fun  FriendsScreen(friendsViewModel: FriendsViewModel) {
                 )
             }
         }
-        if(friendsHistory.isNotEmpty()){
+        if(uiState.friendHistory.isNotEmpty()){
             Text(
                 "Friend History : ",
                 fontSize = 20.sp,
                 modifier = Modifier.testTag("friend-list-screen__history-title")
             )
             LazyColumn(){
-                items(friendsHistory){i ->
+                items(uiState.friendHistory){i ->
                     MessageCard(entry = i)
                 }
             }
@@ -96,7 +101,7 @@ fun  FriendsScreen(friendsViewModel: FriendsViewModel) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text("Uid : $i",
-                        fontSize = 20.sp,
+                        fontSize = 10.sp,
                         modifier = Modifier
                             .padding(6.dp)
                             .align(Alignment.CenterVertically)
@@ -104,7 +109,7 @@ fun  FriendsScreen(friendsViewModel: FriendsViewModel) {
                     )
                     IconButton(
                         onClick = {
-                                  friend.fetchFriendHistory(i)
+                                  friendsViewModel.friendHistory(i)
                         },
                         modifier = Modifier
                             .testTag("friend-list-screen__history-$i")
@@ -121,12 +126,16 @@ fun  FriendsScreen(friendsViewModel: FriendsViewModel) {
                     IconButton(
                         onClick = {
                             friendsViewModel.removeFriend(i)
-                                .addOnSuccessListener { showSuccessToast(context) }
+                                .addOnSuccessListener {
+                                    showSuccessToast(context)
+                                    friendsViewModel.refreshFriendsList()
+                                }
                                 .addOnFailureListener {
                                     showFailureToast(
                                         context,
                                         it.message.orEmpty()
                                     )
+                                  }
                                   },
                         modifier = Modifier
                             .testTag("friend-list-screen__delete-$i")
