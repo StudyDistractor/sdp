@@ -70,7 +70,7 @@ class FriendsServiceFirebase @Inject constructor(): FriendsModel {
     override fun observeFriendHistory(uid : String, onChange: (List<HistoryEntry>) -> Unit) {
         db.getReference("History").child(uid).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                friendHistory.clear()
+                val friendHistory = arrayListOf<HistoryEntry>()
                 for(history in snapshot.children){
                     val historyEntry = history.getValue(HistoryEntry::class.java)
                     if(historyEntry != null) {
