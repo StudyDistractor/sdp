@@ -8,5 +8,6 @@ data class DistractionListUiState(
     val filtersExpanded: Boolean = false,
     val filtersAvailableTags: List<String> = Collections.emptyList(),
     val filtersSelectedTags: Set<String> = Collections.emptySet(),
-    val filtersSelectedLength: Distraction.Length? = null
+    val filtersSelectedLength: Distraction.Length? = null,
+    val bookmarksOnly: Boolean = false
 )
