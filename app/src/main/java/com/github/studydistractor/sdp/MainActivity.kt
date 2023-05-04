@@ -7,9 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.github.studydistractor.sdp.account.FriendsServiceFirebase
-import com.github.studydistractor.sdp.friends.FriendsViewModel
-import com.github.studydistractor.sdp.ui.FriendsScreen
 import com.github.studydistractor.sdp.ui.theme.StudyDistractorTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,7 +21,7 @@ class MainActivity : Hilt_MainActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    FriendsScreen(FriendsViewModel(FriendsServiceFirebase()))
+                    StudyDistractorApp()
                 }
             }
         }
