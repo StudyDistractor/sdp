@@ -1,6 +1,7 @@
-package com.github.studydistractor.sdp.friends
+package com.github.studydistractor.sdp.account
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import com.github.studydistractor.sdp.data.HistoryEntry
 import com.google.android.gms.tasks.Task
 
 /**
@@ -40,4 +41,9 @@ interface FriendsModel {
      * @param uid of the user to fetch friend
      */
     fun fetchAllFriends(uid : String) : SnapshotStateList<String>
+
+    /**
+     * Fetch the history of the friend from the database
+     */
+    fun observeFriendHistory(uid : String, onChange : (List<HistoryEntry>) -> Unit)
 }

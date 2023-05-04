@@ -2,13 +2,15 @@ package com.github.studydistractor.sdp.ui
 
 import android.widget.Toast
 import androidx.compose.Context
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.GroupAdd
+import androidx.compose.material.icons.filled.History
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -18,7 +20,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.github.studydistractor.sdp.friends.FriendsViewModel
+import com.github.studydistractor.sdp.ui.components.MessageCard
 
 @Composable
 fun  FriendsScreen(friendsViewModel: FriendsViewModel) {
@@ -35,57 +39,95 @@ fun  FriendsScreen(friendsViewModel: FriendsViewModel) {
     val uiState by friendsViewModel.uiState.collectAsState()
     val context = LocalContext.current
 
-    Column() {
-        Row(
-            Modifier.padding(6.dp).fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ){
+    Column (modifier = Modifier.padding(20.dp)){
             OutlinedTextField(
                 value = uiState.newFriend,
-                label = {Text("Friends uid") },
-                onValueChange = { friendsViewModel.updateNewFriend(it) },
-                modifier = Modifier.testTag("friend-list-screen__friend-text-field")
+                onValueChange = { friendsViewModel.updateNewFriend(it)},
+                label = { Text("Friend uid") },
+                singleLine = true,
+                leadingIcon = {
+                    Icon(Icons.Filled.GroupAdd, contentDescription = null)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+                    .testTag("friend-list-screen__friend-text-field")
             )
-            IconButton(
+            Button(
                 onClick = {
                     friendsViewModel.addFriend()
-                        .addOnSuccessListener { showSuccessToast(context) }
+                        .addOnSuccessListener {
+                            showSuccessToast(context)
+                            friendsViewModel.refreshFriendsList()
+                        }
                         .addOnFailureListener { showFailureToast(context, it.message.orEmpty()) }
-                },
-                modifier = Modifier.align(Alignment.CenterVertically)
+                          },
+                modifier = Modifier
+                    .fillMaxWidth()
                     .testTag("friend-list-screen__friend-button")
             ) {
-                Icon(
-                    Icons.Filled.Add,
-                    contentDescription = "Add friend button",
-                )
+                Text("Add new friend")
+            }
+        if(uiState.friendHistory.isNotEmpty()){
+            Text(
+                "Friend History : ",
+                fontSize = 20.sp,
+                modifier = Modifier.testTag("friend-list-screen__history-title")
+            )
+            LazyColumn(){
+                items(uiState.friendHistory){historyEntry ->
+                    MessageCard(entry = historyEntry)
+                }
             }
         }
+        Spacer(modifier = Modifier.height(6.dp))
         LazyColumn(){
-            items(uiState.friendsList) {i ->
+            items(uiState.friendsList) {friend ->
                 Row(
-                    modifier = Modifier.fillMaxWidth().fillParentMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillParentMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text("Uid : $i",
-                        modifier = Modifier.padding(6.dp)
+                    Text("Uid : $friend",
+                        fontSize = 10.sp,
+                        modifier = Modifier
+                            .padding(6.dp)
                             .align(Alignment.CenterVertically)
-                            .testTag("friend-list-screen__friend-$i")
+                            .testTag("friend-list-screen__friend-$friend")
                     )
                     IconButton(
                         onClick = {
-                            friendsViewModel.removeFriend(i)
-                                .addOnSuccessListener { showSuccessToast(context) }
+                                  friendsViewModel.refreshFriendHistory(friend)
+                        },
+                        modifier = Modifier
+                            .testTag("friend-list-screen__history-$friend")
+                            .padding(8.dp)
+                    )
+                    {
+                        Icon(
+                            imageVector = Icons.Default.History,
+                            contentDescription = "history",
+                            modifier = Modifier.align(Alignment.CenterVertically),
+                            tint = Color.Blue
+                        )
+                    }
+                    IconButton(
+                        onClick = {
+                            friendsViewModel.removeFriend(friend)
+                                .addOnSuccessListener {
+                                    showSuccessToast(context)
+                                    friendsViewModel.refreshFriendsList()
+                                }
                                 .addOnFailureListener {
                                     showFailureToast(
                                         context,
                                         it.message.orEmpty()
                                     )
-                                }
-                        },
+                                  }
+                                  },
                         modifier = Modifier
-                            .testTag("friend-list-screen__delete-$i")
+                            .testTag("friend-list-screen__delete-$friend")
                             .padding(8.dp)
                     )
                     {
@@ -97,6 +139,10 @@ fun  FriendsScreen(friendsViewModel: FriendsViewModel) {
                         )
                     }
                 }
+                Spacer(modifier = Modifier
+                    .height(2.dp)
+                    .background(Color.Gray)
+                    .fillMaxWidth())
             }
         }
     }
