@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.GroupAdd
 import androidx.compose.material.icons.filled.History
@@ -41,13 +40,6 @@ fun  FriendsScreen(friendsViewModel: FriendsViewModel) {
     val context = LocalContext.current
 
     Column (modifier = Modifier.padding(20.dp)){
-        Row(
-            Modifier
-                .padding(6.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ){
             OutlinedTextField(
                 value = uiState.newFriend,
                 onValueChange = { friendsViewModel.updateNewFriend(it)},
@@ -57,10 +49,11 @@ fun  FriendsScreen(friendsViewModel: FriendsViewModel) {
                     Icon(Icons.Filled.GroupAdd, contentDescription = null)
                 },
                 modifier = Modifier
+                    .fillMaxWidth()
                     .padding(vertical = 8.dp)
                     .testTag("friend-list-screen__friend-text-field")
             )
-            IconButton(
+            Button(
                 onClick = {
                     friendsViewModel.addFriend()
                         .addOnSuccessListener {
@@ -70,15 +63,11 @@ fun  FriendsScreen(friendsViewModel: FriendsViewModel) {
                         .addOnFailureListener { showFailureToast(context, it.message.orEmpty()) }
                           },
                 modifier = Modifier
-                    .align(Alignment.CenterVertically)
+                    .fillMaxWidth()
                     .testTag("friend-list-screen__friend-button")
             ) {
-                Icon(
-                    Icons.Filled.Add,
-                    contentDescription = "Add friend button",
-                )
+                Text("Add new friend")
             }
-        }
         if(uiState.friendHistory.isNotEmpty()){
             Text(
                 "Friend History : ",

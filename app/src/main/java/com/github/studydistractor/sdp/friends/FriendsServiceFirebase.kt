@@ -47,9 +47,9 @@ class FriendsServiceFirebase @Inject constructor(): FriendsModel {
         uid2: String,
     ) : Task<Void> {
         // TODO: what happens if the first update succeeds but not the second?
-        return db.getReference(FRIENDSPATH).child(uid1).child(uid2).setValue(uid1)
+        return db.getReference(FRIENDSPATH).child(uid1).child(uid2).setValue(uid2)
             .continueWithTask {
-                db.getReference(FRIENDSPATH).child(uid2).child(uid1).setValue(uid2)
+                db.getReference(FRIENDSPATH).child(uid2).child(uid1).setValue(uid1)
             }
     }
 
