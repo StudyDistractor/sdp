@@ -1,8 +1,11 @@
 package com.github.studydistractor.sdp.user
 
 import android.telephony.PhoneNumberUtils
+import com.github.studydistractor.sdp.data.UserData
 
-class UserViewModel {
+class UserViewModel(
+    userModel: UserModel
+) {
     private val MAX_NAME_LENGTH = 255
     private val DATE_NUM_ELEM = 3
     private val firstname = "firstname"
@@ -55,7 +58,7 @@ class UserViewModel {
     /**
      * Process a given User by checking if all the data is correctly initialized
      */
-    fun processUser(user : UserData?, userService: UserService){
+    fun processUser(user : UserData?, userModel: UserModel){
 
         requireNotNull(user){"Null User"}
 
@@ -66,7 +69,7 @@ class UserViewModel {
         checkPhoneFormat(user.phone)
 
         requireNotNull(user.score){"Null Score"}
-        userService.postUser(user)
+        userModel.postUser(user)
     }
 
 }

@@ -28,6 +28,9 @@ check_gitlint_task:
 
 check_android_task:
   name: Run Android tests
+  install_java17_script:
+    apt update ;
+    apt install -y openjdk-17-jdk
   install_emulator_script:
     sdkmanager --install "system-images;android-30;google_apis;x86"
   create_avd_script:

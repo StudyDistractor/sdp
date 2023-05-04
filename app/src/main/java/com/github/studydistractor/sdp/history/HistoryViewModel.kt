@@ -1,0 +1,27 @@
+package com.github.studydistractor.sdp.history
+
+import androidx.lifecycle.ViewModel
+import com.github.studydistractor.sdp.ui.state.HistoryUiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+
+class HistoryViewModel(
+    historyModel: HistoryModel
+) : ViewModel() {
+    private val _historyModel: HistoryModel = historyModel
+    private val _uiState = MutableStateFlow(HistoryUiState())
+    val uiState: StateFlow<HistoryUiState> = _uiState.asStateFlow()
+
+    private fun refreshHistoryEntries() {
+        _uiState.update {
+            val uid = _historyModel.getCurrentUid()!!
+            HistoryUiState(_historyModel.getHistory(uid))
+        }
+    }
+
+    init {
+        refreshHistoryEntries()
+    }
+}

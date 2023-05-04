@@ -1,37 +1,39 @@
 package com.github.studydistractor.sdp.ui
 
-import androidx.compose.ui.test.*
+import androidx.compose.ui.test.ComposeTimeoutException
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertHasClickAction
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextContains
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
-import com.github.studydistractor.sdp.login.FakeLoginAuth
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
+import androidx.compose.ui.test.onChildAt
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
+import com.github.studydistractor.sdp.fakeServices.LoginServiceFake
+import com.github.studydistractor.sdp.login.LoginViewModel
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.Assert.assertEquals
 
-@HiltAndroidTest
 class LoginScreenTest {
     private var registerButtonClicks = 0
     private var loggedInCount = 0
 
-    @get:Rule(order = 0)
-    var rule = HiltAndroidRule(this)
-
-    @get:Rule(order = 1)
+    @get:Rule
     val composeRule = createComposeRule()
 
     @Before
     fun setup() {
-        rule.inject()
-
         registerButtonClicks = 0
         loggedInCount = 0
         composeRule.setContent {
             LoginScreen(
                 onRegisterButtonClicked = { registerButtonClicks++ },
                 onLoggedIn = { loggedInCount++ },
-                loginAuth = FakeLoginAuth()
+                loginViewModel = LoginViewModel(LoginServiceFake())
             )
         }
     }
@@ -88,7 +90,7 @@ class LoginScreenTest {
 
     @Test
     fun testToLoginWithValidEmailAndPassword() {
-        val email = "validEmail"
+        val email = "validEmail@email.com"
         val password = "validPassword"
         composeRule.onNodeWithTag("email").performTextInput(email)
         composeRule.onNodeWithTag("password").performTextInput(password)

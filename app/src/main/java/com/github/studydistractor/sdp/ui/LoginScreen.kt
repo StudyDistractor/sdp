@@ -1,9 +1,7 @@
 package com.github.studydistractor.sdp.ui
 
-import android.content.ContentValues
-import android.text.TextUtils
-import android.util.Log
 import android.widget.Toast
+import androidx.compose.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -11,17 +9,16 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.github.studydistractor.sdp.login.LoginAuthInterface
+import com.github.studydistractor.sdp.login.LoginViewModel
 
 /**
  * Author: Bluedrack and AdrienBouquet
@@ -31,9 +28,16 @@ import com.github.studydistractor.sdp.login.LoginAuthInterface
 fun LoginScreen(
     onRegisterButtonClicked: () -> Unit,
     onLoggedIn: () -> Unit,
-    loginAuth : LoginAuthInterface
+    loginViewModel: LoginViewModel
 ) {
+    fun showFailureToast(context: Context, message: String) {
+        Toast.makeText(context, "Failure: $message", Toast.LENGTH_SHORT)
+            .show()
+    }
+
+    val uiState by loginViewModel.uiState.collectAsState()
     val context = LocalContext.current
+
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -41,8 +45,6 @@ fun LoginScreen(
             .testTag("login-screen__main-container"),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val email = remember { mutableStateOf(TextFieldValue("")) }
-        val password = remember { mutableStateOf(TextFieldValue("")) }
         Text(
             text = "Log In",
             style = MaterialTheme.typography.titleLarge,
@@ -50,11 +52,9 @@ fun LoginScreen(
         )
 
         OutlinedTextField(
-            value = email.value,
+            value = uiState.email,
             label = { Text(text = "Email") },
-            onValueChange = {
-                email.value = it
-            },
+            onValueChange = {loginViewModel.updateEmail(it) },
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Email
             ),
@@ -67,11 +67,8 @@ fun LoginScreen(
                 .testTag("email")
         )
         OutlinedTextField(
-
-            value = password.value,
-            onValueChange = {
-                password.value = it
-            },
+            value = uiState.password,
+            onValueChange = { loginViewModel.updatePassword(it) },
             label = { Text(text = "Password") },
             leadingIcon = {
                 Icon(Icons.Filled.Lock, contentDescription = null)
@@ -85,31 +82,11 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        val emailstr = email.value.text
-        val passwordstr = password.value.text
         Button(
             onClick = {
-                if (TextUtils.isEmpty(emailstr) || TextUtils.isEmpty(passwordstr)) {
-                    Toast.makeText(context, "Please fill the blanks", Toast.LENGTH_SHORT).show()
-                } else {
-                    loginAuth.loginWithEmail(emailstr, passwordstr)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                Toast.makeText(context, "Login Succeed", Toast.LENGTH_SHORT)
-                                    .show()
-                                Log.d(ContentValues.TAG, "signInWithEmail:success")
-                                onLoggedIn()
-                            } else {
-                                Toast.makeText(context, "Login Failed", Toast.LENGTH_SHORT)
-                                    .show()
-                                Log.d(ContentValues.TAG, "signInWithEmail:failed")
-                                Log.d(
-                                    ContentValues.TAG,
-                                    "email: $emailstr, password: $passwordstr"
-                                )
-                            }
-                        }
-                }
+                loginViewModel.loginWithEmailAndPassword()
+                    .addOnSuccessListener { onLoggedIn() }
+                    .addOnFailureListener { showFailureToast(context, it.message.orEmpty()) }
             },
             modifier = Modifier
                 .fillMaxWidth()

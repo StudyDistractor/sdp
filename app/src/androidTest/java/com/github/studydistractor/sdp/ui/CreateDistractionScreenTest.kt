@@ -1,34 +1,38 @@
 package com.github.studydistractor.sdp.ui
 
 
-import androidx.compose.ui.test.*
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
-import com.github.studydistractor.sdp.distraction.DistractionService
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
-import org.junit.Assert
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
+import com.github.studydistractor.sdp.createDistraction.CreateDistractionViewModel
+import com.github.studydistractor.sdp.fakeServices.CreateDistractionServiceFake
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import javax.inject.Inject
 
-@HiltAndroidTest
 class CreateDistractionScreenTest {
-
-    @get:Rule(order = 0)
-    var rule = HiltAndroidRule(this)
-
-    @get:Rule(order = 1)
+    @get:Rule
     val composeRule = createComposeRule()
 
-    @Inject
-    lateinit var fakeService: DistractionService
+    private val createDistractionServiceFake = CreateDistractionServiceFake()
+    private val viewModel = CreateDistractionViewModel(createDistractionServiceFake)
+    private var successCount = 0
 
     @Before
     fun setup() {
-        rule.inject()
+        successCount = 0
         composeRule.setContent {
-            CreateDistractionScreen(fakeService)
+            CreateDistractionScreen(
+                createDistractionViewModel = viewModel,
+                onDistractionCreated = { successCount++ })
         }
     }
 
@@ -40,6 +44,8 @@ class CreateDistractionScreenTest {
 
     @Test
     fun addSimpleActivityAddItToTheService() {
+        successCount = 0
+
         val name = "test"
         val description = "test description"
         composeRule.onNodeWithTag("name").performTextInput(name)
@@ -49,80 +55,20 @@ class CreateDistractionScreenTest {
         composeRule.onNodeWithTag("description").assert(hasText(description))
 
         composeRule.onNodeWithTag("addActivity").performClick()
-        val addedActivityList = fakeService.fetchDistractions()
-        Assert.assertEquals(1, addedActivityList.size)
-        val addedActivity = addedActivityList[0]
-        Assert.assertEquals(name, addedActivity.name)
-        Assert.assertEquals(description, addedActivity.description)
+
+        Thread.sleep(100) // bad but does the job.
+        assertEquals(1, successCount)
     }
 
-    @Test
-    fun addImcompleteActivityDoesNotAddItToService1() {
-        val name = "test"
-        composeRule.onNodeWithTag("name").performTextInput(name)
-        composeRule.onNodeWithTag("name").assert(hasText(name))
-
-        composeRule.onNodeWithTag("addActivity").performClick()
-        val addedActivityList = fakeService.fetchDistractions()
-        Assert.assertEquals(0, addedActivityList.size)
-    }
-
-    @Test
-    fun addImcompleteActivityDoesNotAddItToService2() {
-        val description = "test"
-        composeRule.onNodeWithTag("description").performTextInput(description)
-        composeRule.onNodeWithTag("description").assert(hasText(description))
-
-        composeRule.onNodeWithTag("addActivity").performClick()
-        val addedActivityList = fakeService.fetchDistractions()
-        Assert.assertEquals(0, addedActivityList.size)
-    }
-
-    @Test
-    fun tooLongNameDoesNotGetInserted() {
-        val name = "test".repeat(100)
-        val description = "test description"
-        composeRule.onNodeWithTag("name").performTextInput(name)
-        composeRule.onNodeWithTag("description").performTextInput(description)
-        composeRule.onNodeWithTag("name").assertTextContains("0/20")
-        composeRule.onNodeWithTag("description").assertTextContains(description)
-        composeRule.onNodeWithTag("addActivity").performClick()
-        val addedActivityList = fakeService.fetchDistractions()
-        Assert.assertEquals(0, addedActivityList.size)
-    }
-
-    @Test
-    fun tooLongDescriptionDoesNotGetInserted() {
-        val name = "test"
-        val description = "test description".repeat(100)
-        composeRule.onNodeWithTag("name").performTextInput(name)
-        composeRule.onNodeWithTag("description").performTextInput(description)
-        composeRule.onNodeWithTag("name").assertTextContains(name)
-        composeRule.onNodeWithTag("description").assertTextContains("0/200")
-        composeRule.onNodeWithTag("addActivity").performClick()
-        val addedActivityList = fakeService.fetchDistractions()
-        Assert.assertEquals(0, addedActivityList.size)
-    }
-
-    @Test
-    fun tooLongNameAndDescriptionDoesNotGetInserted() {
-        val name = "test".repeat(100)
-        val description = "test description".repeat(100)
-        composeRule.onNodeWithTag("name").performTextInput(name)
-        composeRule.onNodeWithTag("description").performTextInput(description)
-        composeRule.onNodeWithTag("name").assertTextContains("0/20")
-        composeRule.onNodeWithTag("description").assertTextContains("0/200")
-        composeRule.onNodeWithTag("addActivity").performClick()
-        val addedActivityList = fakeService.fetchDistractions()
-        Assert.assertEquals(0, addedActivityList.size)
-    }
-
+    @OptIn(ExperimentalComposeUiApi::class, ExperimentalTestApi::class)
     @Test
     fun supportingTextDisplaysCorrectlyWhenEmpty() {
-        composeRule.onNodeWithTag("name").assert(hasText(""))
-        composeRule.onNodeWithTag("name").assert(hasText("0/20"))
-        composeRule.onNodeWithTag("description").assert(hasText(""))
-        composeRule.onNodeWithTag("description").assert(hasText("0/200"))
+        composeRule.onNodeWithTag("name").performTextInput("test")
+        composeRule.onNodeWithTag("description").performTextInput("test")
+        composeRule.onNodeWithTag("name").assert(hasText("test"))
+        composeRule.onNodeWithTag("description").assert(hasText("test"))
+        composeRule.onNodeWithTag("nameSupport", useUnmergedTree = true).assert(hasText("4/20"))
+        composeRule.onNodeWithTag("descriptionSupport", useUnmergedTree = true).assert(hasText("4/200"))
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.github.studydistractor.sdp.ui
 
 import android.widget.Toast
+import androidx.compose.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -16,20 +17,21 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import com.github.studydistractor.sdp.register.Register.Companion.newUser
-import com.github.studydistractor.sdp.register.RegisterAuthInterface
+import com.github.studydistractor.sdp.register.RegisterViewModel
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
-    onRegistered: () -> Unit,
-    registerAuth : RegisterAuthInterface
+    onSuccess: () -> Unit,
+    registerViewModel: RegisterViewModel
 ) {
+    fun showFailureToast(context: Context, message: String) {
+        Toast.makeText(context, "Failure: $message", Toast.LENGTH_SHORT)
+            .show()
+    }
 
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var pseudo by remember { mutableStateOf("") }
-
+    val uiState by registerViewModel.uiState.collectAsState()
     val context = LocalContext.current
 
     Column(
@@ -46,8 +48,8 @@ fun RegisterScreen(
         )
 
         OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
+            value = uiState.email,
+            onValueChange = { registerViewModel.updateEmail(it) },
             label = { Text("Email") },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -62,8 +64,8 @@ fun RegisterScreen(
                 .testTag("email")
         )
         OutlinedTextField(
-            value = pseudo,
-            onValueChange = { pseudo = it },
+            value = uiState.pseudo,
+            onValueChange = { registerViewModel.updatePseudo(it) },
             label = { Text("Pseudo") },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -79,8 +81,8 @@ fun RegisterScreen(
         )
 
         OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
+            value = uiState.password,
+            onValueChange = { registerViewModel.updatePassword(it) },
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
             singleLine = true,
@@ -97,23 +99,12 @@ fun RegisterScreen(
         )
 
         Button(
-            onClick = {
-                newUser(
-                    auth = registerAuth,
-                    email = email,
-                    password = password,
-                    pseudo = pseudo,
-                    onRegisterSuccess = {
-                        onRegistered()
-                    },
-                    onRegisterFailure =  { reason: String ->
-                        Toast.makeText(context, reason, Toast.LENGTH_SHORT).show()
-                    }
-
-                    )
-
-
-            },
+            onClick = { registerViewModel.newUser(
+                onSuccess = onSuccess,
+                onFailure = {
+                    showFailureToast(context, it)
+                }
+            ) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 16.dp)
