@@ -3,6 +3,7 @@ package com.github.studydistractor.sdp.history
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import com.github.studydistractor.sdp.data.HistoryEntry
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import javax.inject.Inject
@@ -43,7 +44,7 @@ class HistoryServiceFirebase @Inject constructor(): HistoryModel {
 
 
     override fun getCurrentUid(): String? {
-        return firebaseAuth.uid
+        return auth.uid
     }
 
     override fun addHistoryEntry(entry : HistoryEntry, uid: String): Boolean {
