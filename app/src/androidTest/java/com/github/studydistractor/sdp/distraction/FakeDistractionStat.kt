@@ -50,8 +50,4 @@ class FakeDistractionStat : DistractionStatModel {
         tags.remove(tag)
         return Tasks.whenAll(setOf(Tasks.forResult("")))
     }
-
-    override fun updateCurrentDistraction(did: String) {
-        TODO("Not yet implemented")
-    }
 }
