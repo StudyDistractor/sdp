@@ -43,7 +43,7 @@ class DistractionStatViewModel(distractionStatModel: DistractionStatModel) : Vie
     }
 
     fun postTag(){
-        _distractionStatModel.addTag(_uiState.value.did, _uiState.value.feedback)
+        _distractionStatModel.addTag(_uiState.value.did, _uiState.value.tag)
             .continueWith { refreshModel() }
     }
     fun refreshModel(){
