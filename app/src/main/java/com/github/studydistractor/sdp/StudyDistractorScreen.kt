@@ -20,6 +20,8 @@ import com.github.studydistractor.sdp.createDistraction.CreateDistractionService
 import com.github.studydistractor.sdp.createDistraction.CreateDistractionViewModel
 import com.github.studydistractor.sdp.createUser.CreateUserServiceFirebase
 import com.github.studydistractor.sdp.createUser.CreateUserViewModel
+import com.github.studydistractor.sdp.dailyChallenge.DailyChallengeServiceFirebase
+import com.github.studydistractor.sdp.dailyChallenge.DailyChallengeViewModel
 import com.github.studydistractor.sdp.distraction.DistractionViewModel
 import com.github.studydistractor.sdp.distractionList.DistractionListServiceFirebase
 import com.github.studydistractor.sdp.distractionList.DistractionListViewModel
@@ -50,7 +52,8 @@ enum class StudyDistractorScreen(@StringRes val title: Int) {
     DistractionStat(title = R.string.screen_name_distraction_stat),
     CreateDistraction(title = R.string.screen_name_create_distraction),
     History(title = R.string.screen_name_history),
-    CreateUser(title = R.string.screen_name_create_user)
+    CreateUser(title = R.string.screen_name_create_user),
+    DailyChallenge(title = R.string.screen_name_daily_challenge),
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,6 +89,8 @@ fun StudyDistractorApp(
         remember { DistractionListViewModel(DistractionListServiceFirebase()) }
     val distractionStatViewModel          =
         remember { DistractionStatViewModel(DistractionStatServiceFirebase()) }
+    val dailyChallengeViewModel =
+        remember { DailyChallengeViewModel(DailyChallengeServiceFirebase()) }
 
     Scaffold(
         topBar = { AppBarTop(
@@ -107,7 +112,7 @@ fun StudyDistractorApp(
             onListClick = { navController.navigate(StudyDistractorScreen.DistractionList.name) },
             onMapClick = { navController.navigate(StudyDistractorScreen.Maps.name) },
             onFriendsClick = { navController.navigate(StudyDistractorScreen.Friends.name) },
-            onMagicClick = { navController.navigate(StudyDistractorScreen.CreateDistraction.name) }
+            onMagicClick = { navController.navigate(StudyDistractorScreen.DailyChallenge.name) }
         ) }
     ) {
         NavHost(
@@ -178,6 +183,13 @@ fun StudyDistractorApp(
             composable(route = StudyDistractorScreen.History.name) {
                 HistoryScreen(
                     historyViewModel = historyViewModel
+                )
+            }
+
+            composable(route = StudyDistractorScreen.DailyChallenge.name) {
+                dailyChallengeViewModel.updateDistractions() // reset to the current day
+                DailyChallengeScreen(
+                    dailyChallengeViewModel = dailyChallengeViewModel
                 )
             }
             composable(route = StudyDistractorScreen.DistractionStat.name){

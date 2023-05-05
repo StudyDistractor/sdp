@@ -140,6 +140,8 @@ dependencies {
     //Hilt testing
     androidTestImplementation 'com.google.dagger:hilt-android-testing:2.44'
     kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.44'
+
+    implementation 'nl.dionsegijn:konfetti-compose:2.0.2'
 }
 
 hilt {
