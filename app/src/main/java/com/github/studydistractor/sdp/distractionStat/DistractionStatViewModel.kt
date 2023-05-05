@@ -16,7 +16,6 @@ class DistractionStatViewModel(distractionStatModel: DistractionStatModel) : Vie
         _uiState.update {
             it.copy(did = did)
         }
-        _distractionStatModel.updateCurrentDistraction(did)
     }
 
     fun updateFeedback(feedback : String){

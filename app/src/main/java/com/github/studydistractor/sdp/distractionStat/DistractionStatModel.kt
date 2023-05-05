@@ -64,7 +64,4 @@ interface DistractionStatModel {
      * @param tag The tag to be removed the distraction
      */
     fun removeTag(did : String, tag : String) : Task<Void>
-
-
-    fun updateCurrentDistraction(did : String)
 }

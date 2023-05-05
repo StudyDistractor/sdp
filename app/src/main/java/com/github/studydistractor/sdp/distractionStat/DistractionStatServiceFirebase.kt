@@ -105,7 +105,4 @@ class DistractionStatServiceFirebase : DistractionStatModel {
     override fun removeTag(did: String, tag: String) : Task<Void> {
         return db.getReference(pathTags).child(did).child(tag).removeValue()
     }
-    override fun updateCurrentDistraction(did: String) {
-
-    }
 }
