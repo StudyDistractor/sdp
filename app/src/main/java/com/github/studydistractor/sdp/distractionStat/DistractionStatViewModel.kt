@@ -35,21 +35,23 @@ class DistractionStatViewModel(distractionStatModel: DistractionStatModel) : Vie
     }
 
     fun dislike(){
-        _distractionStatModel.postLike(_uiState.value.did).continueWith({refreshModel()})
+        _distractionStatModel.postDislike(_uiState.value.did).continueWith({refreshModel()})
     }
 
     fun postFeedback(){
-        _distractionStatModel.postNewFeedback(_uiState.value.did, _uiState.value.feedback).continueWith({refreshModel()})
+        _distractionStatModel.postNewFeedback(_uiState.value.did, _uiState.value.feedback)
+            .continueWith { refreshModel() }
     }
 
     fun postTag(){
-        _distractionStatModel.addTag(_uiState.value.did, _uiState.value.feedback).continueWith({refreshModel()})
+        _distractionStatModel.addTag(_uiState.value.did, _uiState.value.feedback)
+            .continueWith { refreshModel() }
     }
     fun refreshModel(){
-        _distractionStatModel.fetchDistractionTags(_uiState.value.did).continueWith{
+        _distractionStatModel.fetchDistractionFeedback(_uiState.value.did).continueWith{
                 t-> _uiState.update { it.copy(feedbacks = t.result) }
         }
-        _distractionStatModel.fetchDistractionFeedback(_uiState.value.did).continueWith { t ->
+        _distractionStatModel.fetchDistractionTags(_uiState.value.did).continueWith { t ->
             _uiState.update { it.copy(tags = t.result) }
         }
         _distractionStatModel.fetchLikeCount(_uiState.value.did).continueWith{ t ->

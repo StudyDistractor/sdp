@@ -64,7 +64,6 @@ fun DistractionStatScreen(viewModel : DistractionStatViewModel) {
             IconButton(
                 onClick = {
                     viewModel.like()
-                    viewModel.refreshModel()
                           },
                 Modifier.testTag("distraction-stat-screen__like")
 
@@ -75,7 +74,6 @@ fun DistractionStatScreen(viewModel : DistractionStatViewModel) {
             IconButton(
                 onClick = {
                     viewModel.dislike()
-                    viewModel.refreshModel()
                           },
                 Modifier.testTag("distraction-stat-screen__dislike")
             ) {

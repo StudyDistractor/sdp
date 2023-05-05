@@ -10,11 +10,27 @@ class DistractionStatServiceFirebase : DistractionStatModel {
     private val pathFeedback = "Feedback"
     private val pathLikes = "Likes"
     private val pathDislikes = "Dislikes"
-    private val pathTags = "Tags"
+    private val pathTags = "TagsUsers"
     private val db = FirebaseDatabase.getInstance()
     private val auth = FirebaseAuth.getInstance()
     override fun fetchDistractionFeedback(did: String): Task<List<String>> {
         return db.getReference(pathFeedback).child(did).get().onSuccessTask { t->
+            val feedbacks= arrayListOf<String>()
+            for(id in t.children) {
+                for(child in id.children){
+                    val feedback = child.getValue(String::class.java)
+                    if(feedback != null) {
+                        feedbacks.add(feedback)
+                    }
+
+                }
+            }
+            Tasks.forResult(feedbacks)
+        }
+    }
+
+    override fun fetchDistractionTags(did: String): Task<List<String>> {
+        return db.getReference(pathTags).child(did).get().onSuccessTask { t->
             val tags = arrayListOf<String>()
             for(id in t.children) {
                 val tag = id.getValue(String::class.java)
@@ -23,19 +39,6 @@ class DistractionStatServiceFirebase : DistractionStatModel {
                 }
             }
             Tasks.forResult(tags)
-        }
-    }
-
-    override fun fetchDistractionTags(did: String): Task<List<String>> {
-        return db.getReference(pathTags).child(did).get().onSuccessTask { t->
-            val feedbacks = arrayListOf<String>()
-            for(id in t.children) {
-                val feedback = id.getValue(String::class.java)
-                if(feedback != null) {
-                    feedbacks.add(feedback)
-                }
-            }
-            Tasks.forResult(feedbacks)
         }
     }
 
@@ -54,17 +57,45 @@ class DistractionStatServiceFirebase : DistractionStatModel {
     override fun postNewFeedback(did: String, feedback: String) : Task<Void>{
         if(feedback.isEmpty()) throw  IllegalArgumentException()
         val uid = auth.uid
-        return db.getReference(pathFeedback).child(did).child(uid!!).setValue(feedback)
+        return db.getReference(pathFeedback)
+            .child(did)
+            .child(uid!!)
+            .child(feedback)
+            .setValue(feedback)
     }
 
     override fun postLike(did: String) : Task<Void> {
         val uid = auth.uid
-        return db.getReference(pathLikes).child(did).child(uid!!).setValue(uid)
+        return db.getReference(pathDislikes).child(did).child(uid!!).get().continueWithTask{
+                j ->
+                    if(j.isSuccessful && j.result.value == uid){
+                        db.getReference(pathDislikes).child(did).child(uid).removeValue()
+                    }
+                    db.getReference(pathLikes).child(did).child(uid).get().continueWithTask{
+                        i ->
+                        if(i.result.value == uid){
+                            db.getReference(pathLikes).child(did).child(uid).removeValue()
+                        }
+                        db.getReference(pathLikes).child(did).child(uid).setValue(uid)
+                    }
+        }
     }
 
     override fun postDislike(did: String) : Task<Void>{
         val uid = auth.uid
-        return db.getReference(pathDislikes).child(did).child(uid!!).setValue(uid)
+        return db.getReference(pathLikes).child(did).child(uid!!).get().continueWithTask{
+                j ->
+            if(j.isSuccessful && j.result.value == uid){
+                db.getReference(pathLikes).child(did).child(uid).removeValue()
+            }
+            db.getReference(pathDislikes).child(did).child(uid).get().continueWithTask{
+                    i ->
+                if(i.result.value == uid){
+                    db.getReference(pathDislikes).child(did).child(uid).removeValue()
+                }
+                db.getReference(pathDislikes).child(did).child(uid).setValue(uid)
+            }
+        }
     }
 
     override fun addTag(did: String, tag: String): Task<Void> {
