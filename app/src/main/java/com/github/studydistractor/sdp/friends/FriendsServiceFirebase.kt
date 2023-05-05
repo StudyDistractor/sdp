@@ -35,8 +35,10 @@ class FriendsServiceFirebase @Inject constructor(): FriendsModel {
 
 
     init {
-        val databaseRef = db.getReference(FRIENDSPATH).child(auth.uid!!)
-        databaseRef.addValueEventListener(friendListener)
+        if(auth.uid != null){
+            val databaseRef = db.getReference(FRIENDSPATH).child(auth.uid!!)
+            databaseRef.addValueEventListener(friendListener)
+        }
     }
     override fun getCurrentUid(): String? {
         return auth.uid

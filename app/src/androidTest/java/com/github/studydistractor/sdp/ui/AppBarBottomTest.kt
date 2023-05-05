@@ -24,6 +24,8 @@ class AppBarBottomTest {
                 onMapClick = { clicksNumber[1]++ },
                 onListClick = { clicksNumber[2]++ },
                 onMagicClick = { clicksNumber[3]++ },
+                onFriendsClick = { clicksNumber[3]++ },
+
             )
         }
     }
@@ -34,6 +36,7 @@ class AppBarBottomTest {
         composeRule.onNodeWithTag("app-bar-bottom__map-button").assertIsDisplayed()
         composeRule.onNodeWithTag("app-bar-bottom__list-button").assertIsDisplayed()
         composeRule.onNodeWithTag("app-bar-bottom__magic-button").assertIsDisplayed()
+        composeRule.onNodeWithTag("app-bar-bottom__friend-list-button").assertIsDisplayed()
     }
 
     @Test

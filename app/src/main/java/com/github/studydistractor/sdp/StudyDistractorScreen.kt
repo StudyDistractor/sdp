@@ -16,15 +16,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.github.studydistractor.sdp.account.FriendsServiceFirebase
-import com.github.studydistractor.sdp.bookmark.BookmarkServiceFirebase
 import com.github.studydistractor.sdp.createDistraction.CreateDistractionServiceFirebase
 import com.github.studydistractor.sdp.createDistraction.CreateDistractionViewModel
 import com.github.studydistractor.sdp.createUser.CreateUserServiceFirebase
 import com.github.studydistractor.sdp.createUser.CreateUserViewModel
-import com.github.studydistractor.sdp.distraction.DistractionServiceFirebase
 import com.github.studydistractor.sdp.distraction.DistractionViewModel
 import com.github.studydistractor.sdp.distractionList.DistractionListServiceFirebase
 import com.github.studydistractor.sdp.distractionList.DistractionListViewModel
+import com.github.studydistractor.sdp.distractionStat.DistractionStatServiceFirebase
+import com.github.studydistractor.sdp.distractionStat.DistractionStatViewModel
 import com.github.studydistractor.sdp.friends.FriendsViewModel
 import com.github.studydistractor.sdp.history.HistoryServiceFirebase
 import com.github.studydistractor.sdp.history.HistoryViewModel
@@ -44,8 +44,10 @@ enum class StudyDistractorScreen(@StringRes val title: Int) {
     Login(title = R.string.screen_name_login),
     Register(title = R.string.screen_name_register),
     Maps(title = R.string.screen_name_maps),
+    Friends(title = R.string.screen_name_friends),
     DistractionList(title = R.string.screen_name_distraction_list),
     Distraction(title = R.string.screen_name_distraction),
+    DistractionStat(title = R.string.screen_name_distraction_stat),
     CreateDistraction(title = R.string.screen_name_create_distraction),
     History(title = R.string.screen_name_history),
     CreateUser(title = R.string.screen_name_create_user)
@@ -82,6 +84,8 @@ fun StudyDistractorApp(
         remember { DistractionViewModel() }
     val distractionListViewModel   =
         remember { DistractionListViewModel(DistractionListServiceFirebase()) }
+    val distractionStatViewModel          =
+        remember { DistractionStatViewModel(DistractionStatServiceFirebase()) }
 
     Scaffold(
         topBar = { AppBarTop(
@@ -102,6 +106,7 @@ fun StudyDistractorApp(
             onHomeClick = { navController.navigate(StudyDistractorScreen.Login.name) },
             onListClick = { navController.navigate(StudyDistractorScreen.DistractionList.name) },
             onMapClick = { navController.navigate(StudyDistractorScreen.Maps.name) },
+            onFriendsClick = { navController.navigate(StudyDistractorScreen.Friends.name) },
             onMagicClick = { navController.navigate(StudyDistractorScreen.CreateDistraction.name) }
         ) }
     ) {
@@ -156,9 +161,10 @@ fun StudyDistractorApp(
                 )
             }
             composable(route = StudyDistractorScreen.Distraction.name)  {
-                DistractionScreen(
-                    distractionViewModel = distractionViewModel
-                )
+                DistractionScreen(distractionViewModel, onDistractionState = { it ->
+                    distractionStatViewModel.updateDid(it)
+                   navController.navigate(StudyDistractorScreen.DistractionStat.name)
+                })
             }
             composable(route = StudyDistractorScreen.CreateDistraction.name)  {
                 CreateDistractionScreen(
@@ -173,6 +179,14 @@ fun StudyDistractorApp(
                 HistoryScreen(
                     historyViewModel = historyViewModel
                 )
+            }
+            composable(route = StudyDistractorScreen.DistractionStat.name){
+                DistractionStatScreen(
+                    distractionStatViewModel,
+                )
+            }
+            composable(route = StudyDistractorScreen.Friends.name){
+                FriendsScreen(friendsViewModel)
             }
         }
     }

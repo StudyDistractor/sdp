@@ -25,7 +25,8 @@ import com.github.studydistractor.sdp.distraction.DistractionViewModel
 
 @Composable
 fun DistractionScreen(
-    distractionViewModel: DistractionViewModel
+    distractionViewModel : DistractionViewModel,
+    onDistractionState : (did : String) -> Unit
 ) {
     fun showFailureToast(context: Context, message: String) {
         Toast.makeText(context, "Failure: $message", Toast.LENGTH_SHORT)
@@ -104,6 +105,12 @@ fun DistractionScreen(
                 .padding(8.dp)
         )
         Button(onClick = {
+            //TODO CHANGE TO DID
+            onDistractionState(uiState.distraction.name!!)
+        }, modifier = Modifier.testTag("distraction-screen__stat-button")) {
+            Text(text = "Stat of the activity", color = Color.White)
+        }
+        Button(onClick = {
             Toast.makeText(
                 context,
                 "Activity completed!",
@@ -111,6 +118,7 @@ fun DistractionScreen(
             ).show()
         }, modifier = Modifier.testTag("completeButton")) {
             Text(text = "Activity completed!", color = Color.White)
+
         }
     }
 }

@@ -1,13 +1,15 @@
 package com.github.studydistractor.sdp.viewModels
 
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import com.github.studydistractor.sdp.createUser.CreateUserViewModel
 import com.github.studydistractor.sdp.fakeServices.CreateUserServiceFake
+import com.github.studydistractor.sdp.ui.CreateUserScreen
 import com.google.android.gms.tasks.Tasks
-import kotlinx.coroutines.tasks.await
-import org.hamcrest.MatcherAssert
-import org.hamcrest.Matchers
 import org.junit.Assert
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import java.text.SimpleDateFormat
 import java.util.concurrent.ExecutionException
@@ -115,4 +117,25 @@ class CreateUserViewModelTest {
         Tasks.await(createUserViewModel.createUser(), 100, TimeUnit.MILLISECONDS)
 
     }
+}
+class CreateUserScreenTest {
+
+    @get:Rule(order = 1)
+    val composeRule = createComposeRule()
+
+    @Before
+    fun setup() {
+        composeRule.setContent {
+            CreateUserScreen({},CreateUserViewModel(CreateUserServiceFake()))
+        }
+    }
+    @Test
+    fun testUiIsDisplay(){
+        composeRule.onNodeWithTag("create_account_screen").assertIsDisplayed()
+        composeRule.onNodeWithTag("validbutton").assertIsDisplayed()
+        composeRule.onNodeWithTag("firstname").assertIsDisplayed()
+        composeRule.onNodeWithTag("lastname").assertIsDisplayed()
+        composeRule.onNodeWithTag("birthday").assertIsDisplayed()
+    }
+
 }

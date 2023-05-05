@@ -1,10 +1,9 @@
 package com.github.studydistractor.sdp.ui
 
-import android.graphics.drawable.VectorDrawable
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Group
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -12,15 +11,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
 
 
 @Composable
 fun AppBarBottom(
     onHomeClick: () -> Unit,
     onMapClick: () -> Unit,
+    onFriendsClick : () -> Unit,
     onListClick: () -> Unit,
     onMagicClick: () -> Unit
 ) {
@@ -55,6 +53,15 @@ fun AppBarBottom(
                 Icon(
                     Icons.Outlined.List,
                     contentDescription = "List of ideas",
+                )
+            }
+            IconButton(
+                onClick = onFriendsClick,
+                modifier = Modifier.testTag("app-bar-bottom__friend-list-button")
+            ) {
+                Icon(
+                    Icons.Outlined.Group,
+                    contentDescription = "List of friends",
                 )
             }
         },

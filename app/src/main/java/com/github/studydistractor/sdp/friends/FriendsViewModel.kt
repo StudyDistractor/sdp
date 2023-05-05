@@ -22,6 +22,8 @@ class FriendsViewModel(
     val uiState: StateFlow<FriendsUiState> = _uiState.asStateFlow()
 
     fun refreshFriendsList() {
+        if(_friendsModel.getCurrentUid() == null) return
+
         val uid = _friendsModel.getCurrentUid()!!
         val friendsList = _friendsModel.fetchAllFriends(uid)
         _uiState.update { it.copy(friendsList = friendsList) }

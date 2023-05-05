@@ -15,8 +15,9 @@ class HistoryViewModel(
     val uiState: StateFlow<HistoryUiState> = _uiState.asStateFlow()
 
     private fun refreshHistoryEntries() {
+        if(_historyModel.getCurrentUid() == null) return
+        val uid = _historyModel.getCurrentUid()!!
         _uiState.update {
-            val uid = _historyModel.getCurrentUid()!!
             HistoryUiState(_historyModel.getHistory(uid))
         }
     }
