@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Checkbox
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -31,43 +33,55 @@ fun DailyChallengeScreen(
     dailyChallengeViewModel: DailyChallengeViewModel
 ) {
     val uiState by dailyChallengeViewModel.uiState.collectAsState()
-
-    Column(
+    Card(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .testTag("daily-challenge-screen__main-container"),
-
-        horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxWidth()
+            .padding(horizontal = 14.dp, vertical = 32.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        ),
     ) {
-        Row {
-            Text(
-                text = "Daily Challenge",
-                style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(vertical = 32.dp).testTag("daily-challenge-screen__title")
-            )
-        }
-        Row {
-            Text(
-                text = "Complete these activities and earn the honour of being a master procrastinator.",
-                style = androidx.compose.material3.MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(vertical = 32.dp, horizontal = 16.dp).testTag("daily-challenge-screen__description")
-            )
-        }
         Column(
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .weight(1f, false)
-        ) {
+                .fillMaxSize()
+                .padding(16.dp)
+                .testTag("daily-challenge-screen__main-container"),
 
-            uiState.distractionsToDisplay.forEachIndexed { index, distraction ->
-                DistractionCard(
-                    distraction = distraction,
-                    checkedState = uiState.checkedStates[index],
-                    onCheckboxClicked = { dailyChallengeViewModel.onCheckboxClicked(
-                        index, it
-                    ) }
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row {
+                Text(
+                    text = "Daily Challenge",
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(vertical = 32.dp)
+                        .testTag("daily-challenge-screen__title")
                 )
+            }
+            Row {
+                Text(
+                    text = "Complete these activities and earn the honour of being a master procrastinator.",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(vertical = 32.dp, horizontal = 16.dp)
+                        .testTag("daily-challenge-screen__description")
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .weight(1f, false)
+            ) {
+
+                uiState.distractionsToDisplay.forEachIndexed { index, distraction ->
+                    DistractionCard(
+                        distraction = distraction,
+                        checkedState = uiState.checkedStates[index],
+                        onCheckboxClicked = {
+                            dailyChallengeViewModel.onCheckboxClicked(
+                                index, it
+                            )
+                        }
+                    )
+                }
             }
         }
     }
@@ -118,7 +132,7 @@ fun DistractionCard(
                             start = 0.dp,
                             end = 16.dp
                         ),
-                        style = MaterialTheme.typography.h6,
+                        style = MaterialTheme.typography.headlineSmall,
                     )
                 }
             }
@@ -132,7 +146,7 @@ fun DistractionCard(
                             start = 0.dp,
                             end = 16.dp
                         ),
-                        style = MaterialTheme.typography.body1,
+                        style = MaterialTheme.typography.bodyLarge,
                     )
                 }
             }

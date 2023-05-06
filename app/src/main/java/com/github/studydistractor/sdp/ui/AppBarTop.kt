@@ -32,6 +32,9 @@ fun AppBarTop(
     CenterAlignedTopAppBar(
         modifier = Modifier
             .testTag("app-bar-top"),
+        colors = TopAppBarDefaults.smallTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        ),
         title = {
             Text(
                 "Study Distractor",

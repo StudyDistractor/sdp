@@ -22,7 +22,10 @@ import androidx.compose.material.icons.filled.Tag
 import androidx.compose.material.icons.filled.ThumbDown
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -39,6 +42,15 @@ fun DistractionStatScreen(viewModel : DistractionStatViewModel) {
     val uiState by viewModel.uiState.collectAsState()
     viewModel.refreshModel()
 
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 14.dp, vertical = 32.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        ),
+    ) {
+
     Column(
         modifier = Modifier.fillMaxWidth().fillMaxHeight().padding(26.dp),
     ) {
@@ -46,10 +58,10 @@ fun DistractionStatScreen(viewModel : DistractionStatViewModel) {
          * Like and dislike count
          */
         Row(
-            horizontalArrangement =  Arrangement.Center,
+            horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()
 
-        ){
+        ) {
             Text(text = "Likes : ${uiState.likes}", fontSize = 20.sp)
             Spacer(modifier = Modifier.width(8.dp))
             Text(text = "Dislikes :${uiState.dislikes}", fontSize = 20.sp)
@@ -59,12 +71,12 @@ fun DistractionStatScreen(viewModel : DistractionStatViewModel) {
          */
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement =  Arrangement.Center
+            horizontalArrangement = Arrangement.Center
         ) {
             IconButton(
                 onClick = {
                     viewModel.like()
-                          },
+                },
                 Modifier.testTag("distraction-stat-screen__like")
 
             ) {
@@ -74,7 +86,7 @@ fun DistractionStatScreen(viewModel : DistractionStatViewModel) {
             IconButton(
                 onClick = {
                     viewModel.dislike()
-                          },
+                },
                 Modifier.testTag("distraction-stat-screen__dislike")
             ) {
                 Icon(imageVector = Icons.Default.ThumbDown, contentDescription = "Like")
@@ -103,7 +115,7 @@ fun DistractionStatScreen(viewModel : DistractionStatViewModel) {
             onClick = {
                 viewModel.postFeedback()
                 viewModel.refreshModel()
-                      },
+            },
             Modifier.fillMaxWidth()
                 .testTag("distraction-stat-screen__feedback-button")
 
@@ -137,7 +149,7 @@ fun DistractionStatScreen(viewModel : DistractionStatViewModel) {
             onClick = {
                 viewModel.postTag()
                 viewModel.refreshModel()
-                      },
+            },
             Modifier.testTag("distraction-stat-screen__tag-button")
                 .fillMaxWidth()
         ) {
@@ -147,29 +159,62 @@ fun DistractionStatScreen(viewModel : DistractionStatViewModel) {
         /**
          * List of tags
          */
-        Text("Feedbacks : ", fontSize = 24.sp)
-        LazyColumn(){
-            items(uiState.feedbacks) {i->
-                Text(
-                    "- $i",
-                    fontSize = 20.sp,
-                    modifier = Modifier.testTag("distraction-stat-screen__feedback-$i")
-                )
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 4.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.inversePrimary
+            ),
+        ) {
+            Text(
+                text = "Feedbacks : ",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(horizontal = 14.dp, vertical = 4.dp)
+            )
+            LazyColumn() {
+                items(uiState.feedbacks) { i ->
+                    Text(
+                        "- $i",
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier
+                            .testTag("distraction-stat-screen__feedback-$i")
+                            .padding(horizontal = 14.dp, vertical = 4.dp)
+                    )
+                }
             }
         }
-        Spacer(modifier = Modifier.height(4.dp))
-        /**
-         * List of feedbacks
-         */
-        Text("Tags: ", fontSize = 24.sp)
-        LazyColumn(){
-            items(uiState.tags) {i->
-                Text(
-                    "- $i",
-                    fontSize = 20.sp,
-                    modifier =
-                        Modifier.testTag("distraction-stat-screen__tag-$i"))
+            Spacer(modifier = Modifier.height(4.dp))
+            /**
+             * List of feedbacks
+             */
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 4.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.inversePrimary
+            ),
+        ) {
+            Text(
+                "Tags: ",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(horizontal = 14.dp, vertical = 4.dp)
+            )
+            LazyColumn() {
+                items(uiState.tags) { i ->
+                    Text(
+                        "- $i",
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier =
+                        Modifier
+                            .testTag("distraction-stat-screen__tag-$i")
+                            .padding(horizontal = 14.dp, vertical = 4.dp)
+                    )
+                }
             }
         }
+    }
     }
 }

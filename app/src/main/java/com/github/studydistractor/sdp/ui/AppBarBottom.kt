@@ -6,6 +6,7 @@ import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.Group
+import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
@@ -27,6 +28,7 @@ fun AppBarBottom(
     onMapClick: () -> Unit,
     onFriendsClick : () -> Unit,
     onListClick: () -> Unit,
+    onEventListClick: () -> Unit,
     onEventClick: () -> Unit,
     onEventHistoryClick: () -> Unit,
     onMagicClick: () -> Unit
@@ -34,6 +36,7 @@ fun AppBarBottom(
     BottomAppBar(
         modifier = Modifier
             .testTag("app-bar-bottom"),
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
         actions = {
             IconButton(
                 onClick = onHomeClick,
@@ -91,11 +94,20 @@ fun AppBarBottom(
                     contentDescription = "History of events",
                 )
             }
+            IconButton(
+                onClick = onEventListClick,
+                modifier = Modifier.testTag("app-bar-bottom__event-list-button")
+            ) {
+                Icon(
+                    Icons.Outlined.Groups,
+                    contentDescription = "List of events",
+                )
+            }
         },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onMagicClick,
-                containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
+                containerColor = MaterialTheme.colorScheme.inversePrimary,
                 elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
                 modifier = Modifier.testTag("app-bar-bottom__magic-button")
             ) {

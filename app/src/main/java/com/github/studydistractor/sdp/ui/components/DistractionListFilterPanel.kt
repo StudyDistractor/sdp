@@ -6,10 +6,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.HourglassEmpty
+import androidx.compose.material.icons.filled.Sell
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,6 +28,7 @@ import com.github.studydistractor.sdp.data.Distraction
 /**
  * Screens that represent the filter display in the list of distractions
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DistractionListFilterPanel(
     isExpanded: Boolean,
@@ -37,142 +42,187 @@ fun DistractionListFilterPanel(
     updateExpansion: (expanded: Boolean) -> Unit,
     updateBookmarksOnly: (Boolean) -> Unit
 ) {
-    Column(
+    Card(
         modifier = Modifier
-            .padding(16.dp)
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            .padding(horizontal = 14.dp, vertical = 16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.inversePrimary,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+        ),
+    ){
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 14.dp, vertical = 2.dp)
         ) {
-            Text(
-                text = "Filters",
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
-            )
-            IconButton(
-                onClick = { updateExpansion(!isExpanded) },
-                modifier = Modifier.testTag("distraction-list-screen__filter-Button")
+            Row(
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = if (isExpanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
-                    contentDescription = if (isExpanded) "Collapse filters" else "Expand filters"
+                Text(
+                    text = "Filters",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
                 )
+                IconButton(
+                    onClick = { updateExpansion(!isExpanded) },
+                    modifier = Modifier.testTag("distraction-list-screen__filter-Button")
+                ) {
+                    Icon(
+                        imageVector = if (isExpanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+                        contentDescription = if (isExpanded) "Collapse filters" else "Expand filters"
+                    )
+                }
             }
-        }
-        if (isExpanded) {
-            Column(
-                modifier = Modifier.testTag("filterIsOpen")
-            ){
-                // Tags filter
-                Row(modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .testTag("tags"),
-                    verticalAlignment = Alignment.CenterVertically) {
-                    LazyRow(modifier = Modifier.padding(horizontal = 16.dp)) {
+            if (isExpanded) {
+                Column(
+                    modifier = Modifier.testTag("filterIsOpen")
+                ) {
+                    Divider(
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+                        thickness = 1.dp,
+                        modifier = Modifier.padding(vertical = 10.dp)
+                    )
+                    // Tags filter
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        modifier = Modifier.testTag("tags")
+                    ) {
+                        Icon(Icons.Filled.Sell, contentDescription = "tags icon")
+                        Text(text = "Tags", style = MaterialTheme.typography.titleMedium)
+                    }
+                    LazyRow(
+                        modifier = Modifier.padding(vertical = 8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
                         items(availableTags) { tag ->
                             val selected: Boolean = selectedTags.contains(tag)
-                            Button(
+                            FilterChip(
                                 onClick = {
                                     if (selected) {
                                         removeTag(tag)
                                     } else {
                                         addTag(tag)
                                     }
-                                },
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = if(selected) {
-                                        MaterialTheme.colors.primary
-                                    } else {
-                                        MaterialTheme.colors.surface
+                                          },
+                                label = { Text(text = tag)},
+                                selected = selected,
+                                leadingIcon = {
+                                    if(selected) {
+                                        Icon(Icons.Filled.Check,
+                                            contentDescription = "Bookmark button"
+                                        )
                                     }
+                                },
+                                colors = FilterChipDefaults.filterChipColors(
+                                    containerColor = MaterialTheme.colorScheme.inversePrimary,
+                                    selectedContainerColor = MaterialTheme.colorScheme.primary,
+                                    selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                                    selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimary
                                 ),
-                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                                shape = RoundedCornerShape(16.dp),
-                                modifier = Modifier
-                                    .padding(end = 8.dp)
-                                    .testTag("distraction-list-screen__button-select-tag")
-                            ) {
-                                Text(
-                                    tag,
-                                    color = if (selected) Color.White else MaterialTheme.colors.onSurface
-                                )
-                            }
-                        }
-                    }
-                }
-
-                Divider(
-                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.1f),
-                    thickness = 1.dp,
-                    modifier = Modifier.padding(vertical = 16.dp)
-                )
-
-                // Length filter
-                Row(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .testTag("length"),
-                    verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        "Length",
-                        style = MaterialTheme.typography.subtitle1,
-                        modifier = Modifier.weight(1f)
-                    )
-                    LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        items(Distraction.Length.values()) {
-                            DistractionListLengthButton(
-                                text = it.toString().lowercase().replaceFirstChar { c -> c.uppercase() },
-                                isSelected = it == selectedLength,
-                                onClick = {
-                                    updateLength(it)
-                                }
+                                modifier = Modifier.testTag("distraction-list-screen__button-select-tag")
                             )
                         }
                     }
-                }
 
-                Divider(
-                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.1f),
-                    thickness = 1.dp,
-                    modifier = Modifier.padding(vertical = 16.dp)
-                )
+                    Divider(
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+                        thickness = 1.dp,
+                        modifier = Modifier.padding(vertical = 10.dp)
+                    )
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("distraction-list-screen__filter-panel__bookmark-row"),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Button(onClick = { updateBookmarksOnly(!bookmarksOnly)},
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = if (bookmarksOnly) MaterialTheme.colors.primary else MaterialTheme.colors.surface
-                        )
+                    // Length filter
+                    Row(
+                        modifier = Modifier
+                            .testTag("length"),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        Text("Bookmarks only",
-                            color = if (bookmarksOnly) Color.White else MaterialTheme.colors.onSurface
+                        Icon(Icons.Filled.HourglassEmpty, contentDescription = "length icon")
+                        Text(
+                            "Length",
+                            style = MaterialTheme.typography.titleMedium
                         )
                     }
-                }
 
-                Spacer(modifier = Modifier.weight(1f))
+                    LazyRow(modifier = Modifier.padding(vertical = 8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(Distraction.Length.values()) {
+                            FilterChip(
+                                onClick = {
+                                    updateLength(it)
+                                },
+                                label = { Text(text = it.toString().lowercase().replaceFirstChar { c -> c.uppercase() })},
+                                selected = it == selectedLength,
+                                leadingIcon = {
+                                    if(it == selectedLength) {
+                                        Icon(Icons.Filled.Check,
+                                            contentDescription = "length button"
+                                        )
+                                    }
+                                },
+                                colors = FilterChipDefaults.filterChipColors(
+                                    containerColor = MaterialTheme.colorScheme.inversePrimary,
+                                    selectedContainerColor = MaterialTheme.colorScheme.primary,
+                                    selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                                    selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimary
+                                ),
+                                modifier = Modifier.testTag("distraction-list-screen__select-length")
+                            )
+                        }
+                    }
 
-                // Apply button
-                Button(
-                    onClick = {
-                        updateExpansion(false)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                        .testTag("distraction-list-screen__button-apply-button"),
-                    shape = RoundedCornerShape(16.dp)
-                ) {
-                    Text("Apply Filters", color = Color.White)
+                    Divider(
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+                        thickness = 1.dp,
+                        modifier = Modifier.padding(vertical = 10.dp)
+                    )
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag("distraction-list-screen__filter-panel__bookmark-row"),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Icon(Icons.Filled.Favorite, contentDescription = "bookmark icon")
+                            Text(text = "Bookmarks only", style = MaterialTheme.typography.titleMedium)
+                        }
+
+                        Switch(
+                            checked = bookmarksOnly,
+                            onCheckedChange = {updateBookmarksOnly(!bookmarksOnly)},
+                            colors = SwitchDefaults.colors(
+                                uncheckedBorderColor = MaterialTheme.colorScheme.primary,
+                                uncheckedTrackColor = MaterialTheme.colorScheme.primaryContainer,
+                                uncheckedThumbColor = MaterialTheme.colorScheme.primary
+                            ),
+                            thumbContent = {
+                                if(bookmarksOnly) {
+                                    Icon(Icons.Filled.Check,
+                                        contentDescription = "bookmark switch"
+                                    )
+                                }
+                            }
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    // Apply button
+                    Button(
+                        onClick = {
+                            updateExpansion(false)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                            .testTag("distraction-list-screen__button-apply-button"),
+                        shape = RoundedCornerShape(16.dp)
+                    ) {
+                        Text("Apply Filters", color = Color.White)
+                    }
                 }
             }
         }
