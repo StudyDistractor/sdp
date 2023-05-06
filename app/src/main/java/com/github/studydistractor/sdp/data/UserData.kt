@@ -11,11 +11,13 @@ package com.github.studydistractor.sdp.data
  * @constructor create a user
  */
 data class UserData(
-    var id: String? = null,
+    var id: userId? = null,
     var firstname: String? = null,
     var lastname: String? = null,
     var phone: String? = null,
     var birthday: Int? = null,
     var score: Int?= null
 )
+
+typealias userId = String
 
