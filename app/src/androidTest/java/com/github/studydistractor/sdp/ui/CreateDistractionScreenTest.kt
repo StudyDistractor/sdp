@@ -38,7 +38,7 @@ class CreateDistractionScreenTest {
 
     @Test
     fun testScreenIsShown() {
-        composeRule.onNodeWithTag("create-distraction-screen__main-container").assertIsDisplayed()
+        composeRule.onNodeWithTag("create-activity-screen__main-container").assertIsDisplayed()
         composeRule.onNodeWithText("Create new distraction").assertIsDisplayed()
     }
 
@@ -63,12 +63,13 @@ class CreateDistractionScreenTest {
     @OptIn(ExperimentalComposeUiApi::class, ExperimentalTestApi::class)
     @Test
     fun supportingTextDisplaysCorrectlyWhenEmpty() {
-        composeRule.onNodeWithTag("name").performTextInput("test")
-        composeRule.onNodeWithTag("description").performTextInput("test")
-        composeRule.onNodeWithTag("name").assert(hasText("test"))
-        composeRule.onNodeWithTag("description").assert(hasText("test"))
-        composeRule.onNodeWithTag("nameSupport", useUnmergedTree = true).assert(hasText("4/20"))
-        composeRule.onNodeWithTag("descriptionSupport", useUnmergedTree = true).assert(hasText("4/200"))
+        composeRule.onNodeWithTag("name").performTextInput("test name")
+        composeRule.onNodeWithTag("description").performTextInput("")
+        composeRule.onNodeWithTag("description").performTextInput("test description")
+        composeRule.onNodeWithTag("name").assert(hasText("test name"))
+        composeRule.onNodeWithTag("description").assert(hasText("test description"))
+        composeRule.onNodeWithTag("nameSupport", useUnmergedTree = true).assert(hasText("9/20"))
+        composeRule.onNodeWithTag("descriptionSupport", useUnmergedTree = true).assert(hasText("16/200"))
     }
 
     @Test
@@ -81,5 +82,10 @@ class CreateDistractionScreenTest {
         composeRule.onNodeWithTag("name").assert(hasText("${name.length}/20"))
         composeRule.onNodeWithTag("description").assert(hasText(description))
         composeRule.onNodeWithTag("description").assert(hasText("${description.length}/200"))
+    }
+
+    @Test
+    fun titleDisplaysCorrectly() {
+        composeRule.onNodeWithTag("create-distraction-screen__title").assert(hasText("Create distraction"))
     }
 }

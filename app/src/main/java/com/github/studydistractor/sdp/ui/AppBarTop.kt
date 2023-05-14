@@ -1,10 +1,17 @@
 package com.github.studydistractor.sdp.ui
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material3.*
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
@@ -18,8 +25,10 @@ fun AppBarTop(
     navigateUp: () -> Unit,
     goToMapActivity: () -> Unit,
     goToHistoryActivity: () -> Unit,
-    goToCreateDistractionActivity: () -> Unit
+    goToCreateDistractionActivity: () -> Unit,
+    goToCreateEventActivity: () -> Unit,
 ) {
+
     CenterAlignedTopAppBar(
         modifier = Modifier
             .testTag("app-bar-top"),
@@ -44,16 +53,32 @@ fun AppBarTop(
                         )
                     }
                 }
+                Box() {
+                    var dropDownExpanded by remember { mutableStateOf(false) }
+                    DropdownMenu(
+                        expanded = dropDownExpanded,
+                        onDismissRequest = { dropDownExpanded = false }
+                    ) {
+                        DropdownMenuItem(onClick = goToCreateDistractionActivity) {
+                            Text("Create distraction")
+                        }
+                        DropdownMenuItem(onClick = goToCreateEventActivity) {
+                            Text("Create event")
+                        }
 
-                IconButton(
-                    onClick = goToCreateDistractionActivity,
-                    modifier = Modifier.testTag("app-bar-top__create-distraction-button")
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Add,
-                        contentDescription = "Create distraction"
-                    )
+                    }
+                    IconButton(
+                        onClick = { dropDownExpanded = true },
+                        modifier = Modifier.testTag("app-bar-top__create-activity-button")
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Add,
+                            contentDescription = "Create activity"
+                        )
+                    }
+
                 }
+
             }
         },
         actions = {

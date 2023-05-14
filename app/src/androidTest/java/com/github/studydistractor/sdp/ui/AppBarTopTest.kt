@@ -28,7 +28,9 @@ class AppBarTopTest {
                 navigateUp = { throw Error("this should never be called") },
                 goToMapActivity = { /* this must not be tested as it is temporary */ },
                 goToHistoryActivity = { /* this must not be tested as it is temporary */ },
-                goToCreateDistractionActivity = { /* this must not be tested as it is temporary */ })
+                goToCreateDistractionActivity = { /* this must not be tested as it is temporary */ },
+                goToCreateEventActivity = { /* this must not be tested as it is temporary */ }
+                )
         }
 
         composeRule.onNodeWithTag("app-bar-top__title").assertIsDisplayed()
@@ -43,7 +45,9 @@ class AppBarTopTest {
                 navigateUp = { throw Error("this should never be called") },
                 goToMapActivity = { /* this must not be tested as it is temporary */ },
                 goToHistoryActivity = { /* this must not be tested as it is temporary */ },
-                goToCreateDistractionActivity = { /* this must not be tested as it is temporary */ })
+                goToCreateDistractionActivity = { /* this must not be tested as it is temporary */ },
+                goToCreateEventActivity = { /* this must not be tested as it is temporary */ }
+            )
         }
 
         composeRule.onNodeWithTag("app-bar-top__back-button").assertDoesNotExist()
@@ -60,7 +64,9 @@ class AppBarTopTest {
                 navigateUp = { backClicks++ },
                 goToMapActivity = { /* this must not be tested as it is temporary */ },
                 goToHistoryActivity = { /* this must not be tested as it is temporary */ },
-                goToCreateDistractionActivity = { /* this must not be tested as it is temporary */ })
+                goToCreateDistractionActivity = { /* this must not be tested as it is temporary */ },
+                goToCreateEventActivity = { /* this must not be tested as it is temporary */ }
+            )
         }
 
         composeRule.onNodeWithTag("app-bar-top__back-button").assertIsDisplayed()
