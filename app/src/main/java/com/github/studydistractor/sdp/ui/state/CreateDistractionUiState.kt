@@ -7,4 +7,5 @@ data class CreateDistractionUiState  (
     override val supportingTextDescription: String = "",
     override val latitude: String? = null,
     override val longitude: String? = null,
+    val locationFieldIsVisible: Boolean = false,
 ) : CreateActivityUiState
