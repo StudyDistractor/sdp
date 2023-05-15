@@ -27,6 +27,8 @@ import com.github.studydistractor.sdp.distractionList.DistractionListServiceFire
 import com.github.studydistractor.sdp.distractionList.DistractionListViewModel
 import com.github.studydistractor.sdp.distractionStat.DistractionStatServiceFirebase
 import com.github.studydistractor.sdp.distractionStat.DistractionStatViewModel
+import com.github.studydistractor.sdp.eventChat.EventChatServiceFirebase
+import com.github.studydistractor.sdp.eventChat.EventChatViewModel
 import com.github.studydistractor.sdp.friends.FriendsViewModel
 import com.github.studydistractor.sdp.history.HistoryServiceFirebase
 import com.github.studydistractor.sdp.history.HistoryViewModel
@@ -54,6 +56,7 @@ enum class StudyDistractorScreen(@StringRes val title: Int) {
     History(title = R.string.screen_name_history),
     CreateUser(title = R.string.screen_name_create_user),
     DailyChallenge(title = R.string.screen_name_daily_challenge),
+    ChatEvent(title = R.string.screen_name_chat_event)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -91,6 +94,8 @@ fun StudyDistractorApp(
         remember { DistractionStatViewModel(DistractionStatServiceFirebase()) }
     val dailyChallengeViewModel =
         remember { DailyChallengeViewModel(DailyChallengeServiceFirebase()) }
+    val chatEventViewModel =
+        remember { EventChatViewModel(EventChatServiceFirebase())}
 
     Scaffold(
         topBar = { AppBarTop(
@@ -199,6 +204,9 @@ fun StudyDistractorApp(
             }
             composable(route = StudyDistractorScreen.Friends.name){
                 FriendsScreen(friendsViewModel)
+            }
+            composable(route = StudyDistractorScreen.ChatEvent.name){
+                EventChatScreen(chatEventViewModel)
             }
         }
     }
