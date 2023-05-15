@@ -20,6 +20,10 @@ class EventChatViewModel constructor(eventChatModel : EventChatModel) : ViewMode
         }
     }
 
+    /**
+     * Change to current event chat
+     * @param eventId The event id to get messages and post message to.
+     */
     fun changeEventChat(eventId : String){
         _eventChatModel.changeCurrentChat(eventId)
         _eventChatModel.observeMessages { t ->
@@ -27,13 +31,21 @@ class EventChatViewModel constructor(eventChatModel : EventChatModel) : ViewMode
         }
     }
 
+    /**
+     * Update the text field for the message uiState
+     * @param message The message to update to
+     */
     fun updateMessage(message : String){
         _uiState.update {
             it.copy(message = message)
         }
     }
 
+    /**
+     * Post the current message in the uiState
+     */
     fun postMessage(){
+        if(_uiState.value.message.isEmpty()) return
         _eventChatModel.postMessage(_uiState.value.message)
             .continueWith{
                 _uiState.update {

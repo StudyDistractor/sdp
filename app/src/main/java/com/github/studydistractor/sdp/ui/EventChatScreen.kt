@@ -10,11 +10,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Send
+import androidx.compose.material.icons.rounded.Send
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
@@ -82,7 +83,8 @@ fun EventChatScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 OutlinedTextField(
                     value = uiState.message,
@@ -90,6 +92,7 @@ fun EventChatScreen(
                     label = { Text(text = "Enter your message") },
                     modifier = Modifier.weight(1f)
                         .testTag("event-chat-screen__text-field")
+
                 )
                 IconButton(
                     onClick = {
@@ -99,7 +102,8 @@ fun EventChatScreen(
                         .testTag("event-chat-screen__icon-button")
                 ) {
                     Icon(
-                        imageVector = Icons.Outlined.Send,
+                        imageVector = Icons.Rounded.Send,
+                        tint = MaterialTheme.colorScheme.primary,
                         contentDescription = "Send message"
                     )
                 }
