@@ -5,7 +5,7 @@ import com.google.android.gms.tasks.Task
 
 interface EventChatModel {
 
-    fun messagesObserver(onChange : (List<Message>) -> Unit)
+    fun obeserveMessages(onChange : (List<Message>) -> Unit)
 
     fun getMessages() : Task<List<Message>>
 

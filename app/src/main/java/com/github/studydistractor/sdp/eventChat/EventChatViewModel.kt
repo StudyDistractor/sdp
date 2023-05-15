@@ -13,7 +13,7 @@ class EventChatViewModel constructor(eventChatModel : EventChatModel) : ViewMode
     val uiState: StateFlow<EventChatUiState> = _uiState.asStateFlow()
 
     init {
-        _eventChatModel.messagesObserver { t ->
+        _eventChatModel.obeserveMessages { t ->
             _uiState.update {
                 it.copy(messages = t)
             }
@@ -22,7 +22,7 @@ class EventChatViewModel constructor(eventChatModel : EventChatModel) : ViewMode
 
     fun changeEventChat(eventId : String){
         _eventChatModel.changeCurrentChat(eventId)
-        _eventChatModel.messagesObserver { t ->
+        _eventChatModel.obeserveMessages { t ->
             _uiState.update { it.copy(messages = t) }
         }
     }
