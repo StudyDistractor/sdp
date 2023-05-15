@@ -34,11 +34,14 @@ data class FirebaseChat(
  * @property messageId id of the message
  * @property timeStamp timestamp of the message (time when the message was sent)
  * @property userId id of the user that sent the message
+ * @property message the message sent
  */
 data class Message(
-    val messageId: String?,
-    val timeStamp: String,
-    val userId: String)
+    val messageId: String,
+    val timeStamp: Long,
+    val userId: String,
+    val message : String,
+)
 
 /**
  * Represent a message that is received or sent from/to the firebase database
@@ -46,15 +49,17 @@ data class Message(
  * @property messageId id of the message
  * @property timeStamp timestamp of the message (time when the message was sent)
  * @property userId id of the user that sent the message
+ * @property message the message sent
  */
 data class FirebaseMessage(
     val messageId: String? = null,
-    val timeStamp: String? = null,
-    val userId: String? = null) {
-
+    val timeStamp: Long? = null,
+    val userId: String? = null,
+    val message : String? = null,
+) {
     fun toMessage(): Message {
         return Message(
-            messageId, timeStamp!!, userId!!
+            messageId!!, timeStamp!!, userId!!, message!!
         )
     }
 }
