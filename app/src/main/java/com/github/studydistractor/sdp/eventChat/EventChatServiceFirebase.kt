@@ -11,6 +11,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseException
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.lang.NullPointerException
 import java.util.Date
 
 class EventChatServiceFirebase : EventChatModel {
@@ -55,7 +56,7 @@ class EventChatServiceFirebase : EventChatModel {
                     try {
                         val message = m.getValue(FirebaseMessage::class.java)
                         list.add(message!!.toMessage())
-                    } catch (_: DatabaseException){
+                    } catch (_: NullPointerException){
                         Log.d("ERROR",
                             "Unable to fetch data from firebase due to structure difference"
                         )
