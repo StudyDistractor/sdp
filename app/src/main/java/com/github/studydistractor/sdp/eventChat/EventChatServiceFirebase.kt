@@ -42,7 +42,7 @@ class EventChatServiceFirebase : EventChatModel {
         db.child(currentChat).addValueEventListener(listener)
     }
 
-    override fun obeserveMessages(onChange: (List<Message>) -> Unit) {
+    override fun observeMessages(onChange: (List<Message>) -> Unit) {
         this.onChange = onChange
     }
 

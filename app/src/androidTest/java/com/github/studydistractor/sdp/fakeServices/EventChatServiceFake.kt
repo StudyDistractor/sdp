@@ -10,7 +10,7 @@ class EventChatServiceFake : EventChatModel {
         Message("1", 10000L, "ramond","comment ca va ?"),
         Message("2", 10001L, "michel","bien")
     )
-    override fun obeserveMessages(onChange: (List<Message>) -> Unit) {
+    override fun observeMessages(onChange: (List<Message>) -> Unit) {
         onChange(listOfMessages)
     }
 
