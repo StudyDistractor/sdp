@@ -23,6 +23,7 @@ data class Event(
     val start: String,
     val end: String,
     val lateParticipation: Boolean,
+    val numberOfPoints: Int,
     val chatId: String)
 
 /**
@@ -47,10 +48,11 @@ data class FirebaseEvent(
     val start: String? = null,
     val end: String? = null,
     val lateParticipation: Boolean = false,
+    val numberOfPoints: Int? = 0,
     val chatId: String? = null) {
     fun toEvent(): Event {
         return Event(
-            eventId, name!!, description!!, lat!!, long!!, start!!, end!!, lateParticipation, chatId!!
+            eventId, name!!, description!!, lat!!, long!!, start!!, end!!, lateParticipation, numberOfPoints!!, chatId!!
         )
     }
 }
