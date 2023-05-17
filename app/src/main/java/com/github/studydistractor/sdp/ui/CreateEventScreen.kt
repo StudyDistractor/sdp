@@ -111,14 +111,12 @@ fun CreateEventScreen(
             )
 
             CreateLatitudeAndLongitudeFields(
-                createActivityViewModel = createEventViewModel,
-                uiState = uiState
+                createActivityViewModel = createEventViewModel
             )
 
             PointsAwardedField(createActivityViewModel = createEventViewModel, uiState = uiState)
             LateParticipationCheckbox(
-                createEventViewModel = createEventViewModel,
-                uiState = uiState
+                createEventViewModel = createEventViewModel
             )
 
             CreateActivityButton(
@@ -216,9 +214,9 @@ fun CreateDateTimeField(
  */
 @Composable
 fun LateParticipationCheckbox(
-    createEventViewModel: CreateEventViewModel,
-    uiState: CreateEventUiState
+    createEventViewModel: CreateEventViewModel
 ) {
+    val uiState by createEventViewModel.uiState.collectAsState()
     Row(
         modifier = Modifier
             .fillMaxWidth()

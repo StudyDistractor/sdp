@@ -97,9 +97,8 @@ fun CreateActivityButton(
 @Composable
 fun CreateLatitudeAndLongitudeFields(
     createActivityViewModel: CreateActivityViewModel,
-    uiState: CreateActivityUiState
 ) {
-
+    val uiState by createActivityViewModel.uiState.collectAsState()
     OutlinedTextField(
         value = uiState.latitude.orEmpty(),
         label = { Text("latitude") },
