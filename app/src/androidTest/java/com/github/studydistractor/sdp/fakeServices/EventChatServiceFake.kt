@@ -14,10 +14,6 @@ class EventChatServiceFake : EventChatModel {
         onChange(listOfMessages)
     }
 
-    override fun getMessages(): Task<List<Message>> {
-        return Tasks.forResult(listOfMessages)
-    }
-
     override fun postMessage(message: String): Task<Void> {
         return Tasks.forResult(null)
     }
