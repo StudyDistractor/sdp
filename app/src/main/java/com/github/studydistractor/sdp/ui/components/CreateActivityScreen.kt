@@ -73,52 +73,6 @@ fun CreateActivityNameAndDescriptionFields(
 
 }
 
-
-@Composable
-fun CreateActivityButton(
-    createActivityViewModel: CreateActivityViewModel,
-    onActivityCreated: () -> Unit,
-    buttonText: String
-) {
-    val context = LocalContext.current
-    Button(
-        onClick = {
-            createActivityViewModel.createActivity()
-                .addOnSuccessListener { onActivityCreated() }
-                .addOnFailureListener { showFailureToast(context, it.message.orEmpty()) }
-        },
-        modifier = Modifier.testTag("addActivity")
-    ) {
-        Text(buttonText)
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CreateLatitudeAndLongitudeFields(
-    createActivityViewModel: CreateActivityViewModel,
-) {
-    val uiState by createActivityViewModel.uiState.collectAsState()
-    OutlinedTextField(
-        value = uiState.latitude.orEmpty(),
-        label = { Text("latitude") },
-        onValueChange = { createActivityViewModel.updateLatitude(it) },
-        modifier = Modifier
-            .testTag("latitude")
-            .fillMaxWidth()
-            .padding(top = 16.dp),
-    )
-    OutlinedTextField(
-        value = uiState.longitude.orEmpty(),
-        label = { Text("longitude") },
-        onValueChange = { createActivityViewModel.updateLongitude(it) },
-        modifier = Modifier
-            .testTag("longitude")
-            .fillMaxWidth()
-            .padding(top = 16.dp),
-    )
-}
-
 fun showFailureToast(context: Context, message: String) {
     Toast.makeText(context, "Failure: $message", Toast.LENGTH_SHORT)
         .show()
