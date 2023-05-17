@@ -75,7 +75,7 @@ data class EventParticipants(
  * @param messageIds list of messageId that were sent in the chat
  */
 data class FirebaseEventParticipants(
-    val eventId: String?,
+    val eventId: String? = null,
     val participants: List<String>? = null
 ) {
     fun toEventParticipants(): EventParticipants {

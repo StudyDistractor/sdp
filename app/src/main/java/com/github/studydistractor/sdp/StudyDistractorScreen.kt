@@ -29,6 +29,8 @@ import com.github.studydistractor.sdp.distractionStat.DistractionStatServiceFire
 import com.github.studydistractor.sdp.distractionStat.DistractionStatViewModel
 import com.github.studydistractor.sdp.eventChat.EventChatServiceFirebase
 import com.github.studydistractor.sdp.eventChat.EventChatViewModel
+import com.github.studydistractor.sdp.eventHistory.EventHistoryServiceFirebase
+import com.github.studydistractor.sdp.eventHistory.EventHistoryViewModel
 import com.github.studydistractor.sdp.friends.FriendsViewModel
 import com.github.studydistractor.sdp.history.HistoryServiceFirebase
 import com.github.studydistractor.sdp.history.HistoryViewModel
@@ -56,7 +58,8 @@ enum class StudyDistractorScreen(@StringRes val title: Int) {
     History(title = R.string.screen_name_history),
     CreateUser(title = R.string.screen_name_create_user),
     DailyChallenge(title = R.string.screen_name_daily_challenge),
-    ChatEvent(title = R.string.screen_name_chat_event)
+    ChatEvent(title = R.string.screen_name_chat_event),
+    EventHistory(title = R.string.screen_name_event_history)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -96,6 +99,8 @@ fun StudyDistractorApp(
         remember { DailyChallengeViewModel(DailyChallengeServiceFirebase()) }
     val chatEventViewModel =
         remember { EventChatViewModel(EventChatServiceFirebase())}
+    val eventHistoryViewModel =
+        remember { EventHistoryViewModel(EventHistoryServiceFirebase())}
 
     Scaffold(
         topBar = { AppBarTop(
@@ -113,7 +118,7 @@ fun StudyDistractorApp(
             }
         ) },
         bottomBar = { AppBarBottom(
-            onHomeClick = { navController.navigate(StudyDistractorScreen.Login.name) },
+            onHomeClick = { navController.navigate(StudyDistractorScreen.EventHistory.name) },
             onListClick = { navController.navigate(StudyDistractorScreen.DistractionList.name) },
             onMapClick = { navController.navigate(StudyDistractorScreen.Maps.name) },
             onFriendsClick = { navController.navigate(StudyDistractorScreen.Friends.name) },
@@ -207,6 +212,15 @@ fun StudyDistractorApp(
             }
             composable(route = StudyDistractorScreen.ChatEvent.name){
                 EventChatScreen(chatEventViewModel)
+            }
+            composable(route = StudyDistractorScreen.EventHistory.name){
+                EventHistoryScreen(
+                    eventHistoryViewModel = eventHistoryViewModel,
+                    chatViewModel = chatEventViewModel,
+                    onChatButtonClicked = {
+                        navController.navigate(StudyDistractorScreen.ChatEvent.name)
+                    }
+                )
             }
         }
     }
