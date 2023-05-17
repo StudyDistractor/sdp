@@ -77,7 +77,7 @@ data class EventParticipants(
  * @param participants list of userId that participate in this event
  */
 data class FirebaseEventParticipants(
-    val eventId: String?,
+    val eventId: String? = null,
     val participants: List<String>? = null
 ) {
     fun toEventParticipants(): EventParticipants {
