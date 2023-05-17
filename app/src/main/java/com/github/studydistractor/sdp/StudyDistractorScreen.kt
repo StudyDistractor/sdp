@@ -118,7 +118,7 @@ fun StudyDistractorApp(
             }
         ) },
         bottomBar = { AppBarBottom(
-            onHomeClick = { navController.navigate(StudyDistractorScreen.Login.name) },
+            onHomeClick = { navController.navigate(StudyDistractorScreen.EventHistory.name) },
             onListClick = { navController.navigate(StudyDistractorScreen.DistractionList.name) },
             onMapClick = { navController.navigate(StudyDistractorScreen.Maps.name) },
             onFriendsClick = { navController.navigate(StudyDistractorScreen.Friends.name) },
