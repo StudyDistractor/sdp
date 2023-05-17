@@ -13,12 +13,6 @@ interface EventChatModel {
     fun observeMessages(onChange : (List<Message>) -> Unit)
 
     /**
-     * Fetch the list of current messages
-     * @return A task of list of Message if the fetch succeed.
-     */
-    fun getMessages() : Task<List<Message>>
-
-    /**
      * Post the given message to the chat.
      * @param message The message to post
      * @return A task successful if the message as been post
