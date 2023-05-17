@@ -38,20 +38,18 @@ fun EventHistoryCard(
         Column(
             modifier = Modifier
                 .clickable { isExpanded = !isExpanded }
-                .testTag("entry " + event.eventId)
+                .testTag("event-history-card__title " + event.eventId)
 
         ) {
             Text(
                 text = event.name,
                 color = MaterialTheme.colorScheme.secondary,
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.testTag("name " + event.name)
             )
             Text(
                 text = "Started on ${event.start} / Ended on ${event.end}",
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.testTag("start " + event.start + " end " + event.end)
             )
             Spacer(modifier = Modifier.height(4.dp))
 
@@ -63,9 +61,7 @@ fun EventHistoryCard(
             ) {
                 Text(
                     text = event.description,
-                    modifier = Modifier
-                        .padding(all = 4.dp)
-                        .testTag("description ${event.description}"),
+                    modifier = Modifier.padding(all = 4.dp),
                     maxLines = if(isExpanded) Int.MAX_VALUE else 1,
                     style = MaterialTheme.typography.bodySmall
                 )
@@ -76,11 +72,9 @@ fun EventHistoryCard(
                     chatViewModel.changeEventChat(event.eventId!!)
                     onChatClicked()
                 },
-                modifier = Modifier.testTag("Button ${event.eventId}"),
             ) {
                 Text(
                     "See Chat",
-                    modifier = Modifier.testTag("Test Button ${event.eventId}")
                 )
             }
         }

@@ -19,6 +19,7 @@ class EventHistoryServiceFake: EventHistoryModel {
                     "10-10-1997 00:00",
                     "11-11-1997 00:00",
                     false,
+                    0,
                     "chatId1"
                 ),
                 Event(
@@ -30,6 +31,7 @@ class EventHistoryServiceFake: EventHistoryModel {
                     "10-10-1998 00:00",
                     "11-11-1998 00:00",
                     false,
+                    0,
                     "chatId2"
                 ),
                 Event(
@@ -41,6 +43,7 @@ class EventHistoryServiceFake: EventHistoryModel {
                     "10-10-1999 00:00",
                     "11-11-1999 00:00",
                     false,
+                    0,
                     "chatId3"
                 ),
                 Event(
@@ -52,6 +55,7 @@ class EventHistoryServiceFake: EventHistoryModel {
                     "10-10-1999 00:00",
                     "10-10-2050 00:00",
                     false,
+                    0,
                     "NotFinishedEvent"
                 ),
                 Event(
@@ -63,6 +67,7 @@ class EventHistoryServiceFake: EventHistoryModel {
                     "10-10-1999 00:00",
                     "10-10-2000 00:00",
                     false,
+                    0,
                     "UserHasNotTakenPartIn"
                 )
             )

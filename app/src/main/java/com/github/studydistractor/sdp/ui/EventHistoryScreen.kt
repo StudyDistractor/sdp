@@ -41,7 +41,7 @@ fun EventHistoryScreen(
         Text("Your event history",
             modifier = Modifier
                 .padding(vertical = 32.dp)
-                .testTag("event_history_title"),
+                .testTag("event-history-screen__title"),
             style = MaterialTheme.typography.titleLarge,
         )
         LazyColumn(){

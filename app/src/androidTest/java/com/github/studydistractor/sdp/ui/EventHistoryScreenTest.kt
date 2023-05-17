@@ -32,28 +32,28 @@ class EventHistoryScreenTest {
 
     @Test
     fun testTitleIsDisplayed(){
-        composeRule.onNodeWithTag("event_history_title").assertIsDisplayed()
+        composeRule.onNodeWithTag("event-history-screen__title").assertIsDisplayed()
     }
 
     @Test
     fun testCardsThatShouldBeDisplayed(){
-        composeRule.onNodeWithTag("entry event1").assertExists()
-        composeRule.onNodeWithTag("entry event1").assertIsDisplayed()
-        composeRule.onNodeWithTag("entry event1").assertHasClickAction()
+        composeRule.onNodeWithTag("event-history-card__title event1").assertExists()
+        composeRule.onNodeWithTag("event-history-card__title event1").assertIsDisplayed()
+        composeRule.onNodeWithTag("event-history-card__title event1").assertHasClickAction()
 
-        composeRule.onNodeWithTag("entry event2").assertExists()
-        composeRule.onNodeWithTag("entry event2").assertIsDisplayed()
-        composeRule.onNodeWithTag("entry event2").assertHasClickAction()
+        composeRule.onNodeWithTag("event-history-card__title event2").assertExists()
+        composeRule.onNodeWithTag("event-history-card__title event2").assertIsDisplayed()
+        composeRule.onNodeWithTag("event-history-card__title event2").assertHasClickAction()
 
-        composeRule.onNodeWithTag("entry event3").assertExists()
-        composeRule.onNodeWithTag("entry event3").assertIsDisplayed()
-        composeRule.onNodeWithTag("entry event3").assertHasClickAction()
+        composeRule.onNodeWithTag("event-history-card__title event3").assertExists()
+        composeRule.onNodeWithTag("event-history-card__title event3").assertIsDisplayed()
+        composeRule.onNodeWithTag("event-history-card__title event3").assertHasClickAction()
     }
 
     @Test
     fun testCardsThatShouldNotBeDisplayed(){
-        composeRule.onNodeWithTag("entry NotFinishedEvent").assertDoesNotExist()
-        composeRule.onNodeWithTag("entry UserHasNotTakenPartIn").assertDoesNotExist()
+        composeRule.onNodeWithTag("event-history-card__title NotFinishedEvent").assertDoesNotExist()
+        composeRule.onNodeWithTag("event-history-card__title UserHasNotTakenPartIn").assertDoesNotExist()
     }
 
 }
