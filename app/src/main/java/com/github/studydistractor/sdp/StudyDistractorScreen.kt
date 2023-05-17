@@ -1,6 +1,7 @@
 package com.github.studydistractor.sdp
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,6 +19,8 @@ import androidx.navigation.compose.rememberNavController
 import com.github.studydistractor.sdp.account.FriendsServiceFirebase
 import com.github.studydistractor.sdp.createDistraction.CreateDistractionServiceFirebase
 import com.github.studydistractor.sdp.createDistraction.CreateDistractionViewModel
+import com.github.studydistractor.sdp.createEvent.CreateEventServiceFirebase
+import com.github.studydistractor.sdp.createEvent.CreateEventViewModel
 import com.github.studydistractor.sdp.createUser.CreateUserServiceFirebase
 import com.github.studydistractor.sdp.createUser.CreateUserViewModel
 import com.github.studydistractor.sdp.dailyChallenge.DailyChallengeServiceFirebase
@@ -29,6 +32,8 @@ import com.github.studydistractor.sdp.distractionStat.DistractionStatServiceFire
 import com.github.studydistractor.sdp.distractionStat.DistractionStatViewModel
 import com.github.studydistractor.sdp.eventChat.EventChatServiceFirebase
 import com.github.studydistractor.sdp.eventChat.EventChatViewModel
+import com.github.studydistractor.sdp.eventHistory.EventHistoryServiceFirebase
+import com.github.studydistractor.sdp.eventHistory.EventHistoryViewModel
 import com.github.studydistractor.sdp.friends.FriendsViewModel
 import com.github.studydistractor.sdp.history.HistoryServiceFirebase
 import com.github.studydistractor.sdp.history.HistoryViewModel
@@ -56,7 +61,9 @@ enum class StudyDistractorScreen(@StringRes val title: Int) {
     History(title = R.string.screen_name_history),
     CreateUser(title = R.string.screen_name_create_user),
     DailyChallenge(title = R.string.screen_name_daily_challenge),
-    ChatEvent(title = R.string.screen_name_chat_event)
+    ChatEvent(title = R.string.screen_name_chat_event),
+    EventHistory(title = R.string.screen_name_event_history),
+    CreateEvent(title = R.string.screen_name_create_event),
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -96,6 +103,10 @@ fun StudyDistractorApp(
         remember { DailyChallengeViewModel(DailyChallengeServiceFirebase()) }
     val chatEventViewModel =
         remember { EventChatViewModel(EventChatServiceFirebase())}
+    val eventHistoryViewModel =
+        remember { EventHistoryViewModel(EventHistoryServiceFirebase())}
+    val createEventViewModel =
+        remember { CreateEventViewModel(CreateEventServiceFirebase()) }
 
     Scaffold(
         topBar = { AppBarTop(
@@ -110,7 +121,10 @@ fun StudyDistractorApp(
             },
             goToMapActivity = {
                 context.startActivity(Intent(context, MapsActivity::class.java))
-            }
+            },
+            goToCreateEventActivity = {
+                navController.navigate(StudyDistractorScreen.CreateEvent.name)
+            },
         ) },
         bottomBar = { AppBarBottom(
             onHomeClick = { navController.navigate(StudyDistractorScreen.Login.name) },
@@ -185,6 +199,14 @@ fun StudyDistractorApp(
                     }
                 )
             }
+            composable(route = StudyDistractorScreen.CreateEvent.name)  {
+                CreateEventScreen(
+                    createEventViewModel = createEventViewModel,
+                    onEventCreated = {
+                        Toast.makeText(context, "Event created", Toast.LENGTH_SHORT).show()
+                    }
+                )
+            }
             composable(route = StudyDistractorScreen.History.name) {
                 HistoryScreen(
                     historyViewModel = historyViewModel
@@ -207,6 +229,15 @@ fun StudyDistractorApp(
             }
             composable(route = StudyDistractorScreen.ChatEvent.name){
                 EventChatScreen(chatEventViewModel)
+            }
+            composable(route = StudyDistractorScreen.EventHistory.name){
+                EventHistoryScreen(
+                    eventHistoryViewModel = eventHistoryViewModel,
+                    chatViewModel = chatEventViewModel,
+                    onChatButtonClicked = {
+                        navController.navigate(StudyDistractorScreen.ChatEvent.name)
+                    }
+                )
             }
         }
     }
