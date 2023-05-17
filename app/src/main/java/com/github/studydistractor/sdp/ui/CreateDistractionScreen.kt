@@ -76,7 +76,7 @@ fun CreateDistractionScreen(
             }
 
             if (uiState.locationFieldIsVisible) {
-                CreateLatitudeAndLongitudeFields(createActivityViewModel = createDistractionViewModel, uiState = uiState)
+                CreateLatitudeAndLongitudeFields(createActivityViewModel = createDistractionViewModel)
             } else {
                 createDistractionViewModel.updateLatitude("")
                 createDistractionViewModel.updateLongitude("")

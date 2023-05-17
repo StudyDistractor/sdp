@@ -114,7 +114,7 @@ fun CreateEventScreen(
                 createActivityViewModel = createEventViewModel
             )
 
-            PointsAwardedField(createActivityViewModel = createEventViewModel, uiState = uiState)
+            PointsAwardedField(createActivityViewModel = createEventViewModel)
             LateParticipationCheckbox(
                 createEventViewModel = createEventViewModel
             )
@@ -209,7 +209,6 @@ fun CreateDateTimeField(
 /**
  * Creates a checkbox to allow user to select if late participation is allowed
  * @param createEventViewModel ViewModel
- * @param uiState UI state
  * @return Row
  */
 @Composable
@@ -248,9 +247,9 @@ fun LateParticipationCheckbox(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PointsAwardedField(
-    createActivityViewModel: CreateEventViewModel,
-    uiState: CreateEventUiState
+    createActivityViewModel: CreateEventViewModel
 ) {
+    val uiState by createActivityViewModel.uiState.collectAsState()
     Row(
         modifier = Modifier
             .fillMaxWidth()
