@@ -4,8 +4,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.*
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.Composable
@@ -59,20 +59,14 @@ fun AppBarTop(
                         expanded = dropDownExpanded,
                         onDismissRequest = { dropDownExpanded = false }
                     ) {
-                        DropdownMenuItem(onClick = {
+                        DropdownMenuItem({ Text("Create distraction") }, onClick = {
                             dropDownExpanded = false
                             goToCreateDistractionActivity()
-                        }
-                        ) {
-                            Text("Create distraction")
-                        }
-                        DropdownMenuItem(onClick = {
+                        })
+                        DropdownMenuItem({ Text("Create event") }, onClick = {
                             dropDownExpanded = false
                             goToCreateEventActivity()
-                        }) {
-                            Text("Create event")
-                        }
-
+                        })
                     }
                     IconButton(
                         onClick = { dropDownExpanded = true },
