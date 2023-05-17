@@ -8,7 +8,6 @@ import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseException
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.lang.NullPointerException
@@ -26,12 +25,18 @@ class EventChatServiceFirebase : EventChatModel {
 
     private val listener = object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
-            getMessages().continueWith{
-                t-> onChange(
-                    t.result
-                        .sortedWith(compareBy({it.timeStamp}))
-                )
+            val list = arrayListOf<Message>()
+            for(m in snapshot.children){
+                try {
+                    val message = m.getValue(FirebaseMessage::class.java)
+                    list.add(message!!.toMessage())
+                } catch (_: NullPointerException){
+                    Log.d("ERROR",
+                        "Unable to fetch data from firebase due to structure difference"
+                    )
+                }
             }
+            onChange(list)
         }
 
         override fun onCancelled(error: DatabaseError) {
@@ -45,28 +50,6 @@ class EventChatServiceFirebase : EventChatModel {
 
     override fun observeMessages(onChange: (List<Message>) -> Unit) {
         this.onChange = onChange
-    }
-
-    override fun getMessages(): Task<List<Message>> {
-        return db.child(currentChat).get().continueWithTask{
-                t ->
-            if(t.isSuccessful){
-                val list = arrayListOf<Message>()
-                for(m in t.result.children){
-                    try {
-                        val message = m.getValue(FirebaseMessage::class.java)
-                        list.add(message!!.toMessage())
-                    } catch (_: NullPointerException){
-                        Log.d("ERROR",
-                            "Unable to fetch data from firebase due to structure difference"
-                        )
-                    }
-                }
-                Tasks.forResult(list)
-            } else {
-                Tasks.forException(Exception("Unable to fetch messages"))
-            }
-        }
     }
 
     override fun postMessage(message: String): Task<Void> {
