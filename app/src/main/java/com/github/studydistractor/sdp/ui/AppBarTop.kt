@@ -59,10 +59,17 @@ fun AppBarTop(
                         expanded = dropDownExpanded,
                         onDismissRequest = { dropDownExpanded = false }
                     ) {
-                        DropdownMenuItem(onClick = goToCreateDistractionActivity) {
+                        DropdownMenuItem(onClick = {
+                            dropDownExpanded = false
+                            goToCreateDistractionActivity()
+                        }
+                        ) {
                             Text("Create distraction")
                         }
-                        DropdownMenuItem(onClick = goToCreateEventActivity) {
+                        DropdownMenuItem(onClick = {
+                            dropDownExpanded = false
+                            goToCreateEventActivity()
+                        }) {
                             Text("Create event")
                         }
 
