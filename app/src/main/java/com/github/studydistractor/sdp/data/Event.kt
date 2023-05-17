@@ -84,3 +84,13 @@ data class FirebaseEventParticipants(
         )
     }
 }
+
+data class EventClaimPoints(
+    val eventId: String = "",
+    val claimUser: List<String> = listOf()
+)
+
+data class FirebaseEventClaimPoints(
+    val eventId: String? = null,
+    val claimUser: List<String>? = null
+)

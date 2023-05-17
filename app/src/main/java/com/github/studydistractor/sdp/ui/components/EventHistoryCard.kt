@@ -94,6 +94,18 @@ fun EventHistoryCard(
                         .testTag("event-history-card__chat-button-text " + event.eventId),
                 )
             }
+
+            Button(
+                onClick = {
+
+                },
+            ) {
+                Text(
+                    "Claim Points"
+                )
+            }
+
+
         }
     }
 
