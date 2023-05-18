@@ -1,7 +1,9 @@
 package com.github.studydistractor.sdp.eventHistory
 
 import com.github.studydistractor.sdp.data.Event
+import com.github.studydistractor.sdp.data.EventClaimPoints
 import com.github.studydistractor.sdp.data.EventParticipants
+import com.github.studydistractor.sdp.data.UserData
 import com.google.android.gms.tasks.Task
 
 interface EventHistoryModel {
@@ -18,9 +20,18 @@ interface EventHistoryModel {
      */
     fun observeEventsParticipants(onEventParticipantsChange: (List<EventParticipants>) -> Unit)
 
+    fun observeEventClaimPoints(onEventClaimPointsChange: (List<EventClaimPoints>) -> Unit)
+
+    fun observeCurrentUser(onCurrentUserChange: (UserData) -> Unit)
+
+    fun postUser(userData: UserData): Task<Void>
+
+    fun postEventClaimPoints(eventClaimPoints: EventClaimPoints): Task<Void>
+
     /**
      * Get the id of the current user
      * @return a task containing the id if successful
      */
     fun getCurrentUid() : Task<String>
+
 }

@@ -15,7 +15,7 @@ package com.github.studydistractor.sdp.data
  * @property chatId id of the chat that is linked to the event
  */
 data class Event(
-    val eventId: String?,
+    val eventId: String,
     val name: String,
     val description: String,
     val lat: Double,
@@ -52,13 +52,13 @@ data class FirebaseEvent(
     val chatId: String? = null) {
     fun toEvent(): Event {
         return Event(
-            eventId, name!!, description!!, lat!!, long!!, start!!, end!!, lateParticipation, numberOfPoints!!, chatId!!
+            eventId!!, name!!, description!!, lat!!, long!!, start!!, end!!, lateParticipation, numberOfPoints!!, chatId!!
         )
     }
 }
 
 /**
- * represent participants of a particular events
+ * Represent participants of a particular events
  *
  * @property eventId id of the event
  * @property participants list of userId that participate in this event
@@ -71,8 +71,8 @@ data class EventParticipants(
 /**
  * Represent a chat that is received or sent from/to the firebase database
  *
- * @param chatId id of the chat
- * @param messageIds list of messageId that were sent in the chat
+ * @property eventId id of the chat
+ * @property participants list of messageId that were sent in the chat
  */
 data class FirebaseEventParticipants(
     val eventId: String? = null,
@@ -85,12 +85,27 @@ data class FirebaseEventParticipants(
     }
 }
 
+/**
+ * Represent the point to be claimed/claimed of a particular event
+ *
+ * @param eventId id of the chat
+ * @param claimUser list of users that have already claimed their points
+ */
 data class EventClaimPoints(
     val eventId: String = "",
     val claimUser: List<String> = listOf()
 )
 
+/**
+ * Represent the eventClaimPoint that is received or sent from/to the firebase database
+ */
 data class FirebaseEventClaimPoints(
     val eventId: String? = null,
     val claimUser: List<String>? = null
-)
+) {
+    fun toEventClaimPoints(): EventClaimPoints{
+        return EventClaimPoints(
+            eventId!!, claimUser!!
+        )
+    }
+}
