@@ -16,7 +16,7 @@ package com.github.studydistractor.sdp.data
  * @property chatId id of the chat that is linked to the event
  */
 data class Event(
-    val eventId: String,
+    val eventId: String?,
     val name: String,
     val description: String,
     val lat: Double,
