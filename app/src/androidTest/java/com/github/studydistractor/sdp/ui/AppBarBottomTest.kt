@@ -10,22 +10,22 @@ import org.junit.Rule
 import org.junit.Test
 
 class AppBarBottomTest {
-    private val clicksNumber = List(4) { 0 }.toMutableList()
+    private val clicksNumber = List(6) { 0 }.toMutableList()
 
     @get:Rule
     val composeRule = createComposeRule()
 
     @Before
     fun setup() {
-        for(i in 0..3) { clicksNumber[i] = 0 }
+        for(i in 0..5) { clicksNumber[i] = 0 }
         composeRule.setContent {
             AppBarBottom(
                 onHomeClick = { clicksNumber[0]++ },
                 onMapClick = { clicksNumber[1]++ },
                 onListClick = { clicksNumber[2]++ },
                 onMagicClick = { clicksNumber[3]++ },
-                onFriendsClick = { clicksNumber[3]++ },
-
+                onEventHistoryClick = {clicksNumber[4]++},
+                onFriendsClick = { clicksNumber[5]++ },
             )
         }
     }
@@ -37,6 +37,7 @@ class AppBarBottomTest {
         composeRule.onNodeWithTag("app-bar-bottom__list-button").assertIsDisplayed()
         composeRule.onNodeWithTag("app-bar-bottom__magic-button").assertIsDisplayed()
         composeRule.onNodeWithTag("app-bar-bottom__friend-list-button").assertIsDisplayed()
+        composeRule.onNodeWithTag("app-bar-bottom__event-history-button").assertIsDisplayed()
     }
 
     @Test
@@ -46,6 +47,8 @@ class AppBarBottomTest {
             composeRule.onNodeWithTag("app-bar-bottom__map-button").performClick()
             composeRule.onNodeWithTag("app-bar-bottom__list-button").performClick()
             composeRule.onNodeWithTag("app-bar-bottom__magic-button").performClick()
+            composeRule.onNodeWithTag("app-bar-bottom__friend-list-button").performClick()
+            composeRule.onNodeWithTag("app-bar-bottom__event-history-button").performClick()
 
             clicksNumber.forEach { assert(it == i) }
         }

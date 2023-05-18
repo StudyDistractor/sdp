@@ -2,6 +2,7 @@ package com.github.studydistractor.sdp.ui
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Group
 import androidx.compose.material.icons.outlined.List
@@ -20,6 +21,7 @@ fun AppBarBottom(
     onMapClick: () -> Unit,
     onFriendsClick : () -> Unit,
     onListClick: () -> Unit,
+    onEventHistoryClick: () -> Unit,
     onMagicClick: () -> Unit
 ) {
     BottomAppBar(
@@ -62,6 +64,15 @@ fun AppBarBottom(
                 Icon(
                     Icons.Outlined.Group,
                     contentDescription = "List of friends",
+                )
+            }
+            IconButton(
+                onClick = onEventHistoryClick,
+                modifier = Modifier.testTag("app-bar-bottom__event-history-button")
+            ) {
+                Icon(
+                    Icons.Outlined.AccessTime,
+                    contentDescription = "History of events",
                 )
             }
         },

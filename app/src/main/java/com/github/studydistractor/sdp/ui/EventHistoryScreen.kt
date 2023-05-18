@@ -1,6 +1,8 @@
 package com.github.studydistractor.sdp.ui
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -35,7 +37,7 @@ fun EventHistoryScreen(
     val uiState by eventHistoryViewModel.uiState.collectAsState()
 
     Column(
-        modifier = Modifier.padding(6.dp),
+        modifier = Modifier.padding(6.dp).fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         Text("Your event history",

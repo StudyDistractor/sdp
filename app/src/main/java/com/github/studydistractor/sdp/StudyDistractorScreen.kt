@@ -122,6 +122,7 @@ fun StudyDistractorApp(
             onListClick = { navController.navigate(StudyDistractorScreen.DistractionList.name) },
             onMapClick = { navController.navigate(StudyDistractorScreen.Maps.name) },
             onFriendsClick = { navController.navigate(StudyDistractorScreen.Friends.name) },
+            onEventHistoryClick = {navController.navigate(StudyDistractorScreen.EventHistory.name)},
             onMagicClick = { navController.navigate(StudyDistractorScreen.DailyChallenge.name) }
         ) }
     ) {

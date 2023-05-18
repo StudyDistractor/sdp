@@ -78,6 +78,8 @@ class EventHistoryServiceFirebase: EventHistoryModel {
 
                 eventsParticipants.add(ep)
             }
+
+            onEventParticipantsChange(eventsParticipants)
         }
 
         override fun onCancelled(error: DatabaseError) {
