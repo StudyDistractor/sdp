@@ -113,19 +113,14 @@ class EventHistoryServiceFirebase: EventHistoryModel {
                     } catch (e: Exception){
                         continue
                     }
-                    Log.d("AuthUid", auth.uid?: "Null id")
-                    Log.d("userid in listener", userData.id)
                     if (!auth.uid.isNullOrEmpty()
                         && userData.id == auth.uid
                     ){
                         onCurrentUserChange(userData)
-                        Log.d("userdata chosen", "userdata chosen")
                     }
 
                 }
             }
-
-            onEventParticipantsChange(eventsParticipants)
         }
 
         override fun onCancelled(error: DatabaseError) {

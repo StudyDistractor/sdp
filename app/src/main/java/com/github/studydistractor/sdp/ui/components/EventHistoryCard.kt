@@ -95,7 +95,7 @@ fun EventHistoryCard(
                         onChatClicked()
                     },
                     modifier = Modifier
-                        .padding(top = 8.dp)
+                        .padding(4.dp)
                         .testTag("event-history-card__chat-button " + event.eventId),
                 ) {
                     Text(
@@ -116,8 +116,9 @@ fun EventHistoryCard(
                                     .show()
                             }
                     },
-                    modifier = Modifier.padding(all = 4.dp),
-                    shape = CutCornerShape(1)
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .testTag("event-history-card__points-button " + event.eventId),
                 ) {
                     Text(
                         "Claim Points"
