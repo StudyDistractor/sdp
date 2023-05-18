@@ -87,17 +87,17 @@ class EventHistoryScreenTest {
         composeRule.onNodeWithTag("event-history-card__points-button event1").assertExists()
         composeRule.onNodeWithTag("event-history-card__points-button event1").assertIsDisplayed()
         composeRule.onNodeWithTag("event-history-card__points-button event1").assertHasClickAction()
-        composeRule.onNodeWithTag("event-history-card__points-button event1").assert(hasText("See Points"))
+        composeRule.onNodeWithTag("event-history-card__points-button event1").assert(hasText("Claim Points"))
 
         composeRule.onNodeWithTag("event-history-card__points-button event2").assertExists()
         composeRule.onNodeWithTag("event-history-card__points-button event2").assertIsDisplayed()
         composeRule.onNodeWithTag("event-history-card__points-button event2").assertHasClickAction()
-        composeRule.onNodeWithTag("event-history-card__points-button event2").assert(hasText("See Points"))
+        composeRule.onNodeWithTag("event-history-card__points-button event2").assert(hasText("Claim Points"))
 
         composeRule.onNodeWithTag("event-history-card__points-button event3").assertExists()
         composeRule.onNodeWithTag("event-history-card__points-button event3").assertIsDisplayed()
         composeRule.onNodeWithTag("event-history-card__points-button event3").assertHasClickAction()
-        composeRule.onNodeWithTag("event-history-card__points-button event3").assert(hasText("See Points"))
+        composeRule.onNodeWithTag("event-history-card__points-button event3").assert(hasText("Claim Points"))
     }
 
     @Test
