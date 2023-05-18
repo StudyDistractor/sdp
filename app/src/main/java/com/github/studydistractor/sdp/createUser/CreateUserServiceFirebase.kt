@@ -14,6 +14,7 @@ class CreateUserServiceFirebase : CreateUserModel {
 
     override fun createUser(user: UserData): Task<Void> {
         val uid = firebaseAuth.uid ?: return Tasks.forException(Exception("User is not in the db"))
+        user.id = uid
         return databaseRef.child(uid).setValue(user)
     }
 }

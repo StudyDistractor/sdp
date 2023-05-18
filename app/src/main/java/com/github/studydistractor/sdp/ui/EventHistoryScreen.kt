@@ -48,7 +48,12 @@ fun EventHistoryScreen(
         )
         LazyColumn(){
             items(uiState.eventHistory) {i->
-                EventHistoryCard(i, chatViewModel, onChatButtonClicked)
+                EventHistoryCard(
+                    i,
+                    chatViewModel,
+                    onChatButtonClicked,
+                    eventHistoryViewModel
+                )
             }
         }
     }

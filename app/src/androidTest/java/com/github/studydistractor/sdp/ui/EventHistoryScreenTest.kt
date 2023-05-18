@@ -15,9 +15,13 @@ import com.github.studydistractor.sdp.eventHistory.EventHistoryViewModel
 import com.github.studydistractor.sdp.fakeServices.CreateUserServiceFake
 import com.github.studydistractor.sdp.fakeServices.EventChatServiceFake
 import com.github.studydistractor.sdp.fakeServices.EventHistoryServiceFake
+import com.google.android.gms.tasks.Tasks
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.util.concurrent.ExecutionException
+import java.util.concurrent.TimeUnit
 
 class EventHistoryScreenTest {
     @get:Rule(order = 1)
@@ -79,6 +83,24 @@ class EventHistoryScreenTest {
     }
 
     @Test
+    fun testPointsButtonIsDisplayed(){
+        composeRule.onNodeWithTag("event-history-card__points-button event1").assertExists()
+        composeRule.onNodeWithTag("event-history-card__points-button event1").assertIsDisplayed()
+        composeRule.onNodeWithTag("event-history-card__points-button event1").assertHasClickAction()
+        composeRule.onNodeWithTag("event-history-card__points-button event1").assert(hasText("Claim Points"))
+
+        composeRule.onNodeWithTag("event-history-card__points-button event2").assertExists()
+        composeRule.onNodeWithTag("event-history-card__points-button event2").assertIsDisplayed()
+        composeRule.onNodeWithTag("event-history-card__points-button event2").assertHasClickAction()
+        composeRule.onNodeWithTag("event-history-card__points-button event2").assert(hasText("Claim Points"))
+
+        composeRule.onNodeWithTag("event-history-card__points-button event3").assertExists()
+        composeRule.onNodeWithTag("event-history-card__points-button event3").assertIsDisplayed()
+        composeRule.onNodeWithTag("event-history-card__points-button event3").assertHasClickAction()
+        composeRule.onNodeWithTag("event-history-card__points-button event3").assert(hasText("Claim Points"))
+    }
+
+    @Test
     fun testChatButtonIsNotDisplayed(){
         composeRule.onNodeWithTag("event-history-card__chat-button NotFinishedEvent").assertDoesNotExist()
         composeRule.onNodeWithTag("event-history-card__chat-button UserHasNotTakenPartIn").assertDoesNotExist()
@@ -104,5 +126,50 @@ class EventHistoryScreenTest {
         composeRule.onNodeWithTag("event-history-card__description event2", true).assert(hasText("event2"))
         composeRule.onNodeWithTag("event-history-card__description event3", true).assert(hasText("event3"))
     }
+}
 
+class EventHistoryViewModelTest{
+    val eventHistoryServiceFake = EventHistoryServiceFake()
+    val eventHistoryViewModel = EventHistoryViewModel(eventHistoryModel = eventHistoryServiceFake)
+
+    @Test
+    fun testEmptyEvent(){
+        Assert.assertThrows(ExecutionException::class.java) {
+            Tasks.await( eventHistoryViewModel.claimPoints(""), 100, TimeUnit.MILLISECONDS)
+        }
+    }
+
+    @Test
+    fun testNoneExistingEvent(){
+        Assert.assertThrows(ExecutionException::class.java) {
+            Tasks.await( eventHistoryViewModel.claimPoints("event4"), 100, TimeUnit.MILLISECONDS)
+        }
+    }
+
+    @Test
+    fun testAlreadyClaimedPoint(){
+        Assert.assertThrows(ExecutionException::class.java) {
+            Tasks.await( eventHistoryViewModel.claimPoints("event2"), 100, TimeUnit.MILLISECONDS)
+        }
+    }
+
+    @Test
+    fun testUnClaimedPointWithExistingEventClaimPoint(){
+        val old_size = eventHistoryServiceFake.eventClaimPoints.size
+        // If it throws an exception then it should stop the test
+        Tasks.await( eventHistoryViewModel.claimPoints("event1"), 100, TimeUnit.MILLISECONDS)
+
+        Assert.assertEquals(1, eventHistoryServiceFake.currentUser.score)
+        Assert.assertEquals(old_size, eventHistoryServiceFake.eventClaimPoints.size)
+    }
+
+    @Test
+    fun testUnClaimedPointWithNonExistingEventClaimPoint(){
+        val old_size = eventHistoryServiceFake.eventClaimPoints.size
+        // If it throws an exception then it should stop the test
+        Tasks.await( eventHistoryViewModel.claimPoints("event3"), 100, TimeUnit.MILLISECONDS)
+
+        Assert.assertEquals(3,eventHistoryServiceFake.currentUser.score)
+        Assert.assertEquals(old_size+ 1, eventHistoryServiceFake.eventClaimPoints.size)
+    }
 }
