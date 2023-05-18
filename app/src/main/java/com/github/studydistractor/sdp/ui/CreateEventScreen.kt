@@ -29,8 +29,6 @@ import com.github.studydistractor.sdp.createEvent.CreateEventViewModel
 import com.github.studydistractor.sdp.ui.components.CreateActivityButton
 import com.github.studydistractor.sdp.ui.components.CreateActivityNameAndDescriptionFields
 import com.github.studydistractor.sdp.ui.components.CreateLatitudeAndLongitudeFields
-import com.github.studydistractor.sdp.ui.state.CreateEventUiState
-
 
 
 /**
@@ -46,7 +44,7 @@ fun CreateEventScreen(
 ) {
     val uiState by createEventViewModel.uiState.collectAsState()
     val context = LocalContext.current
-    val startDateTimePicker = dateTimePickerDialog(
+    val startDateTimePicker = DateTimePickerDialog(
         context,
         { y, m, d, h, min -> createEventViewModel.setStartDateTime(y, m, d, h, min) },
         uiState.startYear,
@@ -55,7 +53,7 @@ fun CreateEventScreen(
         uiState.startHour,
         uiState.startMinute
     )
-    val endDateTimePicker = dateTimePickerDialog(
+    val endDateTimePicker = DateTimePickerDialog(
         context,
         { y, m, d, h, min -> createEventViewModel.setEndDateTime(y, m, d, h, min) },
         uiState.endYear,
@@ -139,7 +137,7 @@ fun CreateEventScreen(
  * @param minute Minute
  * @return DatePickerDialog
  */
-private fun dateTimePickerDialog(
+private fun DateTimePickerDialog(
     context: Context,
     setDateTime: (year: Int, month: Int, day: Int, h: Int, m: Int) -> Unit,
     year: Int,
