@@ -80,7 +80,6 @@ class CreateDistractionViewModel(
             return Tasks.forException(Exception("Please fill in the blanks"))
         }
         if ((!uiState.value.latitude.isNullOrBlank()) && (!uiState.value.longitude.isNullOrBlank())) {
-            Log.d("CreateDistractionViewModel", "Latitude: ${uiState.value.latitude}, Longitude: ${uiState.value.longitude}")
             if (!validateLatitude() || !validateLongitude()) {
                 return Tasks.forException(Exception("Invalid latitude or longitude"))
             }
