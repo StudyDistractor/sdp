@@ -1,8 +1,8 @@
 package com.github.studydistractor.sdp.createEvent
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.github.studydistractor.sdp.createActivity.CreateActivityViewModel
+import com.github.studydistractor.sdp.data.Event
 import com.github.studydistractor.sdp.ui.state.CreateEventUiState
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
@@ -77,17 +77,7 @@ class CreateEventViewModel(
         if (!validateDateTime(uiState.value.startDateTime)) return Tasks.forException(Exception("Invalid start date time"))
         if (!validateDateTime(uiState.value.endDateTime)) return Tasks.forException(Exception("Invalid end date time"))
         if (!startDateTimeIsBeforeEndDateTime()) return Tasks.forException(Exception("Start date and time must be before end date and time"))
-        val eventInformation = mapOf(
-            "name" to uiState.value.name,
-            "description" to uiState.value.description,
-            "latitude" to uiState.value.latitude!!.toDouble(),
-            "longitude" to uiState.value.longitude!!.toDouble(),
-            "startDateTime" to uiState.value.startDateTime,
-            "endDateTime" to uiState.value.endDateTime,
-            "points" to uiState.value.pointsAwarded.toInt(),
-            "lateParticipationAllowed" to uiState.value.lateParticipationAllowed,
-        )
-        return _createEventModel.createEvent(eventInformation)
+        return _createEventModel.createEvent(Event(null, uiState.value.name, uiState.value.description, uiState.value.latitude!!.toDouble(), uiState.value.longitude!!.toDouble(), uiState.value.startDateTime, uiState.value.endDateTime, uiState.value.lateParticipationAllowed, uiState.value.pointsAwarded.toInt(), null))
     }
 
     /**
