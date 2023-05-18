@@ -1,9 +1,7 @@
 package com.github.studydistractor.sdp.ui.components
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,11 +9,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CutCornerShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,10 +24,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.github.studydistractor.sdp.data.Event
-import com.github.studydistractor.sdp.data.EventClaimPoints
 import com.github.studydistractor.sdp.eventChat.EventChatViewModel
 import com.github.studydistractor.sdp.eventHistory.EventHistoryViewModel
-import com.google.android.gms.tasks.Task
 
 /**
  * The function representing an event in the history of events
@@ -106,15 +101,17 @@ fun EventHistoryCard(
                 }
                 Button(
                     onClick = {
-                        eventHistoryViewModel.claimPoints(event.eventId)
-                            .addOnSuccessListener {
-                                Toast.makeText(context, "Points added", Toast.LENGTH_SHORT)
-                                    .show()
-                            }
-                            .addOnFailureListener {
-                                Toast.makeText(context, "${it.message}", Toast.LENGTH_SHORT)
-                                    .show()
-                            }
+                        event.eventId?.let {
+                            eventHistoryViewModel.claimPoints(it)
+                                .addOnSuccessListener {
+                                    Toast.makeText(context, "Points added", Toast.LENGTH_SHORT)
+                                        .show()
+                                }
+                                .addOnFailureListener {
+                                    Toast.makeText(context, "${it.message}", Toast.LENGTH_SHORT)
+                                        .show()
+                                }
+                        }
                     },
                     modifier = Modifier
                         .padding(4.dp)

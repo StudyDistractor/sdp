@@ -12,10 +12,11 @@ package com.github.studydistractor.sdp.data
  * @property start time when the event starts
  * @property end time when the event ends
  * @property lateParticipation enable late participation (Can users join in the middle of the event)
+ * @property numberOfPoints number of points awarded to the user when they participate in the event
  * @property chatId id of the chat that is linked to the event
  */
 data class Event(
-    val eventId: String,
+    val eventId: String?,
     val name: String,
     val description: String,
     val lat: Double,
@@ -24,7 +25,7 @@ data class Event(
     val end: String,
     val lateParticipation: Boolean,
     val numberOfPoints: Int,
-    val chatId: String)
+    val chatId: String?)
 
 /**
  * Represent an event that is received or sent from/to the firebase database
