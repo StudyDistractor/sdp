@@ -29,6 +29,7 @@ class EventHistoryViewModel(
     private var eventParticipants: List<EventParticipants> = listOf()
     private var eventsClaimPoints: List<EventClaimPoints> = listOf()
     private var currentUser : UserData = UserData()
+    private val usersEvent : SnapshotStateList<Event> = mutableStateListOf()
 
     val uiState: StateFlow<EventHistoryUiState> = _uiState.asStateFlow()
 
@@ -67,7 +68,7 @@ class EventHistoryViewModel(
     }
 
     private fun refreshEventHistory(){
-        val usersEvent : SnapshotStateList<Event> = mutableStateListOf()
+        usersEvent.clear()
 
         for (eP in eventParticipants){
             if (eP.participants == null) continue
@@ -83,15 +84,20 @@ class EventHistoryViewModel(
         _uiState.update { EventHistoryUiState(usersEvent) }
     }
 
+    /**
+     * Claim the points of a particular event and give them to the currentUser
+     * if not already claimed
+     * @param eventId the id of the particular event
+     * @return a task
+     */
     fun claimPoints(eventId: String): Task<Void> {
         if (eventId.isEmpty()) return Tasks.forException(Exception("Empty eventId"))
+        val event = getEvent(eventId) ?: return Tasks.forException(Exception("Null event"))
         for (cp in eventsClaimPoints){
             if (cp.eventId == eventId){
                 if (cp.claimUser.contains(currentUser.id)){
                     return Tasks.forException(Exception("Points already claimed"))
                 }
-
-                val event = getEvent(eventId) ?: return Tasks.forException(Exception("Null event"))
 
                 val newClaimUser = mutableStateListOf<String>()
                 newClaimUser.addAll(cp.claimUser)
@@ -108,8 +114,6 @@ class EventHistoryViewModel(
             }
         }
 
-        val event = getEvent(eventId) ?: return Tasks.forException(Exception("Null event"))
-
         val newClaimPoints = EventClaimPoints(eventId, listOf(currentUser.id))
 
         val newUser = currentUser.copy()
@@ -122,7 +126,7 @@ class EventHistoryViewModel(
     }
 
     private fun getEvent(eventId: String): Event? {
-        for (ev in events){
+        for (ev in usersEvent){
             if (ev.eventId == eventId) return ev
         }
         return null

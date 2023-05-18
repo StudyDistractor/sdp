@@ -20,18 +20,27 @@ interface EventHistoryModel {
      */
     fun observeEventsParticipants(onEventParticipantsChange: (List<EventParticipants>) -> Unit)
 
+    /**
+     * Observe the updates of the eventClaimPoints and call the given function on the values
+     * @param onEventClaimPointsChange the function to call
+     */
     fun observeEventClaimPoints(onEventClaimPointsChange: (List<EventClaimPoints>) -> Unit)
 
+    /**
+     * Observe the updates of the currentUser and call the given function on the values
+     * @param onCurrentUserChange the function to call
+     */
     fun observeCurrentUser(onCurrentUserChange: (UserData) -> Unit)
 
+    /**
+     * Upload a given user to the database
+     * @param userData the user to upload
+     */
     fun postUser(userData: UserData): Task<Void>
 
-    fun postEventClaimPoints(eventClaimPoints: EventClaimPoints): Task<Void>
-
     /**
-     * Get the id of the current user
-     * @return a task containing the id if successful
+     * Upload an event claim points to the database
+     * @param eventClaimPoints the event claim post to upload
      */
-    fun getCurrentUid() : Task<String>
-
+    fun postEventClaimPoints(eventClaimPoints: EventClaimPoints): Task<Void>
 }

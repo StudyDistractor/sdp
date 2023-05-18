@@ -163,16 +163,4 @@ class EventHistoryServiceFirebase: EventHistoryModel {
     override fun postEventClaimPoints(eventClaimPoints: EventClaimPoints): Task<Void> {
         return eventClaimPointsDatabaseRef.child(eventClaimPoints.eventId).setValue(eventClaimPoints)
     }
-
-
-    override fun getCurrentUid(): Task<String> {
-        val uid = auth.uid
-
-        if (uid.isNullOrEmpty()) {
-            Tasks.forException<Exception>(Exception("Empty or Null userId"))
-        }
-
-        return Tasks.forResult(uid)
-    }
-
 }
