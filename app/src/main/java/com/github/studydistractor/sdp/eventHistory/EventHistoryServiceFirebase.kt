@@ -10,7 +10,6 @@ import com.github.studydistractor.sdp.data.FirebaseEventParticipants
 import com.github.studydistractor.sdp.data.FirebaseUserData
 import com.github.studydistractor.sdp.data.UserData
 import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -51,7 +50,6 @@ class EventHistoryServiceFirebase: EventHistoryModel {
                     }
                 }
             }
-            Log.d("Event", "${events.size}")
             onEventChange(events)
         }
 
@@ -63,17 +61,16 @@ class EventHistoryServiceFirebase: EventHistoryModel {
         override fun onDataChange(snapshot: DataSnapshot) {
             val eventsParticipants = mutableListOf<EventParticipants>()
             for (children in snapshot.children) {
-                val fep = children.getValue(FirebaseEventParticipants::class.java)
-                if (fep != null) {
+                val firebaseEventParticipants = children.getValue(FirebaseEventParticipants::class.java)
+                if (firebaseEventParticipants != null) {
                     try {
-                        val ep = fep.toEventParticipants()
-                        eventsParticipants.add(ep)
+                        val eventParticipants = firebaseEventParticipants.toEventParticipants()
+                        eventsParticipants.add(eventParticipants)
                     } catch(e: Exception){
                         continue
                     }
                 }
             }
-            Log.d("EventParticipants", "${eventsParticipants.size}")
             onEventParticipantsChange(eventsParticipants)
         }
 
@@ -85,11 +82,11 @@ class EventHistoryServiceFirebase: EventHistoryModel {
         override fun onDataChange(snapshot: DataSnapshot) {
             val eventClaimPoints = mutableListOf<EventClaimPoints>()
             for (children in snapshot.children) {
-                val fcp = children.getValue(FirebaseEventClaimPoints::class.java)
-                if (fcp != null) {
+                val firebaseEventClaimPoints = children.getValue(FirebaseEventClaimPoints::class.java)
+                if (firebaseEventClaimPoints != null) {
                     try {
-                        val cp = fcp.toEventClaimPoints()
-                        eventClaimPoints.add(cp)
+                        val claimPoints = firebaseEventClaimPoints.toEventClaimPoints()
+                        eventClaimPoints.add(claimPoints)
                     } catch(e: Exception){
                         continue
                     }
