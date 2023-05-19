@@ -31,6 +31,7 @@ class EventListServiceFake: EventListModel {
         before,
         after,
         false,
+        0,
         "chatId"
     )
 
@@ -43,6 +44,7 @@ class EventListServiceFake: EventListModel {
         before,
         after,
         true,
+        0,
         "chatId"
     )
 
@@ -54,7 +56,7 @@ class EventListServiceFake: EventListModel {
         0.0,
         after,
         after,
-        true,
+        true,0,
         "chatId"
     )
     override fun getAllEvents(): List<Event> {

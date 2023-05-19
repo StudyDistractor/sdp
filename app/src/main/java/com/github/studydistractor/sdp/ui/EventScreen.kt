@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -47,8 +48,7 @@ fun EventScreen(
 
     val uiState by eventViewModel.uiState.collectAsState()
     val context = LocalContext.current
-
-
+    eventViewModel.updateUIParticipants()
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -112,26 +112,28 @@ fun EventScreen(
                     modifier = Modifier.testTag("event-participants-headline")
                 )
             }
-
-            items(uiState.participants) { // Participants list
+            Log.d("UI", "nbr of participants " + uiState.participants.count())
+            items(uiState.participants) {
+                // Participants list
+                Log.d("UI", "draw")
                 Text(
                     text = it
                 )
             }
 
-        }
-
-        FloatingActionButtons(
-            uiState = uiState,
-            onOpenChatClick = onOpenChatClick,
-            onParticipateClick = {
-                eventViewModel.toggleParticipation().addOnFailureListener {
-                    showFailureToast(context, "Failed to update participation !")
-                }
+            item {
+                FloatingActionButtons(
+                    uiState = uiState,
+                    onOpenChatClick = onOpenChatClick,
+                    onParticipateClick = {
+                        eventViewModel.toggleParticipation().addOnFailureListener {
+                            showFailureToast(context, "Failed to update participation !")
+                        }
+                    }
+                )
             }
-        )
+        }
     }
-
 }
 
 @Composable

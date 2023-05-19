@@ -41,6 +41,7 @@ class EventListViewModelTest {
             "wrong date format",
             "wrong date format",
             false,
+            0,
             "chatId"
         )
 
@@ -58,6 +59,7 @@ class EventListViewModelTest {
             after,
             after,
             false,
+            0,
             "chatId"
         )
         assertEquals(true, eventListViewModel.isEventBeforeTime(stillValidEvent))
@@ -74,6 +76,7 @@ class EventListViewModelTest {
             before,
             after,
             true,
+            0,
             "chatId"
         )
         assertEquals(true, eventListViewModel.isEventBeforeTime(lateEvent))
@@ -90,6 +93,7 @@ class EventListViewModelTest {
             before,
             after,
             false,
+            0,
             "chatId"
         )
         assertEquals(false, eventListViewModel.isEventBeforeTime(lateEvent))

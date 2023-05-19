@@ -121,7 +121,7 @@ fun StudyDistractorApp(
         remember { CreateEventViewModel(CreateEventServiceFirebase()) }
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.primary,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = { AppBarTop(
             currentScreen = currentScreen,
             canNavigateBack = navController.previousBackStackEntry != null,

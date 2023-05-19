@@ -1,5 +1,8 @@
 package com.github.studydistractor.sdp.event
 
+import android.util.Log
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.github.studydistractor.sdp.data.Event
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -20,6 +23,9 @@ class EventServiceFirebase: EventModel {
 
     private val eventListeners: MutableMap<String, ValueEventListener> = mutableMapOf()
     private val eventParticipantListeners: MutableMap<String, ValueEventListener> = mutableMapOf()
+    lateinit var currentParticipantListeners: ValueEventListener
+    private var hasParticipantsListener = false
+    val participants2 = mutableStateListOf<String>()
 
     override fun subscribeToEvent(
         eventId: String,
@@ -48,27 +54,62 @@ class EventServiceFirebase: EventModel {
         successListener: (List<String>) -> Unit,
         failureListener: (String) -> Unit
     ) {
-        if(eventId.isEmpty()) return
+//        if(eventId.isEmpty()) return
+//        if(hasParticipantsListener) {
+//            dbParticipants.child(eventId).removeEventListener(currentParticipantListeners)
+//        }
+//
+//        currentParticipantListeners = dbParticipants.child(eventId).addValueEventListener(object: ValueEventListener {
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                participants2.clear()
+//                for(participant in snapshot.children) {
+//                    val participation = participant.getValue<Boolean>()
+//                    if(participation == null) {
+//                        failureListener("Error while syncing with the db")
+//                    } else {
+//                        if(participation) {
+//                            participants2.add(participant.key!!)
+//                        }
+//                    }
+//                }
+//                successListener(
+//                    participants2.toList()
+//                )
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {
+//                failureListener(error.message)
+//            }
+//        })
+//
+//        hasParticipantsListener = true
+    }
 
-        eventParticipantListeners[eventId] = dbParticipants.child(eventId).addValueEventListener(object: ValueEventListener {
+    override fun changeParticipantListener(eventId: String) {
+        if(eventId.isEmpty()) return
+        if(hasParticipantsListener) {
+            dbParticipants.child(eventId).removeEventListener(currentParticipantListeners)
+        }
+
+        currentParticipantListeners = dbParticipants.child(eventId).addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val newEventParticipants = snapshot.getValue<Map<String, Boolean>>()
-                if(newEventParticipants == null) {
-                    failureListener("Error while syncing with the db")
-                } else {
-                    successListener(
-                        newEventParticipants
-                            .filterValues { value -> value }
-                            .keys
-                            .toList()
-                    )
+                participants2.clear()
+                for(participant in snapshot.children) {
+                    val participation = participant.getValue<Boolean>()
+                    if(participation != null && participation) {
+                        participants2.add(participant.key!!)
+                    }
                 }
+                Log.d("Firebase", "Update participant : " + participants2.count())
             }
 
             override fun onCancelled(error: DatabaseError) {
-                failureListener(error.message)
+                Log.d("Firebase", "loadPost:onCancelled " + error.toException().toString())
             }
         })
+    }
+    override fun getParticipants(): SnapshotStateList<String> {
+        return participants2
     }
 
     override fun unsubscribeFromAllEventParticipants() {
@@ -101,14 +142,21 @@ class EventServiceFirebase: EventModel {
         }
     }
 
-    override fun isParticipating(eventId: String, userId: String): Task<Boolean> {
-        return dbParticipants.child(eventId)
-            .child(userId)
-            .get()
-            .continueWith {
-                return@continueWith it.result.value as Boolean
-            }
+    override fun isParticipating(eventId: String): Boolean {
+        if(auth.uid == null) {
+            return false
+        }
+        return participants2.contains(auth.uid)
     }
+
+//    override fun isParticipating(eventId: String, userId: String): Task<Boolean> {
+//        return dbParticipants.child(eventId)
+//            .child(userId)
+//            .get()
+//            .continueWith {
+//                return@continueWith it.result.value as Boolean
+//            }
+//    }
 
     override fun addParticipant(eventId: String, userId: String): Task<Void> {
         val participants = dbParticipants.child(eventId)

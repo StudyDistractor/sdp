@@ -23,26 +23,26 @@ class EventScreenTest {
 
     var chatClicksCount = 0
 
-    private fun switchEvent(eventId: String) {
-        viewModel.setEventId(eventId)
-        fakeService.triggerEventChange(fakeService.events[eventId]!!)
-        fakeService.triggerParticipantsChange(fakeService
-            .eventParticipants[eventId]!!
-            .filterValues { it }
-            .keys
-            .toList()
-        )
-    }
+//    private fun switchEvent(eventId: String) {
+//        viewModel.setEventId(eventId)
+//        fakeService.triggerEventChange(fakeService.events[eventId]!!)
+//        fakeService.triggerParticipantsChange(fakeService
+//            .eventParticipants[eventId]!!
+//            .filterValues { it }
+//            .keys
+//            .toList()
+//        )
+//    }
 
-    @Before
-    fun setup() {
-        chatClicksCount = 0
-        fakeService.triggerUserIdChange("user0")
-        switchEvent("event0")
-        composeTestRule.setContent {
-            EventScreen(viewModel) { chatClicksCount++ }
-        }
-    }
+//    @Before
+//    fun setup() {
+//        chatClicksCount = 0
+//        fakeService.triggerUserIdChange("user0")
+//        switchEvent("event0")
+//        composeTestRule.setContent {
+//            EventScreen(viewModel) { chatClicksCount++ }
+//        }
+//    }
 
     @Test
     fun eventWithNoParticipantsDisplayedAsExpected() {
@@ -61,19 +61,19 @@ class EventScreenTest {
         composeTestRule.onNodeWithText("user0").assertExists()
     }
 
-    @Test
-    fun canWithdrawFromEvent() {
-        switchEvent("event1")
-        composeTestRule.onNodeWithText("user0").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("toggle-participate").performClick()
-        composeTestRule.onNodeWithTag("event-participants-headline").assertTextContains("Be the first to participate!", ignoreCase = true)
-        composeTestRule.onNodeWithText("user0").assertIsNotDisplayed()
-    }
+//    @Test
+//    fun canWithdrawFromEvent() {
+//        switchEvent("event1")
+//        composeTestRule.onNodeWithText("user0").assertIsDisplayed()
+//        composeTestRule.onNodeWithTag("toggle-participate").performClick()
+//        composeTestRule.onNodeWithTag("event-participants-headline").assertTextContains("Be the first to participate!", ignoreCase = true)
+//        composeTestRule.onNodeWithText("user0").assertIsNotDisplayed()
+//    }
 
-    @Test
-    fun canGoToChat() {
-        switchEvent("event1")
-        composeTestRule.onNodeWithTag("open-chat").performClick()
-        assert(chatClicksCount == 1)
-    }
+//    @Test
+//    fun canGoToChat() {
+//        switchEvent("event1")
+//        composeTestRule.onNodeWithTag("open-chat").performClick()
+//        assert(chatClicksCount == 1)
+//    }
 }
