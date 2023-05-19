@@ -259,7 +259,7 @@ fun StudyDistractorApp(
             composable(route = StudyDistractorScreen.EventList.name) {
                 EventListScreen(
                     onEventClicked = { event ->
-                        eventViewModel.setEventId(event.eventId!!)
+                        eventViewModel.setEventId(event)
                         navController.navigate(StudyDistractorScreen.Event.name) },
                     eventListViewModel = eventListViewModel
                 )

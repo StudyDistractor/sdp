@@ -1,6 +1,7 @@
 package com.github.studydistractor.sdp.ui
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -56,79 +57,80 @@ fun EventScreen(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
     ) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top)
-    ) {
-        item { // Event infos
-            Text(
-                text = uiState.event.name,
-                style = MaterialTheme.typography.headlineLarge,
-                modifier = Modifier.testTag("event-name"),
-            )
-
-            Text(
-                text = uiState.event.description,
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.testTag("event-description")
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "start: " + uiState.event.start,
-                style = MaterialTheme.typography.labelSmall,
-                modifier = Modifier.testTag("event-start")
-            )
-
-            Text(
-                text = "end: " + uiState.event.end,
-                style = MaterialTheme.typography.labelSmall,
-                modifier = Modifier.testTag("event-end")
-            )
-
-            if (uiState.event.lateParticipation) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top)
+        ) {
+            item { // Event infos
                 Text(
-                    text = "late participation is allowed",
+                    text = uiState.event.name,
+                    style = MaterialTheme.typography.headlineLarge,
+                    modifier = Modifier.testTag("event-name"),
+                )
+
+                Text(
+                    text = uiState.event.description,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.testTag("event-description")
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "start: " + uiState.event.start,
                     style = MaterialTheme.typography.labelSmall,
-                    modifier = Modifier.testTag("event-lateparticipation")
+                    modifier = Modifier.testTag("event-start")
+                )
+
+                Text(
+                    text = "end: " + uiState.event.end,
+                    style = MaterialTheme.typography.labelSmall,
+                    modifier = Modifier.testTag("event-end")
+                )
+
+                if (uiState.event.lateParticipation) {
+                    Text(
+                        text = "late participation is allowed",
+                        style = MaterialTheme.typography.labelSmall,
+                        modifier = Modifier.testTag("event-lateparticipation")
+                    )
+                }
+            }
+
+            item {
+                Divider(color = MaterialTheme.colorScheme.inversePrimary)
+            }
+
+            item { // Participants header
+                Text(
+                    text = uiState.participantsHeadingText,
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier.testTag("event-participants-headline")
                 )
             }
-        }
 
-        item {
-            Divider(color = MaterialTheme.colorScheme.inversePrimary)
-        }
-
-        item { // Participants header
-            Text(
-                text = uiState.participantsHeadingText,
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.testTag("event-participants-headline")
-            )
-        }
-
-        items(uiState.participants) { // Participants list
-            Text(
-                text = it
-            )
-        }
-    }
-    }
-
-    FloatingActionButtons(
-        uiState = uiState,
-        onOpenChatClick = onOpenChatClick,
-        onParticipateClick = {
-            eventViewModel.toggleParticipation().addOnFailureListener {
-                showFailureToast(context, "Failed to update participation !")
+            items(uiState.participants) { // Participants list
+                Text(
+                    text = it
+                )
             }
+
         }
-    )
+
+        FloatingActionButtons(
+            uiState = uiState,
+            onOpenChatClick = onOpenChatClick,
+            onParticipateClick = {
+                eventViewModel.toggleParticipation().addOnFailureListener {
+                    showFailureToast(context, "Failed to update participation !")
+                }
+            }
+        )
+    }
 
 }
 
@@ -155,10 +157,11 @@ fun FloatingActionButtons(
                 icon = { Icon(Icons.Outlined.Chat, "Open Chat") }
             )
         }
-
+        Log.d("event", uiState.canParticipate.toString())
         if(uiState.canParticipate) {
             ExtendedFloatingActionButton(
                 onClick = onParticipateClick,
+                containerColor = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .height(45.dp)
                     .testTag("toggle-participate"),

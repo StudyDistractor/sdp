@@ -79,17 +79,25 @@ class EventViewModel(eventModel: EventModel): ViewModel() {
                 }
     }
 
-    fun setEventId(eventId: String) {
+    fun setEventId(event2: Event) {
+        val eventId = event2.eventId!!
 //        _uiState.update { it.copy(eventId = eventId) }
 
         _eventModel.unsubscribeFromAllEvents()
         _eventModel.unsubscribeFromAllEventParticipants()
+
+        _uiState.update {it.copy(
+            event = event2,
+            canParticipate = true
+        )
+        }
 
         _eventModel.subscribeToEvent(
             eventId = eventId,
             successListener = {event ->
                 _eventModel.isParticipating(eventId, _uiState.value.userId)
                     .addOnSuccessListener { participating ->
+                        Log.d("UISTATE", "UPDATING")
                         _uiState.update { it.copy(
                             event = event,
                             participating = participating,
