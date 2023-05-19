@@ -23,7 +23,7 @@ class EventViewModel(eventModel: EventModel): ViewModel() {
         _eventModel.subscribeToUserId(
             successListener = { uid ->
                 _uiState.update { it.copy(userId = uid) }
-                setEventId(_uiState.value.eventId)
+                //setEventId(_uiState.value.eventId)
             }
         )
     }
@@ -80,7 +80,7 @@ class EventViewModel(eventModel: EventModel): ViewModel() {
     }
 
     fun setEventId(eventId: String) {
-        _uiState.update { it.copy(eventId = eventId) }
+//        _uiState.update { it.copy(eventId = eventId) }
 
         _eventModel.unsubscribeFromAllEvents()
         _eventModel.unsubscribeFromAllEventParticipants()
@@ -94,7 +94,8 @@ class EventViewModel(eventModel: EventModel): ViewModel() {
                             event = event,
                             participating = participating,
                             toggleParticipationButtonText = getToggleParticipationButtonText(participating),
-                            canParticipate = canParticipate(event)
+                            canParticipate = canParticipate(event),
+                            eventId = eventId
                         )
                     }
                 }

@@ -16,6 +16,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.Chat
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -45,6 +47,15 @@ fun EventScreen(
     val uiState by eventViewModel.uiState.collectAsState()
     val context = LocalContext.current
 
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 14.dp, vertical = 32.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        ),
+    ) {
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
@@ -106,6 +117,7 @@ fun EventScreen(
                 text = it
             )
         }
+    }
     }
 
     FloatingActionButtons(

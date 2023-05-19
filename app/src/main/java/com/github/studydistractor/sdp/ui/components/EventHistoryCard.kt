@@ -40,12 +40,10 @@ fun EventHistoryCard(
 
     Row(modifier = Modifier.padding(all = 8.dp)
     ) {
-        var isExpanded by remember { mutableStateOf(false) }
         val context = LocalContext.current
 
         Column(
             modifier = Modifier
-                .clickable { isExpanded = !isExpanded }
                 .fillMaxSize()
                 .testTag("event-history-card__title " + event.eventId),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -67,21 +65,15 @@ fun EventHistoryCard(
             )
             Spacer(modifier = Modifier.height(4.dp))
 
-            Surface(
-                shape = MaterialTheme.shapes.medium,
+
+            Text(
+                text = event.description,
                 modifier = Modifier
-                    .animateContentSize()
-                    .padding(1.dp)
-            ) {
-                Text(
-                    text = event.description,
-                    modifier = Modifier
-                        .padding(all = 4.dp)
-                        .testTag("event-history-card__description " + event.eventId),
-                    maxLines = if(isExpanded) Int.MAX_VALUE else 1,
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
+                    .padding(all = 4.dp)
+                    .testTag("event-history-card__description " + event.eventId),
+                style = MaterialTheme.typography.bodySmall
+            )
+
 
             Row() {
                 Button(

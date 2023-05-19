@@ -14,6 +14,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -29,7 +30,6 @@ fun AppBarBottom(
     onFriendsClick : () -> Unit,
     onListClick: () -> Unit,
     onEventListClick: () -> Unit,
-    onEventClick: () -> Unit,
     onEventHistoryClick: () -> Unit,
     onMagicClick: () -> Unit
 ) {
@@ -74,15 +74,6 @@ fun AppBarBottom(
                 Icon(
                     Icons.Outlined.Group,
                     contentDescription = "List of friends",
-                )
-            }
-            IconButton(
-                onClick = onEventClick,
-                modifier = Modifier.testTag("app-bar-bottom__event-button")
-            ) {
-                Icon(
-                    Icons.Outlined.Event,
-                    contentDescription = "Event",
                 )
             }
             IconButton(

@@ -63,8 +63,14 @@ fun CreateEventScreen(
         uiState.endMinute
     )
 
-
-
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 14.dp, vertical = 32.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        ),
+    ) {
     Box(
         modifier = Modifier
             .padding(16.dp)
@@ -123,6 +129,7 @@ fun CreateEventScreen(
                 buttonText = "Create event"
             )
         }
+    }
     }
 }
 

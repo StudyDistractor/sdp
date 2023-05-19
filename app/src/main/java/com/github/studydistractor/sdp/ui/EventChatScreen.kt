@@ -32,9 +32,17 @@ fun EventChatScreen(
 ){
     val uiState by viewModel.uiState.collectAsState()
     Surface(
-        color = MaterialTheme.colorScheme.surface,
+        color = MaterialTheme.colorScheme.primary,
         contentColor = MaterialTheme.colorScheme.onSurface
     ) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 14.dp, vertical = 32.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer
+            ),
+        ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -55,8 +63,7 @@ fun EventChatScreen(
                             top = 8.dp,
                             bottom = 8.dp
                         )
-                            .testTag("event-chat-screen__message-${message.messageId}")
-                        ,
+                            .testTag("event-chat-screen__message-${message.messageId}"),
                         shape = RoundedCornerShape(8.dp),
                         color = MaterialTheme.colorScheme.primary,
                         contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -73,8 +80,11 @@ fun EventChatScreen(
                     )
                     Text(
                         text = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy")
-                            .format(LocalDateTime.ofInstant(
-                            Instant.ofEpochMilli(message.timeStamp), ZoneId.systemDefault())),
+                            .format(
+                                LocalDateTime.ofInstant(
+                                    Instant.ofEpochMilli(message.timeStamp), ZoneId.systemDefault()
+                                )
+                            ),
                         style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier.padding(start = 16.dp)
                     )
@@ -108,6 +118,7 @@ fun EventChatScreen(
                     )
                 }
             }
+        }
         }
     }
 }

@@ -71,7 +71,6 @@ enum class StudyDistractorScreen(@StringRes val title: Int) {
     ChatEvent(title = R.string.screen_name_chat_event),
     EventHistory(title = R.string.screen_name_event_history),
     Event(title = R.string.screen_name_event),
-    ChatEvent(title = R.string.screen_name_chat_event),
     EventList(title = R.string.screen_name_event_list)
 }
 
@@ -147,7 +146,6 @@ fun StudyDistractorApp(
             onFriendsClick = { navController.navigate(StudyDistractorScreen.Friends.name) },
             onEventListClick = { navController.navigate(StudyDistractorScreen.EventList.name) },
             onEventHistoryClick = {navController.navigate(StudyDistractorScreen.EventHistory.name)},
-            onEventClick = { navController.navigate(StudyDistractorScreen.Event.name) },
             onMagicClick = { navController.navigate(StudyDistractorScreen.DailyChallenge.name) }
         ) }
     ) {
@@ -247,7 +245,6 @@ fun StudyDistractorApp(
                 FriendsScreen(friendsViewModel)
             }
             composable(route = StudyDistractorScreen.Event.name) {
-                eventViewModel.setEventId("-NVM3RuoS1C5STbH2gwZ")
                 EventScreen(
                     eventViewModel = eventViewModel,
                     onOpenChatClick = {
@@ -260,7 +257,12 @@ fun StudyDistractorApp(
                 EventChatScreen(chatEventViewModel)
             }
             composable(route = StudyDistractorScreen.EventList.name) {
-                EventListScreen(onEventClicked = {/*TODO: link this to open an event*/}, eventListViewModel = eventListViewModel)
+                EventListScreen(
+                    onEventClicked = { event ->
+                        eventViewModel.setEventId(event.eventId!!)
+                        navController.navigate(StudyDistractorScreen.Event.name) },
+                    eventListViewModel = eventListViewModel
+                )
             }
             composable(route = StudyDistractorScreen.EventHistory.name){
                 EventHistoryScreen(
