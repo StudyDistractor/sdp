@@ -30,6 +30,8 @@ import com.github.studydistractor.sdp.distractionList.DistractionListServiceFire
 import com.github.studydistractor.sdp.distractionList.DistractionListViewModel
 import com.github.studydistractor.sdp.distractionStat.DistractionStatServiceFirebase
 import com.github.studydistractor.sdp.distractionStat.DistractionStatViewModel
+import com.github.studydistractor.sdp.event.EventServiceFirebase
+import com.github.studydistractor.sdp.event.EventViewModel
 import com.github.studydistractor.sdp.eventChat.EventChatServiceFirebase
 import com.github.studydistractor.sdp.eventChat.EventChatViewModel
 import com.github.studydistractor.sdp.eventHistory.EventHistoryServiceFirebase
@@ -43,6 +45,7 @@ import com.github.studydistractor.sdp.maps.MapsActivity
 import com.github.studydistractor.sdp.register.RegisterServiceFirebase
 import com.github.studydistractor.sdp.register.RegisterViewModel
 import com.github.studydistractor.sdp.ui.*
+import com.google.firebase.auth.FirebaseAuth
 
 // Inspired by https://developer.android.com/codelabs/basic-android-kotlin-compose-navigation#7
 
@@ -63,7 +66,8 @@ enum class StudyDistractorScreen(@StringRes val title: Int) {
     DailyChallenge(title = R.string.screen_name_daily_challenge),
     CreateEvent(title = R.string.screen_name_create_event),
     ChatEvent(title = R.string.screen_name_chat_event),
-    EventHistory(title = R.string.screen_name_event_history)
+    EventHistory(title = R.string.screen_name_event_history),
+    Event(title = R.string.screen_name_event),
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -101,6 +105,8 @@ fun StudyDistractorApp(
         remember { DistractionStatViewModel(DistractionStatServiceFirebase()) }
     val dailyChallengeViewModel =
         remember { DailyChallengeViewModel(DailyChallengeServiceFirebase()) }
+    val eventViewModel =
+        remember { EventViewModel(EventServiceFirebase()) }
     val chatEventViewModel =
         remember { EventChatViewModel(EventChatServiceFirebase())}
     val eventHistoryViewModel =
@@ -132,6 +138,7 @@ fun StudyDistractorApp(
             onMapClick = { navController.navigate(StudyDistractorScreen.Maps.name) },
             onFriendsClick = { navController.navigate(StudyDistractorScreen.Friends.name) },
             onEventHistoryClick = {navController.navigate(StudyDistractorScreen.EventHistory.name)},
+            onEventClick = { navController.navigate(StudyDistractorScreen.Event.name) },
             onMagicClick = { navController.navigate(StudyDistractorScreen.DailyChallenge.name) }
         ) }
     ) {
@@ -148,6 +155,8 @@ fun StudyDistractorApp(
                         navController.navigate(StudyDistractorScreen.Register.name)
                     },
                     onLoggedIn = {
+                        val uid = FirebaseAuth.getInstance().uid.orEmpty()
+                        eventHistoryViewModel.setUserId(uid)
                         navController.navigate(StudyDistractorScreen.Maps.name)
                     },
                     loginViewModel = loginViewModel
@@ -227,6 +236,16 @@ fun StudyDistractorApp(
             }
             composable(route = StudyDistractorScreen.Friends.name){
                 FriendsScreen(friendsViewModel)
+            }
+            composable(route = StudyDistractorScreen.Event.name) {
+                eventViewModel.setEventId("-NVM3RuoS1C5STbH2gwZ")
+                EventScreen(
+                    eventViewModel = eventViewModel,
+                    onOpenChatClick = {
+                        chatEventViewModel.changeEventChat(eventViewModel.uiState.value.eventId)
+                        navController.navigate(StudyDistractorScreen.ChatEvent.name)
+                    }
+                )
             }
             composable(route = StudyDistractorScreen.ChatEvent.name){
                 EventChatScreen(chatEventViewModel)

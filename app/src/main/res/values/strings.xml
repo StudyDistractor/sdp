@@ -17,4 +17,5 @@
     <string name="screen_name_chat_event">Chat event</string>
     <string name="screen_name_event_history">Event History</string>
     <string name="screen_name_create_event">CreateEvent</string>
+    <string name="screen_name_event">Event</string>
 </resources>

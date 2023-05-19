@@ -16,16 +16,17 @@ package com.github.studydistractor.sdp.data
  * @property chatId id of the chat that is linked to the event
  */
 data class Event(
-    val eventId: String?,
-    val name: String,
-    val description: String,
-    val lat: Double,
-    val long: Double,
-    val start: String,
-    val end: String,
-    val lateParticipation: Boolean,
-    val numberOfPoints: Int,
-    val chatId: String?)
+    val eventId: String? = null,
+    val name: String = "",
+    val description: String = "",
+    val lat: Double = .0,
+    val long: Double = .0,
+    val start: String = "",
+    val end: String = "",
+    val lateParticipation: Boolean = false,
+    val numberOfPoints: Int = 0,
+    val chatId: String? = null
+)
 
 /**
  * Represent an event that is received or sent from/to the firebase database
@@ -38,6 +39,7 @@ data class Event(
  * @property start time when the event starts
  * @property end time when the event ends
  * @property lateParticipation enable late participation (Can users join in the middle of the event)
+ * @property numberOfPoints number of points
  * @property chatId id of the chat that is linked to the event
  */
 data class FirebaseEvent(
@@ -48,12 +50,21 @@ data class FirebaseEvent(
     val long: Double? = null,
     val start: String? = null,
     val end: String? = null,
-    val lateParticipation: Boolean = false,
-    val numberOfPoints: Int? = 0,
+    val lateParticipation: Boolean? = null,
+    val numberOfPoints: Int? = null,
     val chatId: String? = null) {
     fun toEvent(): Event {
         return Event(
-            eventId!!, name!!, description!!, lat!!, long!!, start!!, end!!, lateParticipation, numberOfPoints!!, chatId!!
+            eventId!!,
+            name!!,
+            description!!,
+            lat!!,
+            long!!,
+            start!!,
+            end!!,
+            lateParticipation!!,
+            numberOfPoints!!,
+            chatId!!
         )
     }
 }
@@ -65,23 +76,20 @@ data class FirebaseEvent(
  * @property participants list of userId that participate in this event
  */
 data class EventParticipants(
-    val eventId: String? = null,
-    val participants: List<String>? = null
+    val participants: Map<String, Boolean> = mapOf()
 )
 
 /**
  * Represent a chat that is received or sent from/to the firebase database
  *
- * @property eventId id of the chat
  * @property participants list of messageId that were sent in the chat
  */
 data class FirebaseEventParticipants(
-    val eventId: String? = null,
-    val participants: List<String>? = null
+    val participants: Map<String, Boolean>? = null
 ) {
     fun toEventParticipants(): EventParticipants {
         return EventParticipants(
-            eventId, participants!!
+            participants!!
         )
     }
 }
@@ -89,24 +97,21 @@ data class FirebaseEventParticipants(
 /**
  * Represent the point to be claimed/claimed of a particular event
  *
- * @param eventId id of the chat
  * @param claimUser list of users that have already claimed their points
  */
 data class EventClaimPoints(
-    val eventId: String = "",
-    val claimUser: List<String> = listOf()
+    val claimUser: Map<String, Boolean> = mapOf()
 )
 
 /**
  * Represent the eventClaimPoint that is received or sent from/to the firebase database
  */
 data class FirebaseEventClaimPoints(
-    val eventId: String? = null,
-    val claimUser: List<String>? = null
+    val claimUser: Map<String, Boolean>? = null
 ) {
     fun toEventClaimPoints(): EventClaimPoints{
         return EventClaimPoints(
-            eventId!!, claimUser!!
+            claimUser!!
         )
     }
 }
