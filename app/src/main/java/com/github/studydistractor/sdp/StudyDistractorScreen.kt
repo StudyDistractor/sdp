@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,6 +35,8 @@ import com.github.studydistractor.sdp.event.EventServiceFirebase
 import com.github.studydistractor.sdp.event.EventViewModel
 import com.github.studydistractor.sdp.eventChat.EventChatServiceFirebase
 import com.github.studydistractor.sdp.eventChat.EventChatViewModel
+import com.github.studydistractor.sdp.eventList.EventListServiceFirebase
+import com.github.studydistractor.sdp.eventList.EventListViewModel
 import com.github.studydistractor.sdp.eventHistory.EventHistoryServiceFirebase
 import com.github.studydistractor.sdp.eventHistory.EventHistoryViewModel
 import com.github.studydistractor.sdp.friends.FriendsViewModel
@@ -68,6 +71,7 @@ enum class StudyDistractorScreen(@StringRes val title: Int) {
     ChatEvent(title = R.string.screen_name_chat_event),
     EventHistory(title = R.string.screen_name_event_history),
     Event(title = R.string.screen_name_event),
+    EventList(title = R.string.screen_name_event_list)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -109,12 +113,15 @@ fun StudyDistractorApp(
         remember { EventViewModel(EventServiceFirebase()) }
     val chatEventViewModel =
         remember { EventChatViewModel(EventChatServiceFirebase())}
+    val eventListViewModel =
+        remember { EventListViewModel(EventListServiceFirebase()) }
     val eventHistoryViewModel =
         remember { EventHistoryViewModel(EventHistoryServiceFirebase())}
     val createEventViewModel =
         remember { CreateEventViewModel(CreateEventServiceFirebase()) }
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = { AppBarTop(
             currentScreen = currentScreen,
             canNavigateBack = navController.previousBackStackEntry != null,
@@ -137,8 +144,8 @@ fun StudyDistractorApp(
             onListClick = { navController.navigate(StudyDistractorScreen.DistractionList.name) },
             onMapClick = { navController.navigate(StudyDistractorScreen.Maps.name) },
             onFriendsClick = { navController.navigate(StudyDistractorScreen.Friends.name) },
+            onEventListClick = { navController.navigate(StudyDistractorScreen.EventList.name) },
             onEventHistoryClick = {navController.navigate(StudyDistractorScreen.EventHistory.name)},
-            onEventClick = { navController.navigate(StudyDistractorScreen.Event.name) },
             onMagicClick = { navController.navigate(StudyDistractorScreen.DailyChallenge.name) }
         ) }
     ) {
@@ -238,7 +245,6 @@ fun StudyDistractorApp(
                 FriendsScreen(friendsViewModel)
             }
             composable(route = StudyDistractorScreen.Event.name) {
-                eventViewModel.setEventId("-NVM3RuoS1C5STbH2gwZ")
                 EventScreen(
                     eventViewModel = eventViewModel,
                     onOpenChatClick = {
@@ -249,6 +255,14 @@ fun StudyDistractorApp(
             }
             composable(route = StudyDistractorScreen.ChatEvent.name){
                 EventChatScreen(chatEventViewModel)
+            }
+            composable(route = StudyDistractorScreen.EventList.name) {
+                EventListScreen(
+                    onEventClicked = { event ->
+                        eventViewModel.setEventId(event)
+                        navController.navigate(StudyDistractorScreen.Event.name) },
+                    eventListViewModel = eventListViewModel
+                )
             }
             composable(route = StudyDistractorScreen.EventHistory.name){
                 EventHistoryScreen(

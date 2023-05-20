@@ -8,58 +8,74 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.ui.graphics.Color
 import com.github.studydistractor.sdp.data.Distraction
 
 /**
  * Screens that represents how one distraction is displayed in the list of distraction
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListedDistraction(
     distraction: Distraction,
     onClick: () -> Unit,
     isBookmarked: (Distraction) -> Boolean
 ) {
-    Column {
-        Box(
-            modifier = Modifier
-                .clickable { onClick() }
-                .testTag("distraction-list-screen__box-distraction")
-        ) {
-            Row(
+
+    Card(
+        onClick = onClick,
+        modifier = Modifier
+            .padding(horizontal = 16.dp, vertical = 4.dp)
+            .testTag("event-list-screen__event-card"),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        )
+    ) {
+        Column {
+            Box(
                 modifier = Modifier
-                    .padding(all = 14.dp)
-                    .fillMaxWidth()
-                    .fillMaxHeight(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                    .clickable { onClick() }
+                    .testTag("distraction-list-screen__box-distraction")
             ) {
-                Text(
-                    text = distraction.name!!,
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.testTag("name")
-                )
-                if(isBookmarked(distraction)) {
-                    Icon(Icons.Filled.Favorite,
-                        contentDescription = "Bookmark button",
-                        tint = Color.Red,
-                        modifier = Modifier.testTag("distraction-list-screen__bookmarked-icon")
+                Row(
+                    modifier = Modifier
+                        .padding(all = 14.dp)
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = distraction.name!!,
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.testTag("name")
                     )
+                    if (isBookmarked(distraction)) {
+                        Icon(
+                            Icons.Filled.Favorite,
+                            contentDescription = "Bookmark button",
+                            tint = Color.Red,
+                            modifier = Modifier.testTag("distraction-list-screen__bookmarked-icon")
+                        )
+                    }
                 }
             }
+            Divider(
+                modifier = Modifier.padding(horizontal = 14.dp),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
+            )
         }
-        Divider(
-            modifier = Modifier.padding(horizontal = 14.dp),
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
-        )
     }
 }

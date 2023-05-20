@@ -24,9 +24,9 @@ class AppBarBottomTest {
                 onMapClick = { clicksNumber[1]++ },
                 onListClick = { clicksNumber[2]++ },
                 onMagicClick = { clicksNumber[3]++ },
-                onEventClick = { },
+                onEventListClick = {clicksNumber[3]++},
                 onEventHistoryClick = {clicksNumber[4]++},
-                onFriendsClick = { clicksNumber[5]++ },
+                onFriendsClick = { clicksNumber[5]++ }
             )
         }
     }

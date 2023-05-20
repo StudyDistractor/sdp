@@ -3,6 +3,8 @@ package com.github.studydistractor.sdp.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +33,14 @@ fun CreateDistractionScreen(
     onDistractionCreated: () -> Unit
 ) {
     val uiState = createDistractionViewModel.uiState.collectAsState().value
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 14.dp, vertical = 32.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        ),
+    ) {
     Box(
         modifier = Modifier
             .padding(16.dp)
@@ -89,5 +99,5 @@ fun CreateDistractionScreen(
                 buttonText = "Create new distraction"
             )
         }
-    }
+    }}
 }

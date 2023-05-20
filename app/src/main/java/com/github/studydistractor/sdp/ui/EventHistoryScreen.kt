@@ -3,9 +3,12 @@ package com.github.studydistractor.sdp.ui
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -36,18 +39,27 @@ fun EventHistoryScreen(
 ){
     val uiState by eventHistoryViewModel.uiState.collectAsState()
 
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 14.dp, vertical = 32.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        ),
+    ) {
     Column(
         modifier = Modifier.padding(6.dp).fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        Text("Your event history",
+    ) {
+        Text(
+            "Your event history",
             modifier = Modifier
                 .padding(vertical = 32.dp)
                 .testTag("event-history-screen__title"),
             style = MaterialTheme.typography.titleLarge,
         )
-        LazyColumn(){
-            items(uiState.eventHistory) {i->
+        LazyColumn() {
+            items(uiState.eventHistory) { i ->
                 EventHistoryCard(
                     i,
                     chatViewModel,
@@ -56,5 +68,6 @@ fun EventHistoryScreen(
                 )
             }
         }
+    }
     }
 }

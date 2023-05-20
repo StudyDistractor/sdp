@@ -1,5 +1,6 @@
 package com.github.studydistractor.sdp.event
 
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.github.studydistractor.sdp.data.Event
 import com.google.android.gms.tasks.Task
 
@@ -64,7 +65,7 @@ interface EventModel {
      * @param eventId the id of the event
      * @param userId the id of the user
      */
-    fun isParticipating(eventId: String, userId: String): Task<Boolean>
+    fun isParticipating(eventId: String): Boolean
 
     /**
      * Add the user as participant to the selected event.
@@ -79,4 +80,8 @@ interface EventModel {
      * @param userId the id of the user
      */
     fun removeParticipant(eventId: String, userId: String): Task<Void>
+
+    fun changeParticipantListener(eventId: String)
+
+    fun getParticipants(): SnapshotStateList<String>
 }

@@ -22,6 +22,7 @@ class DistractionListServiceFirebase @Inject constructor() : DistractionListMode
     init {
         distractionDatabaseRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                Log.d("Distractions", "Updating distraction list")
                 distractions.clear()
                 for(distraction in snapshot.children) {
                     val distractionItem = distraction.getValue(Distraction::class.java)

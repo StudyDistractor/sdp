@@ -1,6 +1,7 @@
 package com.github.studydistractor.sdp.ui
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.Chat
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -24,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -44,80 +48,92 @@ fun EventScreen(
 
     val uiState by eventViewModel.uiState.collectAsState()
     val context = LocalContext.current
-
-    LazyColumn(
+    eventViewModel.updateUIParticipants()
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top)
+            .padding(horizontal = 14.dp, vertical = 32.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        ),
     ) {
-        item { // Event infos
-            Text(
-                text = uiState.event.name,
-                style = MaterialTheme.typography.headlineLarge,
-                modifier = Modifier.testTag("event-name"),
-            )
-
-            Text(
-                text = uiState.event.description,
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.testTag("event-description")
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "start: " + uiState.event.start,
-                style = MaterialTheme.typography.labelSmall,
-                modifier = Modifier.testTag("event-start")
-            )
-
-            Text(
-                text = "end: " + uiState.event.end,
-                style = MaterialTheme.typography.labelSmall,
-                modifier = Modifier.testTag("event-end")
-            )
-
-            if (uiState.event.lateParticipation) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top)
+        ) {
+            item { // Event infos
                 Text(
-                    text = "late participation is allowed",
+                    text = uiState.event.name,
+                    style = MaterialTheme.typography.headlineLarge,
+                    modifier = Modifier.testTag("event-name"),
+                )
+
+                Text(
+                    text = uiState.event.description,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.testTag("event-description")
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "start: " + uiState.event.start,
                     style = MaterialTheme.typography.labelSmall,
-                    modifier = Modifier.testTag("event-lateparticipation")
+                    modifier = Modifier.testTag("event-start")
+                )
+
+                Text(
+                    text = "end: " + uiState.event.end,
+                    style = MaterialTheme.typography.labelSmall,
+                    modifier = Modifier.testTag("event-end")
+                )
+
+                if (uiState.event.lateParticipation) {
+                    Text(
+                        text = "late participation is allowed",
+                        style = MaterialTheme.typography.labelSmall,
+                        modifier = Modifier.testTag("event-lateparticipation")
+                    )
+                }
+            }
+
+            item {
+                Divider(color = MaterialTheme.colorScheme.inversePrimary)
+            }
+
+            item { // Participants header
+                Text(
+                    text = uiState.participantsHeadingText,
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier.testTag("event-participants-headline")
+                )
+            }
+            Log.d("UI", "nbr of participants " + uiState.participants.count())
+            items(uiState.participants) {
+                // Participants list
+                Log.d("UI", "draw")
+                Text(
+                    text = it
+                )
+            }
+
+            item {
+                FloatingActionButtons(
+                    uiState = uiState,
+                    onOpenChatClick = onOpenChatClick,
+                    onParticipateClick = {
+                        eventViewModel.toggleParticipation().addOnFailureListener {
+                            showFailureToast(context, "Failed to update participation !")
+                        }
+                    }
                 )
             }
         }
-
-        item {
-            Divider(color = MaterialTheme.colorScheme.inversePrimary)
-        }
-
-        item { // Participants header
-            Text(
-                text = uiState.participantsHeadingText,
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.testTag("event-participants-headline")
-            )
-        }
-
-        items(uiState.participants) { // Participants list
-            Text(
-                text = it
-            )
-        }
     }
-
-    FloatingActionButtons(
-        uiState = uiState,
-        onOpenChatClick = onOpenChatClick,
-        onParticipateClick = {
-            eventViewModel.toggleParticipation().addOnFailureListener {
-                showFailureToast(context, "Failed to update participation !")
-            }
-        }
-    )
-
 }
 
 @Composable
@@ -143,10 +159,11 @@ fun FloatingActionButtons(
                 icon = { Icon(Icons.Outlined.Chat, "Open Chat") }
             )
         }
-
+        Log.d("event", uiState.canParticipate.toString())
         if(uiState.canParticipate) {
             ExtendedFloatingActionButton(
                 onClick = onParticipateClick,
+                containerColor = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .height(45.dp)
                     .testTag("toggle-participate"),

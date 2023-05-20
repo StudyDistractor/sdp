@@ -37,7 +37,6 @@ fun DistractionListScreen(
             updateBookmarksOnly = {distractionListViewModel.updateBookmarksFilter(it)}
         )
         LazyColumn {
-            Log.d("list of distraction size", uiState.distractionList.size.toString())
             items(uiState.distractionList) {distraction->
                 ListedDistraction(
                     distraction = distraction,

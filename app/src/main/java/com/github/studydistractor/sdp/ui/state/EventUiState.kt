@@ -1,5 +1,6 @@
 package com.github.studydistractor.sdp.ui.state
 
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.github.studydistractor.sdp.data.Event
 
 data class EventUiState(
@@ -9,6 +10,6 @@ data class EventUiState(
     val toggleParticipationButtonText: String = "",
     val participantsHeadingText: String = "",
     val participating: Boolean = false,
-    val participants: List<String> = listOf(),
+    val participants: MutableList<String> = mutableListOf(),
     val canParticipate: Boolean = false
 )

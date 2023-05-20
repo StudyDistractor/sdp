@@ -1,6 +1,7 @@
 package com.github.studydistractor.sdp.event
 
 import android.util.Log
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import com.github.studydistractor.sdp.data.Event
 import com.github.studydistractor.sdp.ui.state.EventUiState
@@ -20,10 +21,16 @@ class EventViewModel(eventModel: EventModel): ViewModel() {
     val uiState: StateFlow<EventUiState> = _uiState.asStateFlow()
 
     init {
+        _uiState.update {
+            it.copy(
+                participants = _eventModel.getParticipants()
+            )
+        }
+
         _eventModel.subscribeToUserId(
             successListener = { uid ->
                 _uiState.update { it.copy(userId = uid) }
-                setEventId(_uiState.value.eventId)
+                //setEventId(_uiState.value.eventId)
             }
         )
     }
@@ -79,39 +86,35 @@ class EventViewModel(eventModel: EventModel): ViewModel() {
                 }
     }
 
-    fun setEventId(eventId: String) {
-        _uiState.update { it.copy(eventId = eventId) }
+    /**
+     * Sets the event that will be displayed in the screen.
+     */
+    fun setEventId(event: Event) {
+        val eventId = event.eventId!!
+        _eventModel.changeParticipantListener(eventId)
 
-        _eventModel.unsubscribeFromAllEvents()
-        _eventModel.unsubscribeFromAllEventParticipants()
+        //Handle participation button (Which is like the floating one)
+        _uiState.update { it.copy(
+            event = event,
+            participating = _eventModel.isParticipating(eventId),
+            toggleParticipationButtonText = getToggleParticipationButtonText(_eventModel.isParticipating(eventId),),
+            canParticipate = canParticipate(event),
+            eventId = eventId
+        )}
 
-        _eventModel.subscribeToEvent(
-            eventId = eventId,
-            successListener = {event ->
-                _eventModel.isParticipating(eventId, _uiState.value.userId)
-                    .addOnSuccessListener { participating ->
-                        _uiState.update { it.copy(
-                            event = event,
-                            participating = participating,
-                            toggleParticipationButtonText = getToggleParticipationButtonText(participating),
-                            canParticipate = canParticipate(event)
-                        )
-                    }
-                }
-            }
-        )
+        //Handle participants list display
+        updateUIParticipants()
+    }
 
-        _eventModel.subscribeToEventParticipants(
-            eventId = eventId,
-            successListener = {eventParticipants ->
-                _uiState.update {
-                    it.copy(
-                        participants = eventParticipants,
-                        participantsHeadingText = getParticipantsHeadingText(eventParticipants.isEmpty())
-                    )
-                }
-            }
-        )
+    /**
+     * Change the participant list used to display in UI
+     */
+    fun updateUIParticipants() {
+        _uiState.update {
+            it.copy(
+                participants = _eventModel.getParticipants()
+            )
+        }
     }
 
     private fun updateParticipationUiState(participating: Boolean) {
