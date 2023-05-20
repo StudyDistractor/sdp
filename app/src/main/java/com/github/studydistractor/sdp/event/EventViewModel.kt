@@ -86,6 +86,9 @@ class EventViewModel(eventModel: EventModel): ViewModel() {
                 }
     }
 
+    /**
+     * Sets the event that will be displayed in the screen.
+     */
     fun setEventId(event: Event) {
         val eventId = event.eventId!!
         _eventModel.changeParticipantListener(eventId)
@@ -103,6 +106,9 @@ class EventViewModel(eventModel: EventModel): ViewModel() {
         updateUIParticipants()
     }
 
+    /**
+     * Change the participant list used to display in UI
+     */
     fun updateUIParticipants() {
         _uiState.update {
             it.copy(
