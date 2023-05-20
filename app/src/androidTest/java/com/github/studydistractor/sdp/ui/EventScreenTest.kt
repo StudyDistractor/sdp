@@ -10,7 +10,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.github.studydistractor.sdp.data.Event
 import com.github.studydistractor.sdp.event.EventViewModel
-import com.github.studydistractor.sdp.fakeServices.EventServiceFake
+//import com.github.studydistractor.sdp.fakeServices.EventServiceFake
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -77,4 +77,4 @@ import org.junit.Test
 //        composeTestRule.onNodeWithTag("open-chat").performClick()
 //        assert(chatClicksCount == 1)
 //    }
-}
+//}
