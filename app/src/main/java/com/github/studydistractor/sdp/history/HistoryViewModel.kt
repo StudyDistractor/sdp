@@ -18,7 +18,9 @@ class HistoryViewModel(
         if(_historyModel.getCurrentUid() == null) return
         val uid = _historyModel.getCurrentUid()!!
         _uiState.update {
-            HistoryUiState(_historyModel.getHistory(uid))
+            it.copy(
+                historyEntries = _historyModel.getHistory(uid)
+            )
         }
     }
 
