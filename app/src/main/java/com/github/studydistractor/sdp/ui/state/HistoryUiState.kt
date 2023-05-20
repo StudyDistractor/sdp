@@ -4,5 +4,5 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.github.studydistractor.sdp.data.HistoryEntry
 
 data class HistoryUiState(
-    val historyEntries: SnapshotStateList<HistoryEntry> = SnapshotStateList(),
+    val historyEntries: SnapshotStateList<HistoryEntry> = SnapshotStateList()
 )

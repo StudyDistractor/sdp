@@ -14,11 +14,13 @@ class HistoryViewModel(
     private val _uiState = MutableStateFlow(HistoryUiState())
     val uiState: StateFlow<HistoryUiState> = _uiState.asStateFlow()
 
-    private fun refreshHistoryEntries() {
+    fun refreshHistoryEntries() {
         if(_historyModel.getCurrentUid() == null) return
         val uid = _historyModel.getCurrentUid()!!
         _uiState.update {
-            HistoryUiState(_historyModel.getHistory(uid))
+            it.copy(
+                historyEntries = _historyModel.getHistory(uid)
+            )
         }
     }
 

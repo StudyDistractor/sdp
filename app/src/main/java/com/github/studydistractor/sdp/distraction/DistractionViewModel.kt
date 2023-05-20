@@ -5,18 +5,24 @@ import androidx.lifecycle.ViewModel
 import com.github.studydistractor.sdp.bookmark.BookmarkModel
 import com.github.studydistractor.sdp.bookmark.BookmarkServiceFirebase
 import com.github.studydistractor.sdp.data.Distraction
+import com.github.studydistractor.sdp.data.HistoryEntry
+import com.github.studydistractor.sdp.history.HistoryModel
+import com.github.studydistractor.sdp.history.HistoryServiceFirebase
 import com.github.studydistractor.sdp.ui.state.DistractionUiState
 import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import java.text.SimpleDateFormat
+import java.util.Date
 
 /**
  * This class help passing distraction data between views
  */
 class DistractionViewModel(
-    private val bookmarksService : BookmarkModel = BookmarkServiceFirebase()
+    private val bookmarksService : BookmarkModel = BookmarkServiceFirebase(),
+    private val historyService: HistoryModel = HistoryServiceFirebase()
 ) : ViewModel(){
 
     private val _uiState = MutableStateFlow(DistractionUiState())
@@ -65,5 +71,21 @@ class DistractionViewModel(
 
     fun reverseBookmarked() {
         bookmarked = !bookmarked
+    }
+
+    fun distractionCompleted(): Boolean {
+        val distraction = _uiState.value.distraction
+        return historyService.addHistoryEntry(
+            entry = HistoryEntry(
+                name = distraction.name!!,
+                description = distraction.description!!,
+                date = currentTimeToLong()
+            ),
+            uid = historyService.getCurrentUid()!!
+        )
+    }
+
+    private fun currentTimeToLong(): Long {
+        return System.currentTimeMillis()
     }
 }

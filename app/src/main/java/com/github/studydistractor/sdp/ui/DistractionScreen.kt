@@ -131,11 +131,13 @@ fun DistractionScreen(
                 }
                 Spacer(modifier = Modifier.padding(8.dp))
                 Button(onClick = {
-                    Toast.makeText(
-                        context,
-                        "Activity completed!",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    if(distractionViewModel.distractionCompleted()) {
+                        Toast.makeText(
+                            context,
+                            "Activity completed!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }, modifier = Modifier.testTag("completeButton")) {
                     Text(text = "Activity completed!", color = Color.White)
 

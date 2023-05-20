@@ -31,6 +31,5 @@ fun HistoryScreen(historyViewModel: HistoryViewModel) {
                 MessageCard(i)
             }
         }
-
     }
 }
