@@ -43,10 +43,16 @@ class DistractionViewModel(
         }
     }
 
+    /**
+     * Return true if the given distraction is bookmarked by the user else false
+     */
     fun isBookmarked(distraction: Distraction): Boolean {
         return bookmarksService.isBookmarked(distraction)
     }
 
+    /**
+     * Act as a toggle for bookmark and handle bookmarked value
+     */
     fun handleBookmark(): Task<Void> {
         return if(isBookmarked(_uiState.value.distraction)) {
             bookmarked = false
@@ -57,6 +63,9 @@ class DistractionViewModel(
         }
     }
 
+    /**
+     * Update the UI each time the bookmark value is changed
+     */
     fun onChangedBookmark() {
         if(bookmarked) {
             Log.d("boomarked", "update UI to true")
@@ -67,10 +76,18 @@ class DistractionViewModel(
         }
     }
 
+    /**
+     * helper function that inverts the value of bookmarked
+     */
     fun reverseBookmarked() {
         bookmarked = !bookmarked
     }
 
+    /**
+     * Add the current displayed distraction to the user's history
+     *
+     * return false in case the user is not logged in
+     */
     fun distractionCompleted(): Boolean {
         val distraction = _uiState.value.distraction
         return historyService.addHistoryEntry(
@@ -83,6 +100,9 @@ class DistractionViewModel(
         )
     }
 
+    /**
+     * Helper function to get the current time in a `Long` format
+     */
     private fun currentTimeToLong(): Long {
         return System.currentTimeMillis()
     }
