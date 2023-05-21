@@ -42,7 +42,7 @@ fun ListedEvent(
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .testTag("event-list-screen__event-card"),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
     ) {
         Column(
@@ -55,7 +55,7 @@ fun ListedEvent(
             //Name and Description
             Text(
                 text = event.name,
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.testTag("event-list-screen__event-name-"+event.eventId)
             )
@@ -102,11 +102,11 @@ fun ListedEvent(
                     }
                     Button(
                         onClick = onEventMoreClick,
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.inversePrimary)
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primaryContainer)
                     ) {
                         Text(
                             text = "More",
-                            color = MaterialTheme.colorScheme.onPrimary,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
                             modifier = Modifier.testTag("event-list-screen__more-button")
                         )
                     }

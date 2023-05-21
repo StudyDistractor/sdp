@@ -25,20 +25,15 @@ fun EventListScreen(
 ) {
     val uiState by eventListViewModel.uiState.collectAsState()
     eventListViewModel.updateEvents()
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.primary)
-            .padding(vertical = 4.dp)
-    ) {
-        LazyColumn{
-            items(uiState.eventList){(event, count) ->
-                ListedEvent(
-                    event,
-                    onEventMoreClick = { onEventClicked(event) },
-                    countPeople = count
-                )
-            }
+
+    LazyColumn{
+        items(uiState.eventList){(event, count) ->
+            ListedEvent(
+                event,
+                onEventMoreClick = { onEventClicked(event) },
+                countPeople = count
+            )
         }
+
     }
 }

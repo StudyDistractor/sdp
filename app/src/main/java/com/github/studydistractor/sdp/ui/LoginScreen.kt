@@ -38,88 +38,79 @@ fun LoginScreen(
     val uiState by loginViewModel.uiState.collectAsState()
     val context = LocalContext.current
 
-    Card(
+    Column (
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 14.dp, vertical = 32.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        ),
+            .padding(16.dp)
+            .testTag("login-screen__main-container"),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column (
+        Text(
+            text = "Log In",
+            style = MaterialTheme.typography.displaySmall,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+
+        OutlinedTextField(
+            value = uiState.email,
+            label = { Text(text = "Email") },
+            onValueChange = {loginViewModel.updateEmail(it) },
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Email
+            ),
+            leadingIcon = {
+                Icon(Icons.Filled.Email, contentDescription = null)
+            },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
-                .testTag("login-screen__main-container"),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(vertical = 8.dp)
+                .testTag("email")
+        )
+        OutlinedTextField(
+            value = uiState.password,
+            onValueChange = { loginViewModel.updatePassword(it) },
+            label = { Text(text = "Password") },
+            leadingIcon = {
+                Icon(Icons.Filled.Lock, contentDescription = null)
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+                .testTag("password"),
+            visualTransformation = PasswordVisualTransformation()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = {
+                loginViewModel.loginWithEmailAndPassword()
+                    .addOnSuccessListener { onLoggedIn() }
+                    .addOnFailureListener { showFailureToast(context, it.message.orEmpty()) }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag("login"),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+            )
         ) {
             Text(
-                text = "Log In",
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(vertical = 8.dp)
+                text = "Log in"
             )
-
-            OutlinedTextField(
-                value = uiState.email,
-                label = { Text(text = "Email") },
-                onValueChange = {loginViewModel.updateEmail(it) },
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Email
-                ),
-                leadingIcon = {
-                    Icon(Icons.Filled.Email, contentDescription = null)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-                    .testTag("email")
+        }
+        Button(
+            onClick = onRegisterButtonClicked,
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag("register"),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
             )
-            OutlinedTextField(
-                value = uiState.password,
-                onValueChange = { loginViewModel.updatePassword(it) },
-                label = { Text(text = "Password") },
-                leadingIcon = {
-                    Icon(Icons.Filled.Lock, contentDescription = null)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-                    .testTag("password"),
-                visualTransformation = PasswordVisualTransformation()
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = {
-                    loginViewModel.loginWithEmailAndPassword()
-                        .addOnSuccessListener { onLoggedIn() }
-                        .addOnFailureListener { showFailureToast(context, it.message.orEmpty()) }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("login"),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
-            ) {
-                Text(
-                    text = "Log in",
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-            Button(
-                onClick = onRegisterButtonClicked,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("register"),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
-            ) {
-                Text(text = "Register",
-                    color = MaterialTheme.colorScheme.onPrimary)
-            }
+        ) {
+            Text(text = "Register")
         }
     }
 }

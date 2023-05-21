@@ -33,12 +33,6 @@ class EventHistoryScreenTest {
     }
 
     @Test
-    fun testTitleIsDisplayed(){
-        composeRule.onNodeWithTag("event-history-screen__title").assertIsDisplayed()
-        composeRule.onNodeWithTag("event-history-screen__title").assertTextContains("Your event history")
-    }
-
-    @Test
     fun testCardsThatShouldBeDisplayed(){
         composeRule.onNodeWithTag("event-history-card__title event1").assertExists()
         composeRule.onNodeWithTag("event-history-card__title event1").assertIsDisplayed()

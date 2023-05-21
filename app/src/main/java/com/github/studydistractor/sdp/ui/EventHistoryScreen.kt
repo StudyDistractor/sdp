@@ -39,25 +39,10 @@ fun EventHistoryScreen(
 ){
     val uiState by eventHistoryViewModel.uiState.collectAsState()
 
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 14.dp, vertical = 32.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        ),
-    ) {
     Column(
         modifier = Modifier.padding(6.dp).fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            "Your event history",
-            modifier = Modifier
-                .padding(vertical = 32.dp)
-                .testTag("event-history-screen__title"),
-            style = MaterialTheme.typography.titleLarge,
-        )
         LazyColumn() {
             items(uiState.eventHistory) { i ->
                 EventHistoryCard(
@@ -68,6 +53,5 @@ fun EventHistoryScreen(
                 )
             }
         }
-    }
     }
 }

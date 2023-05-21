@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -38,83 +41,95 @@ fun EventHistoryCard(
     eventHistoryViewModel: EventHistoryViewModel
 ){
 
-    Row(modifier = Modifier.padding(all = 8.dp)
+    Card(
+        modifier = Modifier
+            .padding(horizontal = 16.dp, vertical = 4.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        )
     ) {
-        val context = LocalContext.current
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .testTag("event-history-card__title " + event.eventId),
-            horizontalAlignment = Alignment.CenterHorizontally
-
+        Row(modifier = Modifier.padding(all = 8.dp)
         ) {
-            Text(
-                text = event.name,
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.titleMedium,
+            val context = LocalContext.current
+            Column(
                 modifier = Modifier
-                    .testTag("event-history-card__name " + event.eventId)
-            )
-            Text(
-                text = "From ${event.start} to ${event.end}",
-                color = MaterialTheme.colorScheme.secondary,
-                style = MaterialTheme.typography.titleSmall,
-                modifier = Modifier
-                    .testTag("event-history-card__date " + event.eventId)
-            )
-            Spacer(modifier = Modifier.height(4.dp))
+                    .fillMaxSize()
+                    .testTag("event-history-card__title " + event.eventId),
+                horizontalAlignment = Alignment.CenterHorizontally
 
-
-            Text(
-                text = event.description,
-                modifier = Modifier
-                    .padding(all = 4.dp)
-                    .testTag("event-history-card__description " + event.eventId),
-                style = MaterialTheme.typography.bodySmall
-            )
-
-
-            Row() {
-                Button(
-                    onClick = {
-                        chatViewModel.changeEventChat(event.eventId!!)
-                        onChatClicked()
-                    },
+            ) {
+                Text(
+                    text = event.name,
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier
-                        .padding(4.dp)
-                        .testTag("event-history-card__chat-button " + event.eventId),
-                ) {
-                    Text(
-                        "See Chat",
+                        .testTag("event-history-card__name " + event.eventId)
+                )
+                Text(
+                    text = "From ${event.start} to ${event.end}",
+                    color = MaterialTheme.colorScheme.secondary,
+                    style = MaterialTheme.typography.titleSmall,
+                    modifier = Modifier
+                        .testTag("event-history-card__date " + event.eventId)
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+
+
+                Text(
+                    text = event.description,
+                    modifier = Modifier
+                        .padding(all = 4.dp)
+                        .testTag("event-history-card__description " + event.eventId),
+                    style = MaterialTheme.typography.bodySmall
+                )
+
+
+                Row() {
+                    Button(
+                        onClick = {
+                            chatViewModel.changeEventChat(event.eventId!!)
+                            onChatClicked()
+                        },
                         modifier = Modifier
-                            .testTag("event-history-card__chat-button-text " + event.eventId),
-                    )
-                }
-                Button(
-                    onClick = {
-                        event.eventId?.let {
-                            eventHistoryViewModel.claimPoints(it)
-                                .addOnSuccessListener {
-                                    Toast.makeText(context, "Points added", Toast.LENGTH_SHORT)
-                                        .show()
-                                }
-                                .addOnFailureListener {
-                                    Toast.makeText(context, "${it.message}", Toast.LENGTH_SHORT)
-                                        .show()
-                                }
-                        }
-                    },
-                    modifier = Modifier
-                        .padding(4.dp)
-                        .testTag("event-history-card__points-button " + event.eventId),
-                ) {
-                    Text(
-                        "Claim Points"
-                    )
+                            .padding(4.dp)
+                            .testTag("event-history-card__chat-button " + event.eventId),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                        )
+                    ) {
+                        Text(
+                            "See Chat",
+                            modifier = Modifier
+                                .testTag("event-history-card__chat-button-text " + event.eventId),
+                        )
+                    }
+                    Button(
+                        onClick = {
+                            event.eventId?.let {
+                                eventHistoryViewModel.claimPoints(it)
+                                    .addOnSuccessListener {
+                                        Toast.makeText(context, "Points added", Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
+                                    .addOnFailureListener {
+                                        Toast.makeText(context, "${it.message}", Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
+                            }
+                        },
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .testTag("event-history-card__points-button " + event.eventId),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                        )
+                    ) {
+                        Text(
+                            "Claim Points"
+                        )
+                    }
                 }
             }
         }
     }
-
 }

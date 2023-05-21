@@ -23,9 +23,6 @@ fun HistoryScreen(historyViewModel: HistoryViewModel) {
     val uiState by historyViewModel.uiState.collectAsState()
 
     Column(modifier = Modifier.padding(6.dp)){
-        Text("History :",
-            fontSize = 20.sp,
-        )
         LazyColumn(){
             items(uiState.historyEntries) {i->
                 MessageCard(i)
