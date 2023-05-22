@@ -7,7 +7,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -20,7 +19,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -55,12 +53,12 @@ fun DistractionScreen(
                 IconToggleButton(
                     checked = uiState.isBookmarked,
                     onCheckedChange = {
-                    distractionViewModel.handleBookmark()
-                        .addOnSuccessListener { distractionViewModel.onChangedBookmark() }
-                        .addOnFailureListener {
-                            showFailureToast(context, it.message.orEmpty())
-                            distractionViewModel.reverseBookmarked()
-                        }
+                        distractionViewModel.handleBookmark()
+                            .addOnSuccessListener { distractionViewModel.onChangedBookmark() }
+                            .addOnFailureListener {
+                                showFailureToast(context, it.message.orEmpty())
+                                distractionViewModel.reverseBookmarked()
+                            }
                     },
                     modifier = Modifier
                         .padding(8.dp)
@@ -69,8 +67,8 @@ fun DistractionScreen(
                         checkedContentColor = Color.Red,
                         contentColor = MaterialTheme.colorScheme.primary
                     )
-                ){
-                    if(!uiState.isBookmarked) {
+                ) {
+                    if (!uiState.isBookmarked) {
                         Icon(
                             ImageVector.vectorResource(id = com.github.studydistractor.sdp.R.drawable.baseline_favorite_border_24),
                             contentDescription = "Bookmark button"
@@ -121,8 +119,9 @@ fun DistractionScreen(
             Row {
                 Button(
                     onClick = {
-                    //TODO CHANGE TO DID
-                    onDistractionState(uiState.distraction.name!!) },
+                        //TODO CHANGE TO DID
+                        onDistractionState(uiState.distraction.name!!)
+                    },
                     modifier = Modifier.testTag("distraction-screen__stat-button"),
                     colors = ButtonDefaults
                         .buttonColors(
@@ -136,13 +135,14 @@ fun DistractionScreen(
                 Spacer(modifier = Modifier.padding(8.dp))
                 Button(
                     onClick = {
-                        if(distractionViewModel.distractionCompleted()) {
+                        if (distractionViewModel.distractionCompleted()) {
                             Toast.makeText(
                                 context,
                                 "Activity completed!",
                                 Toast.LENGTH_SHORT
                             ).show()
-                        }},
+                        }
+                    },
                     modifier = Modifier.testTag("completeButton"),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -151,9 +151,9 @@ fun DistractionScreen(
                 ) {
                     Text(text = "Activity completed!")
 
+                }
             }
         }
-
 }
 
 private fun activityHasIcon(iconName: String?): Boolean {
