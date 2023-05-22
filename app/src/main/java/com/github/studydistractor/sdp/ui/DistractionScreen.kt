@@ -37,123 +37,122 @@ fun DistractionScreen(
     val uiState by distractionViewModel.uiState.collectAsState()
     val context = LocalContext.current
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.SpaceAround,
-            horizontalAlignment = Alignment.CenterHorizontally
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.SpaceAround,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Row(
-                horizontalArrangement = Arrangement.Start,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-
-                IconToggleButton(
-                    checked = uiState.isBookmarked,
-                    onCheckedChange = {
-                        distractionViewModel.handleBookmark()
-                            .addOnSuccessListener { distractionViewModel.onChangedBookmark() }
-                            .addOnFailureListener {
-                                showFailureToast(context, it.message.orEmpty())
-                                distractionViewModel.reverseBookmarked()
-                            }
-                    },
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .testTag("distraction-screen__bookmark-button"),
-                    colors = IconButtonDefaults.iconToggleButtonColors(
-                        checkedContentColor = Color.Red,
-                        contentColor = MaterialTheme.colorScheme.primary
-                    )
-                ) {
-                    if (!uiState.isBookmarked) {
-                        Icon(
-                            ImageVector.vectorResource(id = com.github.studydistractor.sdp.R.drawable.baseline_favorite_border_24),
-                            contentDescription = "Bookmark button"
-                        )
-                    } else {
-                        Icon(
-                            Icons.Filled.Favorite,
-                            contentDescription = "Bookmark button"
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.padding(8.dp))
-                Text(
-                    text = uiState.distraction.name.orEmpty(),
-                    style = MaterialTheme.typography.titleLarge,
-                    fontSize = 45.sp,
-                    modifier = Modifier.testTag("name"),
-                    lineHeight = 45.sp
-                )
-            }
-
-            if (activityHasIcon(uiState.distraction.iconName)) {
-                Icon(
-                    painter = painterResource(
-                        LocalContext.current.resources.getIdentifier(
-                            uiState.distraction.iconName,
-                            "drawable",
-                            "com.github.studydistractor.sdp"
-                        )
-                    ),
-                    tint = Color(0xFF6650a4),
-                    modifier = Modifier
-                        .size(350.dp)
-                        .testTag("icon"),
-                    contentDescription = uiState.distraction.iconName,
-                )
-            }
-            Text(
-                text = uiState.distraction.description.orEmpty(),
-                style = MaterialTheme.typography.bodyMedium,
-                fontSize = 24.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .testTag("description")
-                    .padding(8.dp)
-            )
-            Row {
-                Button(
-                    onClick = {
-                        //TODO CHANGE TO DID
-                        onDistractionState(uiState.distraction.name!!)
-                    },
-                    modifier = Modifier.testTag("distraction-screen__stat-button"),
-                    colors = ButtonDefaults
-                        .buttonColors(
-                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                        )
-                )
-                {
-                    Text(text = "Stat of the activity")
-                }
-                Spacer(modifier = Modifier.padding(8.dp))
-                Button(
-                    onClick = {
-                        if (distractionViewModel.distractionCompleted()) {
-                            Toast.makeText(
-                                context,
-                                "Activity completed!",
-                                Toast.LENGTH_SHORT
-                            ).show()
+            IconToggleButton(
+                checked = uiState.isBookmarked,
+                onCheckedChange = {
+                    distractionViewModel.handleBookmark()
+                        .addOnSuccessListener { distractionViewModel.onChangedBookmark() }
+                        .addOnFailureListener {
+                            showFailureToast(context, it.message.orEmpty())
+                            distractionViewModel.reverseBookmarked()
                         }
-                    },
-                    modifier = Modifier.testTag("completeButton"),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                },
+                modifier = Modifier
+                    .padding(8.dp)
+                    .testTag("distraction-screen__bookmark-button"),
+                colors = IconButtonDefaults.iconToggleButtonColors(
+                    checkedContentColor = Color.Red,
+                    contentColor = MaterialTheme.colorScheme.primary
+                )
+            ) {
+                if (!uiState.isBookmarked) {
+                    Icon(
+                        ImageVector.vectorResource(id = com.github.studydistractor.sdp.R.drawable.baseline_favorite_border_24),
+                        contentDescription = "Bookmark button"
                     )
-                ) {
-                    Text(text = "Activity completed!")
-
+                } else {
+                    Icon(
+                        Icons.Filled.Favorite,
+                        contentDescription = "Bookmark button"
+                    )
                 }
+            }
+
+            Spacer(modifier = Modifier.padding(8.dp))
+            Text(
+                text = uiState.distraction.name.orEmpty(),
+                style = MaterialTheme.typography.titleLarge,
+                fontSize = 45.sp,
+                modifier = Modifier.testTag("name"),
+                lineHeight = 45.sp
+            )
+        }
+
+        if (activityHasIcon(uiState.distraction.iconName)) {
+            Icon(
+                painter = painterResource(
+                    LocalContext.current.resources.getIdentifier(
+                        uiState.distraction.iconName,
+                        "drawable",
+                        "com.github.studydistractor.sdp"
+                    )
+                ),
+                tint = Color(0xFF6650a4),
+                modifier = Modifier
+                    .size(350.dp)
+                    .testTag("icon"),
+                contentDescription = uiState.distraction.iconName,
+            )
+        }
+        Text(
+            text = uiState.distraction.description.orEmpty(),
+            style = MaterialTheme.typography.bodyMedium,
+            fontSize = 24.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .testTag("description")
+                .padding(8.dp)
+        )
+        Row {
+            Button(
+                onClick = {
+                    //TODO CHANGE TO DID
+                    onDistractionState(uiState.distraction.name!!)
+                },
+                modifier = Modifier.testTag("distraction-screen__stat-button"),
+                colors = ButtonDefaults
+                    .buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+            )
+            {
+                Text(text = "Stat of the activity")
+            }
+            Spacer(modifier = Modifier.padding(8.dp))
+            Button(
+                onClick = {
+                    if (distractionViewModel.distractionCompleted()) {
+                        Toast.makeText(
+                            context,
+                            "Activity completed!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                },
+                modifier = Modifier.testTag("completeButton"),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            ) {
+                Text(text = "Activity completed!")
+
             }
         }
+    }
 }
 
 private fun activityHasIcon(iconName: String?): Boolean {
