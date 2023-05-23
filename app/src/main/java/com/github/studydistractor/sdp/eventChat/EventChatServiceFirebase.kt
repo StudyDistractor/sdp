@@ -10,7 +10,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import java.lang.NullPointerException
 import java.util.Date
 
 class EventChatServiceFirebase : EventChatModel {
@@ -22,6 +21,7 @@ class EventChatServiceFirebase : EventChatModel {
     private var currentChat : String = "test"
 
     private var onChange : (List<Message>)-> Unit = {}
+    private var onOnlineChange: (Boolean) -> Unit = {}
 
     private val listener = object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
@@ -37,10 +37,13 @@ class EventChatServiceFirebase : EventChatModel {
                 }
             }
             onChange(list)
+            onOnlineChange(true)
         }
 
         override fun onCancelled(error: DatabaseError) {
-            Log.d("ERROR", error.message)
+            if(error.code == DatabaseError.DISCONNECTED){
+                onOnlineChange(false)
+            }
         }
     }
 
@@ -69,5 +72,9 @@ class EventChatServiceFirebase : EventChatModel {
         currentChat = eventId
         db.child(currentChat).addValueEventListener(listener)
         return Tasks.forResult(null)
+    }
+
+    override fun observeOnlineStatus(onChange: (Boolean) -> Unit) {
+        this.onOnlineChange = onChange
     }
 }

@@ -2,6 +2,7 @@ package com.github.studydistractor.sdp.data
 
 import android.os.Parcel
 import android.os.Parcelable
+import kotlinx.serialization.Serializable
 
 /**
  * Data class that represents a Distraction
@@ -9,6 +10,7 @@ import android.os.Parcelable
  * @param description description of the Distraction
  * @constructor create the Distraction
  */
+@Serializable
 data class Distraction(
     val name: String? = null,
     val description: String? = null,

@@ -1,5 +1,6 @@
 package com.github.studydistractor.sdp
 
+import android.app.Application
 import android.content.Intent
 import android.widget.Toast
 import androidx.annotation.StringRes
@@ -33,12 +34,13 @@ import com.github.studydistractor.sdp.distractionStat.DistractionStatServiceFire
 import com.github.studydistractor.sdp.distractionStat.DistractionStatViewModel
 import com.github.studydistractor.sdp.event.EventServiceFirebase
 import com.github.studydistractor.sdp.event.EventViewModel
+import com.github.studydistractor.sdp.eventChat.EventChatMiddlewareOffline
 import com.github.studydistractor.sdp.eventChat.EventChatServiceFirebase
 import com.github.studydistractor.sdp.eventChat.EventChatViewModel
-import com.github.studydistractor.sdp.eventList.EventListServiceFirebase
-import com.github.studydistractor.sdp.eventList.EventListViewModel
 import com.github.studydistractor.sdp.eventHistory.EventHistoryServiceFirebase
 import com.github.studydistractor.sdp.eventHistory.EventHistoryViewModel
+import com.github.studydistractor.sdp.eventList.EventListServiceFirebase
+import com.github.studydistractor.sdp.eventList.EventListViewModel
 import com.github.studydistractor.sdp.friends.FriendsViewModel
 import com.github.studydistractor.sdp.history.HistoryServiceFirebase
 import com.github.studydistractor.sdp.history.HistoryViewModel
@@ -112,7 +114,11 @@ fun StudyDistractorApp(
     val eventViewModel =
         remember { EventViewModel(EventServiceFirebase()) }
     val chatEventViewModel =
-        remember { EventChatViewModel(EventChatServiceFirebase())}
+        remember { EventChatViewModel(
+            EventChatMiddlewareOffline(
+                EventChatServiceFirebase(),
+                ApplicationScope()
+            )) }
     val eventListViewModel =
         remember { EventListViewModel(EventListServiceFirebase()) }
     val eventHistoryViewModel =
