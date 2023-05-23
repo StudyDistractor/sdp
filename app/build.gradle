@@ -72,9 +72,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1'
 
-    // Offline mode
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
-    implementation("io.github.irgaly.kottage:kottage:1.5.1")
+    // Offline mode (Room)
+    implementation "androidx.room:room-runtime:2.5.0"
+    annotationProcessor "androidx.room:room-compiler:2.5.0"
+    testImplementation "androidx.room:room-testing:2.5.0"
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+
 
     // Android Maps Compose
     implementation 'com.google.android.libraries.places:places:3.0.0'

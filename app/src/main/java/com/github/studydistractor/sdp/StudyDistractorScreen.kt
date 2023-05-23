@@ -1,6 +1,5 @@
 package com.github.studydistractor.sdp
 
-import android.app.Application
 import android.content.Intent
 import android.widget.Toast
 import androidx.annotation.StringRes
@@ -18,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.room.Room
 import com.github.studydistractor.sdp.account.FriendsServiceFirebase
 import com.github.studydistractor.sdp.createDistraction.CreateDistractionServiceFirebase
 import com.github.studydistractor.sdp.createDistraction.CreateDistractionViewModel
@@ -49,6 +49,7 @@ import com.github.studydistractor.sdp.login.LoginViewModel
 import com.github.studydistractor.sdp.maps.MapsActivity
 import com.github.studydistractor.sdp.register.RegisterServiceFirebase
 import com.github.studydistractor.sdp.register.RegisterViewModel
+import com.github.studydistractor.sdp.roomdb.RoomDatabase
 import com.github.studydistractor.sdp.ui.*
 import com.google.firebase.auth.FirebaseAuth
 
@@ -114,11 +115,14 @@ fun StudyDistractorApp(
     val eventViewModel =
         remember { EventViewModel(EventServiceFirebase()) }
     val chatEventViewModel =
-        remember { EventChatViewModel(
-            EventChatMiddlewareOffline(
-                EventChatServiceFirebase(),
-                ApplicationScope()
-            )) }
+        remember { EventChatViewModel(EventChatMiddlewareOffline(
+            Room.databaseBuilder(
+                context,
+                RoomDatabase::class.java,
+                "study-distractor-db"
+            ).build(),
+            EventChatServiceFirebase()
+        )) }
     val eventListViewModel =
         remember { EventListViewModel(EventListServiceFirebase()) }
     val eventHistoryViewModel =

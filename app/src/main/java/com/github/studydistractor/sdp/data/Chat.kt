@@ -1,6 +1,7 @@
 package com.github.studydistractor.sdp.data
 
-import kotlinx.serialization.Serializable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 /**
  * Represent a chat (place where users can exchange messages)
@@ -38,9 +39,9 @@ data class FirebaseChat(
  * @property userId id of the user that sent the message
  * @property message the message sent
  */
-@Serializable
+@Entity(tableName = "messages")
 data class Message(
-    val messageId: String,
+    @PrimaryKey val messageId: String,
     val timeStamp: Long,
     val userId: String,
     val message : String,
