@@ -1,5 +1,8 @@
 package com.github.studydistractor.sdp.data
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
 /**
  * Represent a chat (place where users can exchange messages)
  *
@@ -32,11 +35,13 @@ data class FirebaseChat(
  * @property userId id of the user that sent the message
  * @property message the message sent
  */
+@Entity(tableName = "messages")
 data class Message(
-    val messageId: String,
+    @PrimaryKey val messageId: String,
     val timeStamp: Long,
     val userId: String,
     val message : String,
+    var eventId : String,
 )
 
 /**
@@ -55,7 +60,7 @@ data class FirebaseMessage(
 ) {
     fun toMessage(): Message {
         return Message(
-            messageId!!, timeStamp!!, userId!!, message!!
+            messageId!!, timeStamp!!, userId!!, message!!, ""
         )
     }
 }

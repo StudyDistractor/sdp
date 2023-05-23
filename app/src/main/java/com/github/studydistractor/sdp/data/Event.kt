@@ -1,5 +1,8 @@
 package com.github.studydistractor.sdp.data
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
 /**
  * Represent an event, an event is a group distraction that can only be done during a specific
  * time window
@@ -26,7 +29,72 @@ data class Event(
     val lateParticipation: Boolean = false,
     val numberOfPoints: Int = 0,
     val chatId: String? = null
-)
+){
+    fun toEventEntity() : EventEntity{
+        return EventEntity(
+            0,
+            eventId!!,
+            name,
+            description,
+            lat,
+            long,
+            start,
+            end,
+            lateParticipation,
+            numberOfPoints,
+            chatId,
+            0
+        )
+    }
+}
+
+/**
+ * Represent an event, an event is a group distraction that can only be done during a specific
+ * time window
+ *
+ * @property key the unique key of the event in room
+ * @property eventId id of the event
+ * @property name name of the event
+ * @property description description of the event
+ * @property lat latitude position of the event
+ * @property long longitude position of the event
+ * @property start time when the event starts
+ * @property end time when the event ends
+ * @property lateParticipation enable late participation (Can users join in the middle of the event)
+ * @property numberOfPoints number of points awarded to the user when they participate in the event
+ * @property chatId id of the chat that is linked to the event
+ */
+@Entity(tableName = "event")
+data class EventEntity(
+    @PrimaryKey(autoGenerate = true)
+    var key : Int = 0,
+    var eventId: String? = null,
+    var name: String = "",
+    var description: String = "",
+    var lat: Double = .0,
+    var long: Double = .0,
+    var start: String = "",
+    var end: String = "",
+    var lateParticipation: Boolean = false,
+    var numberOfPoints: Int = 0,
+    var chatId: String? = null,
+    var history : Int = 0
+) {
+    fun toEvent(): Event {
+        return Event(
+            eventId!!,
+            name,
+            description,
+            lat,
+            long,
+            start,
+            end,
+            lateParticipation,
+            numberOfPoints,
+            chatId
+        )
+    }
+}
 
 /**
  * Represent an event that is received or sent from/to the firebase database

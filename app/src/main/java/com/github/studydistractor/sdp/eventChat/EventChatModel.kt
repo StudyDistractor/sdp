@@ -25,4 +25,5 @@ interface EventChatModel {
      * @return Task successful is the currentChat as been updated.
      */
     fun changeCurrentChat(eventId : String) : Task<Void>
+
 }

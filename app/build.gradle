@@ -6,6 +6,7 @@ plugins {
     id 'com.google.gms.google-services'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.21'
 }
 
 android {
@@ -70,6 +71,20 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:31.2.3')
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1'
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+
+    // Offline mode (Room)
+    apply plugin: 'kotlin-kapt'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0-alpha04'
+
+    var room_version = "2.5.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+
+    // To use Kotlin annotation processing tool (kapt)
+    kapt("androidx.room:room-compiler:$room_version")
+
 
     // Android Maps Compose
     implementation 'com.google.android.libraries.places:places:3.0.0'
@@ -142,6 +157,7 @@ dependencies {
     kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.44'
 
     implementation 'nl.dionsegijn:konfetti-compose:2.0.2'
+
 }
 
 hilt {

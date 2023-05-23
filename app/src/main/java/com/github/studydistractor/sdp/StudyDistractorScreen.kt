@@ -1,5 +1,7 @@
 package com.github.studydistractor.sdp
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
@@ -33,6 +35,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.room.Room
 import com.github.studydistractor.sdp.account.FriendsServiceFirebase
 import com.github.studydistractor.sdp.createDistraction.CreateDistractionServiceFirebase
 import com.github.studydistractor.sdp.createDistraction.CreateDistractionViewModel
@@ -49,12 +52,15 @@ import com.github.studydistractor.sdp.distractionStat.DistractionStatServiceFire
 import com.github.studydistractor.sdp.distractionStat.DistractionStatViewModel
 import com.github.studydistractor.sdp.event.EventServiceFirebase
 import com.github.studydistractor.sdp.event.EventViewModel
+import com.github.studydistractor.sdp.eventChat.EventChatMiddlewareOffline
 import com.github.studydistractor.sdp.eventChat.EventChatServiceFirebase
 import com.github.studydistractor.sdp.eventChat.EventChatViewModel
+import com.github.studydistractor.sdp.eventHistory.EventHistoryMiddlewareOffline
 import com.github.studydistractor.sdp.eventList.EventListServiceFirebase
 import com.github.studydistractor.sdp.eventList.EventListViewModel
 import com.github.studydistractor.sdp.eventHistory.EventHistoryServiceFirebase
 import com.github.studydistractor.sdp.eventHistory.EventHistoryViewModel
+import com.github.studydistractor.sdp.eventList.EventListMiddlewareOffline
 import com.github.studydistractor.sdp.friends.FriendsViewModel
 import com.github.studydistractor.sdp.history.HistoryServiceFirebase
 import com.github.studydistractor.sdp.history.HistoryViewModel
@@ -63,6 +69,7 @@ import com.github.studydistractor.sdp.login.LoginViewModel
 import com.github.studydistractor.sdp.maps.MapViewModel
 import com.github.studydistractor.sdp.register.RegisterServiceFirebase
 import com.github.studydistractor.sdp.register.RegisterViewModel
+import com.github.studydistractor.sdp.roomdb.RoomDatabase
 import com.github.studydistractor.sdp.ui.*
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
@@ -105,6 +112,13 @@ fun StudyDistractorApp(
         backStackEntry?.destination?.route ?: StudyDistractorScreen.DistractionList.name
     )
     val context = LocalContext.current
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val database = Room.databaseBuilder(
+                context,
+                RoomDatabase::class.java,
+                "study-distractor-db"
+            ).allowMainThreadQueries().build()
 
     val createDistractionViewModel =
         remember { CreateDistractionViewModel(CreateDistractionServiceFirebase()) }
@@ -129,11 +143,28 @@ fun StudyDistractorApp(
     val eventViewModel =
         remember { EventViewModel(EventServiceFirebase()) }
     val chatEventViewModel =
-        remember { EventChatViewModel(EventChatServiceFirebase())}
+        remember { EventChatViewModel(EventChatMiddlewareOffline(
+            database,
+            EventChatServiceFirebase(),
+            connectivityManager
+        )) }
     val eventListViewModel =
-        remember { EventListViewModel(EventListServiceFirebase()) }
+        remember { EventListViewModel(
+                EventListMiddlewareOffline(
+                    EventListServiceFirebase(),
+                    database,
+                    connectivityManager
+                )
+            )
+        }
     val eventHistoryViewModel =
-        remember { EventHistoryViewModel(EventHistoryServiceFirebase())}
+        remember { EventHistoryViewModel(
+            EventHistoryMiddlewareOffline(
+                EventHistoryServiceFirebase(),
+                database,
+                connectivityManager)
+            )
+        }
     val createEventViewModel =
         remember { CreateEventViewModel(CreateEventServiceFirebase()) }
     val mapViewModel =
