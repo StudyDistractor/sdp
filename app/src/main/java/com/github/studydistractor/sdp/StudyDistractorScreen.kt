@@ -1,6 +1,5 @@
 package com.github.studydistractor.sdp
 
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
@@ -251,7 +250,6 @@ fun StudyDistractorApp(
             bottomBar = { AppBarBottom(
                 onHomeClick = { navController.navigate(StudyDistractorScreen.Login.name) },
                 onListClick = { navController.navigate(StudyDistractorScreen.DistractionList.name) },
-//                onMapClick = { context.startActivity(Intent(context, MapsActivity::class.java)) },
                 onMapClick = { navController.navigate(StudyDistractorScreen.Maps.name) },
                 onEventListClick = { navController.navigate(StudyDistractorScreen.EventList.name) },
                 onCreateDistractionActivityClick = {navController.navigate(StudyDistractorScreen.CreateDistraction.name)},
@@ -298,7 +296,6 @@ fun StudyDistractorApp(
                     MapsScreen(
                         mapViewModel,
                         onDistractionClick = {distraction ->
-                            Log.d("Click", "register cliock on distraction")
                             distractionViewModel.updateDistraction(distraction)
                             navController.navigate(StudyDistractorScreen.Distraction.name)
                         },
