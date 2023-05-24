@@ -79,4 +79,28 @@ class EventListServiceFirebase : EventListModel {
         }
     }
 
+    /**
+     * This is a workaround for the maps
+     * TODO: When maps are move to screen remove this function
+     */
+    fun fetchEventsCallBack(callback: (List<Event>) -> Unit) {
+        val result =  mutableStateListOf<Event>()
+        eventDatabaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(activity in snapshot.children) {
+                    val activityItem = activity.getValue(Event::class.java)
+                    if(activityItem != null) {
+                        result.add(activityItem)
+                    }
+                }
+                callback(result)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("Firebase", "loadPost:onCancelled " + error.toException().toString())
+                callback(emptyList())
+            }
+        })
+    }
+
 }
