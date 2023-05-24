@@ -42,7 +42,7 @@ fun AppBarTop(
         navigationIcon = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 if(canNavigateBack) {
                     IconButton(
@@ -54,21 +54,25 @@ fun AppBarTop(
                             contentDescription = "Back arrow"
                         )
                     }
+
+                }
+                IconButton(
+                    onClick = { openDrawer() },
+                    modifier = Modifier.testTag("app-bar-top__drawer-button")
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Menu,
+                        contentDescription = "Drawer"
+                    )
+                }
+
+                if(canNavigateBack) {
                     Text(
                         text = currentScreen.name,
                         style = MaterialTheme.typography.titleLarge
                     )
-                } else {
-                    IconButton(
-                        onClick = { openDrawer() },
-                        modifier = Modifier.testTag("app-bar-top__drawer-button")
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Menu,
-                            contentDescription = "Drawer"
-                        )
-                    }
                 }
+
             }
         },
         actions = {
