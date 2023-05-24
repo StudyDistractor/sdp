@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Cancel
@@ -49,37 +51,34 @@ fun EventScreen(
     val uiState by eventViewModel.uiState.collectAsState()
     val context = LocalContext.current
     eventViewModel.updateUIParticipants()
-    Card(
+    LazyColumn(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 14.dp, vertical = 32.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        ),
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top)
-        ) {
-            item { // Event infos
-                Text(
-                    text = uiState.event.name,
-                    style = MaterialTheme.typography.headlineLarge,
-                    modifier = Modifier.testTag("event-name"),
-                )
+        item {
+            Text(
+                text = uiState.event.name,
+                style = MaterialTheme.typography.displayMedium,
+                modifier = Modifier.testTag("event-name"),
+            )
+        }
 
-                Text(
-                    text = uiState.event.description,
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.testTag("event-description")
-                )
+        item {
+            Text(
+                text = uiState.event.description,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.testTag("event-description")
+            )
+        }
 
-                Spacer(modifier = Modifier.height(8.dp))
-
+        item {
+            Column(
+                modifier = Modifier.padding(vertical = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
                 Text(
                     text = "start: " + uiState.event.start,
                     style = MaterialTheme.typography.labelSmall,
@@ -100,41 +99,43 @@ fun EventScreen(
                     )
                 }
             }
+        }
 
-            item {
-                Divider(color = MaterialTheme.colorScheme.inversePrimary)
-            }
+        item {
+            Divider(color = MaterialTheme.colorScheme.inversePrimary)
+        }
 
-            item { // Participants header
-                Text(
-                    text = uiState.participantsHeadingText,
-                    style = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier.testTag("event-participants-headline")
-                )
-            }
-            Log.d("UI", "nbr of participants " + uiState.participants.count())
-            items(uiState.participants) {
-                // Participants list
-                Log.d("UI", "draw")
-                Text(
-                    text = it
-                )
-            }
+        item {
+            Text(
+                text = uiState.participantsHeadingText,
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.testTag("event-participants-headline")
+            )
+        }
 
-            item {
-                FloatingActionButtons(
-                    uiState = uiState,
-                    onOpenChatClick = onOpenChatClick,
-                    onParticipateClick = {
-                        eventViewModel.toggleParticipation().addOnFailureListener {
-                            showFailureToast(context, "Failed to update participation !")
-                        }
+        Log.d("UI", "nbr of participants " + uiState.participants.count())
+        items(uiState.participants) {
+            // Participants list
+            Log.d("UI", "draw")
+            Text(
+                text = it
+            )
+        }
+
+        item {
+            FloatingActionButtons(
+                uiState = uiState,
+                onOpenChatClick = onOpenChatClick,
+                onParticipateClick = {
+                    eventViewModel.toggleParticipation().addOnFailureListener {
+                        showFailureToast(context, "Failed to update participation !")
                     }
-                )
-            }
+                }
+            )
         }
     }
 }
+
 
 @Composable
 fun FloatingActionButtons(

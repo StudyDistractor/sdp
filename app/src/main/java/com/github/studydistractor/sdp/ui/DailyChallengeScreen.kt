@@ -1,6 +1,7 @@
 package com.github.studydistractor.sdp.ui
 
 import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,58 +34,45 @@ fun DailyChallengeScreen(
     dailyChallengeViewModel: DailyChallengeViewModel
 ) {
     val uiState by dailyChallengeViewModel.uiState.collectAsState()
-    Card(
+
+    Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 14.dp, vertical = 32.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        ),
+            .fillMaxSize()
+            .padding(16.dp)
+            .testTag("daily-challenge-screen__main-container"),
+
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Row {
+            Text(
+                text = "Complete these activities and earn the honour of being a master procrastinator.",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier
+                    .padding(vertical = 32.dp, horizontal = 16.dp)
+                    .testTag("daily-challenge-screen__description")
+            )
+        }
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-                .testTag("daily-challenge-screen__main-container"),
-
-            horizontalAlignment = Alignment.CenterHorizontally
+                .verticalScroll(rememberScrollState())
+                .weight(1f, false),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Row {
-                Text(
-                    text = "Daily Challenge",
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(vertical = 32.dp)
-                        .testTag("daily-challenge-screen__title")
-                )
-            }
-            Row {
-                Text(
-                    text = "Complete these activities and earn the honour of being a master procrastinator.",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(vertical = 32.dp, horizontal = 16.dp)
-                        .testTag("daily-challenge-screen__description")
-                )
-            }
-            Column(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .weight(1f, false)
-            ) {
 
-                uiState.distractionsToDisplay.forEachIndexed { index, distraction ->
-                    DistractionCard(
-                        distraction = distraction,
-                        checkedState = uiState.checkedStates[index],
-                        onCheckboxClicked = {
-                            dailyChallengeViewModel.onCheckboxClicked(
-                                index, it
-                            )
-                        }
-                    )
-                }
+            uiState.distractionsToDisplay.forEachIndexed { index, distraction ->
+                DistractionCard(
+                    distraction = distraction,
+                    checkedState = uiState.checkedStates[index],
+                    onCheckboxClicked = {
+                        dailyChallengeViewModel.onCheckboxClicked(
+                            index, it
+                        )
+                    }
+                )
             }
         }
     }
+
 
     if (uiState.allChecked) {
         Log.d("DailyChallengeScreen", "all checked")
@@ -109,48 +97,56 @@ fun DistractionCard(
     onCheckboxClicked: (Boolean) -> Unit,
 ) {
 
-    Row(
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth()
-            .testTag("distraction-card-for-${distraction.name}"),
-        verticalAlignment = Alignment.Top
-    ) {
-        Checkbox(
-            checked = checkedState,
-            modifier = Modifier.padding(top = 0.dp, bottom = 16.dp, start = 0.dp, end = 16.dp).testTag("distraction-card__checkbox-for-${distraction.name}"),
-            onCheckedChange = onCheckboxClicked
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
-        Column {
-            Row {
-                distraction.name?.let {
-                    Text(
-                        text = it,
-                        modifier = Modifier.padding(
-                            top = 0.dp,
-                            bottom = 16.dp,
-                            start = 0.dp,
-                            end = 16.dp
-                        ),
-                        style = MaterialTheme.typography.headlineSmall,
-                    )
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth()
+                .testTag("distraction-card-for-${distraction.name}"),
+            verticalAlignment = Alignment.Top
+        ) {
+            Checkbox(
+                checked = checkedState,
+                modifier = Modifier
+                    .padding(top = 0.dp, bottom = 16.dp, start = 0.dp, end = 16.dp)
+                    .testTag("distraction-card__checkbox-for-${distraction.name}"),
+                onCheckedChange = onCheckboxClicked
+            )
+            Column {
+                Row {
+                    distraction.name?.let {
+                        Text(
+                            text = it,
+                            modifier = Modifier.padding(
+                                top = 0.dp,
+                                bottom = 16.dp,
+                                start = 0.dp,
+                                end = 16.dp
+                            ),
+                            style = MaterialTheme.typography.headlineSmall,
+                        )
+                    }
                 }
-            }
-            Row {
-                distraction.description?.let {
-                    Text(
-                        text = it,
-                        modifier = Modifier.padding(
-                            top = 0.dp,
-                            bottom = 16.dp,
-                            start = 0.dp,
-                            end = 16.dp
-                        ),
-                        style = MaterialTheme.typography.bodyLarge,
-                    )
+                Row {
+                    distraction.description?.let {
+                        Text(
+                            text = it,
+                            modifier = Modifier.padding(
+                                top = 0.dp,
+                                bottom = 16.dp,
+                                start = 0.dp,
+                                end = 16.dp
+                            ),
+                            style = MaterialTheme.typography.bodyLarge,
+                        )
+                    }
                 }
-            }
 
+            }
         }
     }
 }

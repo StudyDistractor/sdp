@@ -20,34 +20,13 @@ class AppBarTopTest {
     }
 
     @Test
-    fun testTitleAppears() {
-        composeRule.setContent {
-            AppBarTop(
-                currentScreen = StudyDistractorScreen.values()[0],
-                canNavigateBack = false,
-                navigateUp = { throw Error("this should never be called") },
-                goToMapActivity = { /* this must not be tested as it is temporary */ },
-                goToHistoryActivity = { /* this must not be tested as it is temporary */ },
-                goToCreateDistractionActivity = { /* this must not be tested as it is temporary */ },
-                goToCreateEventActivity = { /* this must not be tested as it is temporary */ }
-                )
-        }
-
-        composeRule.onNodeWithTag("app-bar-top__title").assertIsDisplayed()
-    }
-
-    @Test
     fun testCannotGoBackWorks() {
         composeRule.setContent {
             AppBarTop(
                 currentScreen = StudyDistractorScreen.values()[0],
                 canNavigateBack = false,
                 navigateUp = { throw Error("this should never be called") },
-                goToMapActivity = { /* this must not be tested as it is temporary */ },
-                goToHistoryActivity = { /* this must not be tested as it is temporary */ },
-                goToCreateDistractionActivity = { /* this must not be tested as it is temporary */ },
-                goToCreateEventActivity = { /* this must not be tested as it is temporary */ }
-            )
+                openDrawer = {})
         }
 
         composeRule.onNodeWithTag("app-bar-top__back-button").assertDoesNotExist()
@@ -62,10 +41,7 @@ class AppBarTopTest {
                 currentScreen = StudyDistractorScreen.values()[0],
                 canNavigateBack = true,
                 navigateUp = { backClicks++ },
-                goToMapActivity = { /* this must not be tested as it is temporary */ },
-                goToHistoryActivity = { /* this must not be tested as it is temporary */ },
-                goToCreateDistractionActivity = { /* this must not be tested as it is temporary */ },
-                goToCreateEventActivity = { /* this must not be tested as it is temporary */ }
+                openDrawer = {}
             )
         }
 

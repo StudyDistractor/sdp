@@ -4,14 +4,40 @@ import android.content.Intent
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.HourglassFull
+import androidx.compose.material.icons.outlined.AccessTime
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Group
+import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DrawerDefaults
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -49,6 +75,7 @@ import com.github.studydistractor.sdp.register.RegisterServiceFirebase
 import com.github.studydistractor.sdp.register.RegisterViewModel
 import com.github.studydistractor.sdp.ui.*
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 
 // Inspired by https://developer.android.com/codelabs/basic-android-kotlin-compose-navigation#7
 
@@ -85,7 +112,7 @@ fun StudyDistractorApp(
     val backStackEntry by navController.currentBackStackEntryAsState()
     // Get the name of the current screen
     val currentScreen = StudyDistractorScreen.valueOf(
-        backStackEntry?.destination?.route ?: StudyDistractorScreen.Login.name
+        backStackEntry?.destination?.route ?: StudyDistractorScreen.DistractionList.name
     )
     val context = LocalContext.current
 
@@ -120,158 +147,246 @@ fun StudyDistractorApp(
     val createEventViewModel =
         remember { CreateEventViewModel(CreateEventServiceFirebase()) }
 
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        topBar = { AppBarTop(
-            currentScreen = currentScreen,
-            canNavigateBack = navController.previousBackStackEntry != null,
-            navigateUp = { navController.navigateUp() },
-            goToCreateDistractionActivity = {
-                navController.navigate(StudyDistractorScreen.CreateDistraction.name)
-            },
-            goToHistoryActivity = {
-                navController.navigate(StudyDistractorScreen.History.name)
-            },
-            goToMapActivity = {
-                context.startActivity(Intent(context, MapsActivity::class.java))
-            },
-            goToCreateEventActivity = {
-                navController.navigate(StudyDistractorScreen.CreateEvent.name)
-            },
-        ) },
-        bottomBar = { AppBarBottom(
-            onHomeClick = { navController.navigate(StudyDistractorScreen.Login.name) },
-            onListClick = { navController.navigate(StudyDistractorScreen.DistractionList.name) },
-            onMapClick = { navController.navigate(StudyDistractorScreen.Maps.name) },
-            onFriendsClick = { navController.navigate(StudyDistractorScreen.Friends.name) },
-            onEventListClick = { navController.navigate(StudyDistractorScreen.EventList.name) },
-            onEventHistoryClick = {navController.navigate(StudyDistractorScreen.EventHistory.name)},
-            onMagicClick = { navController.navigate(StudyDistractorScreen.DailyChallenge.name) }
-        ) }
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet(
+                drawerContainerColor = MaterialTheme.colorScheme.inverseOnSurface
+            ) {
+                Spacer(Modifier.height(12.dp))
+                Text(
+                    text = "Study Distractor",
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
+                Divider(
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(vertical = 12.dp)
+                )
+
+                NavigationDrawerItem(
+                    icon = {Icon(
+                        imageVector = Icons.Filled.HourglassFull,
+                        contentDescription = "History"
+                    )},
+                    label = {Text("Distraction's history")},
+                    onClick = {
+                        scope.launch { drawerState.close() }
+                        navController.navigate(StudyDistractorScreen.History.name)
+                              },
+                    selected = false,
+                    colors = NavigationDrawerItemDefaults.colors(
+                        unselectedContainerColor = MaterialTheme.colorScheme.inverseOnSurface
+                    ),
+                    modifier = Modifier
+                        .padding(NavigationDrawerItemDefaults.ItemPadding)
+                        .testTag("app-bar-top__history-button")
+                )
+
+                NavigationDrawerItem(
+                    icon = {Icon(
+                        Icons.Outlined.AccessTime,
+                        contentDescription = "History of events",
+                    )},
+                    label = {Text("Event's history")},
+                    onClick = {
+                        scope.launch { drawerState.close() }
+                        navController.navigate(StudyDistractorScreen.EventHistory.name)
+                    },
+                    selected = false,
+                    colors = NavigationDrawerItemDefaults.colors(
+                        unselectedContainerColor = MaterialTheme.colorScheme.inverseOnSurface
+                    ),
+                    modifier = Modifier
+                        .padding(NavigationDrawerItemDefaults.ItemPadding)
+                        .testTag("app-bar-bottom__history-button")
+                )
+
+                NavigationDrawerItem(
+                    icon = {Icon(
+                        Icons.Outlined.Group,
+                        contentDescription = "List of friends",
+                    )},
+                    label = {Text("Friends")},
+                    onClick = {
+                        scope.launch { drawerState.close() }
+                        navController.navigate(StudyDistractorScreen.Friends.name)
+                    },
+                    selected = false,
+                    colors = NavigationDrawerItemDefaults.colors(
+                        unselectedContainerColor = MaterialTheme.colorScheme.inverseOnSurface
+                    ),
+                    modifier = Modifier
+                        .padding(NavigationDrawerItemDefaults.ItemPadding)
+                        .testTag("app-bar-bottom__friend-list-button")
+                )
+
+                NavigationDrawerItem(
+                    icon = {Icon(
+                        Icons.Outlined.AccountCircle,
+                        contentDescription = "Home"
+                    )},
+                    label = {Text("Account")},
+                    onClick = {
+                        scope.launch { drawerState.close() }
+                        navController.navigate(StudyDistractorScreen.Login.name)
+                    },
+                    selected = false,
+                    colors = NavigationDrawerItemDefaults.colors(
+                        unselectedContainerColor = MaterialTheme.colorScheme.inverseOnSurface
+                    ),
+                    modifier = Modifier
+                        .padding(NavigationDrawerItemDefaults.ItemPadding)
+                        .testTag("app-bar-bottom__friend-list-button")
+                )
+
+            }
+        }
     ) {
-        NavHost(
-            navController = navController,
-            startDestination = StudyDistractorScreen.Login.name,
-            modifier = modifier
-                .padding(it)
-
+        Scaffold(
+            containerColor = MaterialTheme.colorScheme.inverseOnSurface,
+            topBar = { AppBarTop(
+                currentScreen = currentScreen,
+                canNavigateBack = navController.previousBackStackEntry != null,
+                navigateUp = { navController.navigateUp() },
+                openDrawer = { scope.launch { drawerState.open() }}
+            ) },
+            bottomBar = { AppBarBottom(
+                onHomeClick = { navController.navigate(StudyDistractorScreen.Login.name) },
+                onListClick = { navController.navigate(StudyDistractorScreen.DistractionList.name) },
+                onMapClick = { context.startActivity(Intent(context, MapsActivity::class.java)) },
+                onEventListClick = { navController.navigate(StudyDistractorScreen.EventList.name) },
+                onCreateDistractionActivityClick = {navController.navigate(StudyDistractorScreen.CreateDistraction.name)},
+                onCreateEventActivityClick = {navController.navigate(StudyDistractorScreen.CreateEvent.name)},
+                onMagicClick = { navController.navigate(StudyDistractorScreen.DailyChallenge.name) }
+            ) }
         ) {
-            composable(route = StudyDistractorScreen.Login.name) {
-                LoginScreen(
-                    onRegisterButtonClicked = {
-                        navController.navigate(StudyDistractorScreen.Register.name)
-                    },
-                    onLoggedIn = {
-                        val uid = FirebaseAuth.getInstance().uid.orEmpty()
-                        eventHistoryViewModel.setUserId(uid)
-                        navController.navigate(StudyDistractorScreen.Maps.name)
-                    },
-                    loginViewModel = loginViewModel
-                )
-            }
-            composable(route = StudyDistractorScreen.Register.name) {
-                RegisterScreen(
-                    onSuccess = {
-                        navController.navigate(StudyDistractorScreen.CreateUser.name)
-                    },
-                    registerViewModel = registerViewModel
-                )
-            }
-            composable(route = StudyDistractorScreen.CreateUser.name) {
-                CreateUserScreen(
-                    onUserCreated = {
-                        navController.navigate(StudyDistractorScreen.Maps.name)
-                    },
-                    createUserViewModel = createUserViewModel
-                )
-            }
-            composable(route = StudyDistractorScreen.Maps.name) {
-                MapsScreen(
-                    /*onActivity = {
-                        navController.navigate(StudyDistractorScreen.Distraction.name)
-                    }*/
-                )
-            }
-            composable(route = StudyDistractorScreen.DistractionList.name) {
-                DistractionListScreen(
-                    onDistractionClicked = { distraction ->
-                        distractionViewModel.updateDistraction(distraction)
-                        navController.navigate(StudyDistractorScreen.Distraction.name)
-                    },
-                    distractionListViewModel = distractionListViewModel
-                )
-            }
-            composable(route = StudyDistractorScreen.Distraction.name)  {
-                DistractionScreen(distractionViewModel, onDistractionState = { it ->
-                    distractionStatViewModel.updateDid(it)
-                   navController.navigate(StudyDistractorScreen.DistractionStat.name)
-                })
-            }
-            composable(route = StudyDistractorScreen.CreateDistraction.name)  {
-                CreateDistractionScreen(
-                    createDistractionViewModel = createDistractionViewModel,
-                    onDistractionCreated = {
-                        distractionListViewModel.allDistractions()
-                        navController.navigate(StudyDistractorScreen.DistractionList.name)
-                    }
-                )
-            }
-            composable(route = StudyDistractorScreen.CreateEvent.name)  {
-                CreateEventScreen(
-                    createEventViewModel = createEventViewModel,
-                    onEventCreated = {
-                        Toast.makeText(context, "Event created", Toast.LENGTH_SHORT).show()
-                    }
-                )
-            }
-            composable(route = StudyDistractorScreen.History.name) {
-                HistoryScreen(
-                    historyViewModel = historyViewModel
-                )
-            }
+            NavHost(
+                navController = navController,
+                startDestination = StudyDistractorScreen.DistractionList.name,
+                modifier = modifier
+                    .padding(it)
+            ) {
+                composable(route = StudyDistractorScreen.Login.name) {
+                    LoginScreen(
+                        onRegisterButtonClicked = {
+                            navController.navigate(StudyDistractorScreen.Register.name)
+                        },
+                        onLoggedIn = {
+                            val uid = FirebaseAuth.getInstance().uid.orEmpty()
+                            eventHistoryViewModel.setUserId(uid)
+                            navController.navigate(StudyDistractorScreen.Maps.name)
+                        },
+                        loginViewModel = loginViewModel
+                    )
+                }
+                composable(route = StudyDistractorScreen.Register.name) {
+                    RegisterScreen(
+                        onSuccess = {
+                            navController.navigate(StudyDistractorScreen.CreateUser.name)
+                        },
+                        registerViewModel = registerViewModel
+                    )
+                }
+                composable(route = StudyDistractorScreen.CreateUser.name) {
+                    CreateUserScreen(
+                        onUserCreated = {
+                            navController.navigate(StudyDistractorScreen.Maps.name)
+                        },
+                        createUserViewModel = createUserViewModel
+                    )
+                }
+                composable(route = StudyDistractorScreen.Maps.name) {
+                    MapsScreen(
+                        /*onActivity = {
+                            navController.navigate(StudyDistractorScreen.Distraction.name)
+                        }*/
+                    )
+                }
+                composable(route = StudyDistractorScreen.DistractionList.name) {
+                    DistractionListScreen(
+                        onDistractionClicked = { distraction ->
+                            distractionViewModel.updateDistraction(distraction)
+                            navController.navigate(StudyDistractorScreen.Distraction.name)
+                        },
+                        distractionListViewModel = distractionListViewModel
+                    )
+                }
+                composable(route = StudyDistractorScreen.Distraction.name)  {
+                    DistractionScreen(distractionViewModel, onDistractionState = { it ->
+                        distractionStatViewModel.updateDid(it)
+                        navController.navigate(StudyDistractorScreen.DistractionStat.name)
+                    })
+                }
+                composable(route = StudyDistractorScreen.CreateDistraction.name)  {
+                    CreateDistractionScreen(
+                        createDistractionViewModel = createDistractionViewModel,
+                        onDistractionCreated = {
+                            distractionListViewModel.allDistractions()
+                            navController.navigate(StudyDistractorScreen.DistractionList.name)
+                        }
+                    )
+                }
+                composable(route = StudyDistractorScreen.CreateEvent.name)  {
+                    CreateEventScreen(
+                        createEventViewModel = createEventViewModel,
+                        onEventCreated = {
+                            Toast.makeText(context, "Event created", Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                }
+                composable(route = StudyDistractorScreen.History.name) {
+                    HistoryScreen(
+                        historyViewModel = historyViewModel
+                    )
+                }
 
-            composable(route = StudyDistractorScreen.DailyChallenge.name) {
-                dailyChallengeViewModel.updateDistractions() // reset to the current day
-                DailyChallengeScreen(
-                    dailyChallengeViewModel = dailyChallengeViewModel
-                )
-            }
-            composable(route = StudyDistractorScreen.DistractionStat.name){
-                DistractionStatScreen(
-                    distractionStatViewModel,
-                )
-            }
-            composable(route = StudyDistractorScreen.Friends.name){
-                FriendsScreen(friendsViewModel)
-            }
-            composable(route = StudyDistractorScreen.Event.name) {
-                EventScreen(
-                    eventViewModel = eventViewModel,
-                    onOpenChatClick = {
-                        chatEventViewModel.changeEventChat(eventViewModel.uiState.value.eventId)
-                        navController.navigate(StudyDistractorScreen.ChatEvent.name)
-                    }
-                )
-            }
-            composable(route = StudyDistractorScreen.ChatEvent.name){
-                EventChatScreen(chatEventViewModel)
-            }
-            composable(route = StudyDistractorScreen.EventList.name) {
-                EventListScreen(
-                    onEventClicked = { event ->
-                        eventViewModel.setEventId(event)
-                        navController.navigate(StudyDistractorScreen.Event.name) },
-                    eventListViewModel = eventListViewModel
-                )
-            }
-            composable(route = StudyDistractorScreen.EventHistory.name){
-                EventHistoryScreen(
-                    eventHistoryViewModel = eventHistoryViewModel,
-                    chatViewModel = chatEventViewModel,
-                    onChatButtonClicked = {
-                        navController.navigate(StudyDistractorScreen.ChatEvent.name)
-                    }
-                )
+                composable(route = StudyDistractorScreen.DailyChallenge.name) {
+                    dailyChallengeViewModel.updateDistractions() // reset to the current day
+                    DailyChallengeScreen(
+                        dailyChallengeViewModel = dailyChallengeViewModel
+                    )
+                }
+                composable(route = StudyDistractorScreen.DistractionStat.name){
+                    DistractionStatScreen(
+                        distractionStatViewModel,
+                    )
+                }
+                composable(route = StudyDistractorScreen.Friends.name){
+                    FriendsScreen(friendsViewModel)
+                }
+                composable(route = StudyDistractorScreen.Event.name) {
+                    EventScreen(
+                        eventViewModel = eventViewModel,
+                        onOpenChatClick = {
+                            chatEventViewModel.changeEventChat(eventViewModel.uiState.value.eventId)
+                            navController.navigate(StudyDistractorScreen.ChatEvent.name)
+                        }
+                    )
+                }
+                composable(route = StudyDistractorScreen.ChatEvent.name){
+                    EventChatScreen(chatEventViewModel)
+                }
+                composable(route = StudyDistractorScreen.EventList.name) {
+                    EventListScreen(
+                        onEventClicked = { event ->
+                            eventViewModel.setEventId(event)
+                            navController.navigate(StudyDistractorScreen.Event.name) },
+                        eventListViewModel = eventListViewModel
+                    )
+                }
+                composable(route = StudyDistractorScreen.EventHistory.name){
+                    EventHistoryScreen(
+                        eventHistoryViewModel = eventHistoryViewModel,
+                        chatViewModel = chatEventViewModel,
+                        onChatButtonClicked = {
+                            navController.navigate(StudyDistractorScreen.ChatEvent.name)
+                        }
+                    )
+                }
             }
         }
     }

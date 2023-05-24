@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,6 +22,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import com.github.studydistractor.sdp.data.Distraction
 
@@ -41,7 +43,7 @@ fun ListedDistraction(
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .testTag("event-list-screen__event-card"),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
     ) {
         Column {
@@ -57,17 +59,32 @@ fun ListedDistraction(
                         .fillMaxHeight(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(
-                        text = distraction.name!!,
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.testTag("name")
-                    )
-                    if (isBookmarked(distraction)) {
-                        Icon(
-                            Icons.Filled.Favorite,
-                            contentDescription = "Bookmark button",
-                            tint = Color.Red,
-                            modifier = Modifier.testTag("distraction-list-screen__bookmarked-icon")
+                    Column(
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = distraction.name!!,
+                                style = MaterialTheme.typography.headlineLarge,
+                                modifier = Modifier.testTag("name")
+                            )
+                            if (isBookmarked(distraction)) {
+                                Icon(
+                                    Icons.Filled.Favorite,
+                                    contentDescription = "Bookmark button",
+                                    tint = Color.Red,
+                                    modifier = Modifier.testTag("distraction-list-screen__bookmarked-icon")
+                                )
+                            }
+                        }
+
+                        Text(
+                            text = distraction.description!!,
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier.testTag("name")
                         )
                     }
                 }

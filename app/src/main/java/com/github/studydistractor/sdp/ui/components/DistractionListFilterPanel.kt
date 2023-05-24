@@ -42,14 +42,6 @@ fun DistractionListFilterPanel(
     updateExpansion: (expanded: Boolean) -> Unit,
     updateBookmarksOnly: (Boolean) -> Unit
 ) {
-    Card(
-        modifier = Modifier
-            .padding(horizontal = 14.dp, vertical = 16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.inversePrimary,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-        ),
-    ){
         Column(
             modifier = Modifier
                 .padding(horizontal = 14.dp, vertical = 2.dp)
@@ -114,10 +106,10 @@ fun DistractionListFilterPanel(
                                     }
                                 },
                                 colors = FilterChipDefaults.filterChipColors(
-                                    containerColor = MaterialTheme.colorScheme.inversePrimary,
-                                    selectedContainerColor = MaterialTheme.colorScheme.primary,
-                                    selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
-                                    selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimary
+                                    containerColor = MaterialTheme.colorScheme.inverseOnSurface,
+                                    selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                                    selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer
                                 ),
                                 modifier = Modifier.testTag("distraction-list-screen__button-select-tag")
                             )
@@ -161,10 +153,10 @@ fun DistractionListFilterPanel(
                                     }
                                 },
                                 colors = FilterChipDefaults.filterChipColors(
-                                    containerColor = MaterialTheme.colorScheme.inversePrimary,
-                                    selectedContainerColor = MaterialTheme.colorScheme.primary,
-                                    selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
-                                    selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimary
+                                    containerColor = MaterialTheme.colorScheme.inverseOnSurface,
+                                    selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                                    selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer
                                 ),
                                 modifier = Modifier.testTag("distraction-list-screen__select-length")
                             )
@@ -193,11 +185,6 @@ fun DistractionListFilterPanel(
                         Switch(
                             checked = bookmarksOnly,
                             onCheckedChange = {updateBookmarksOnly(!bookmarksOnly)},
-                            colors = SwitchDefaults.colors(
-                                uncheckedBorderColor = MaterialTheme.colorScheme.primary,
-                                uncheckedTrackColor = MaterialTheme.colorScheme.primaryContainer,
-                                uncheckedThumbColor = MaterialTheme.colorScheme.primary
-                            ),
                             thumbContent = {
                                 if(bookmarksOnly) {
                                     Icon(Icons.Filled.Check,
@@ -219,12 +206,16 @@ fun DistractionListFilterPanel(
                             .fillMaxWidth()
                             .padding(16.dp)
                             .testTag("distraction-list-screen__button-apply-button"),
-                        shape = RoundedCornerShape(16.dp)
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
                     ) {
                         Text("Apply Filters", color = Color.White)
                     }
                 }
             }
-        }
+
     }
 }

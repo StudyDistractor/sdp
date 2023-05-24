@@ -29,12 +29,6 @@ class DailyChallengeScreenTest {
     }
 
     @Test
-    fun titleIsDisplayed() {
-        composeTestRule.onNodeWithTag("daily-challenge-screen__title").assertExists()
-        composeTestRule.onNodeWithTag("daily-challenge-screen__title").assert(hasText("Daily Challenge"))
-    }
-
-    @Test
     fun descriptionIsDisplayed() {
         composeTestRule.onNodeWithTag("daily-challenge-screen__description").assertExists()
         composeTestRule.onNodeWithTag("daily-challenge-screen__description").assert(hasText("Complete these activities and earn the honour of being a master procrastinator."))

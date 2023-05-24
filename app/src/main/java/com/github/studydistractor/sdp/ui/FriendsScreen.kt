@@ -11,11 +11,13 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.GroupAdd
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -47,124 +49,122 @@ fun  FriendsScreen(friendsViewModel: FriendsViewModel) {
 
     val uiState by friendsViewModel.uiState.collectAsState()
     val context = LocalContext.current
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 14.dp, vertical = 32.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        ),
-    ) {
-        Column(modifier = Modifier.padding(20.dp)) {
-            OutlinedTextField(
-                value = uiState.newFriend,
-                onValueChange = { friendsViewModel.updateNewFriend(it) },
-                label = { Text("Friend uid") },
-                singleLine = true,
-                leadingIcon = {
-                    Icon(Icons.Filled.GroupAdd, contentDescription = null)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-                    .testTag("friend-list-screen__friend-text-field")
-            )
-            Button(
-                onClick = {
-                    friendsViewModel.addFriend()
-                        .addOnSuccessListener {
-                            showSuccessToast(context)
-                            friendsViewModel.refreshFriendsList()
-                        }
-                        .addOnFailureListener { showFailureToast(context, it.message.orEmpty()) }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("friend-list-screen__friend-button")
-            ) {
-                Text("Add new friend")
-            }
-            if (uiState.friendHistory.isNotEmpty()) {
-                Text(
-                    "Friend History : ",
-                    fontSize = 20.sp,
-                    modifier = Modifier.testTag("friend-list-screen__history-title")
-                )
-                LazyColumn() {
-                    items(uiState.friendHistory) { historyEntry ->
-                        MessageCard(entry = historyEntry)
-                    }
-                }
-            }
 
-            Spacer(modifier = Modifier.height(6.dp))
-            LazyColumn() {
-                items(uiState.friendsList) { friend ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillParentMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            "Uid : $friend",
-                            fontSize = 10.sp,
-                            modifier = Modifier
-                                .padding(6.dp)
-                                .align(Alignment.CenterVertically)
-                                .testTag("friend-list-screen__friend-$friend")
-                        )
-                        IconButton(
-                            onClick = {
-                                friendsViewModel.refreshFriendHistory(friend)
-                            },
-                            modifier = Modifier
-                                .testTag("friend-list-screen__history-$friend")
-                                .padding(8.dp)
-                        )
-                        {
-                            Icon(
-                                imageVector = Icons.Default.History,
-                                contentDescription = "history",
-                                modifier = Modifier.align(Alignment.CenterVertically),
-                                tint = Color.Blue
-                            )
-                        }
-                        IconButton(
-                            onClick = {
-                                friendsViewModel.removeFriend(friend)
-                                    .addOnSuccessListener {
-                                        showSuccessToast(context)
-                                        friendsViewModel.refreshFriendsList()
-                                    }
-                                    .addOnFailureListener {
-                                        showFailureToast(
-                                            context,
-                                            it.message.orEmpty()
-                                        )
-                                    }
-                            },
-                            modifier = Modifier
-                                .testTag("friend-list-screen__delete-$friend")
-                                .padding(8.dp)
-                        )
-                        {
-                            Icon(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = "delete",
-                                modifier = Modifier.align(Alignment.CenterVertically),
-                                tint = Color.Red
-                            )
-                        }
+    Column(modifier = Modifier.padding(20.dp)) {
+        OutlinedTextField(
+            value = uiState.newFriend,
+            onValueChange = { friendsViewModel.updateNewFriend(it) },
+            label = { Text("Friend uid") },
+            singleLine = true,
+            leadingIcon = {
+                Icon(Icons.Filled.GroupAdd, contentDescription = null)
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+                .testTag("friend-list-screen__friend-text-field")
+        )
+        Button(
+            onClick = {
+                friendsViewModel.addFriend()
+                    .addOnSuccessListener {
+                        showSuccessToast(context)
+                        friendsViewModel.refreshFriendsList()
                     }
-                    Spacer(
-                        modifier = Modifier
-                            .height(2.dp)
-                            .background(Color.Gray)
-                            .fillMaxWidth()
-                    )
+                    .addOnFailureListener { showFailureToast(context, it.message.orEmpty()) }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag("friend-list-screen__friend-button"),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+            )
+        ) {
+            Text("Add new friend")
+        }
+        if (uiState.friendHistory.isNotEmpty()) {
+            Text(
+                "Friend History : ",
+                fontSize = 20.sp,
+                modifier = Modifier.testTag("friend-list-screen__history-title")
+            )
+            LazyColumn() {
+                items(uiState.friendHistory) { historyEntry ->
+                    MessageCard(entry = historyEntry)
                 }
             }
         }
+
+        Spacer(modifier = Modifier.height(6.dp))
+        LazyColumn() {
+            items(uiState.friendsList) { friend ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillParentMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        "Uid : $friend",
+                        fontSize = 10.sp,
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .align(Alignment.CenterVertically)
+                            .testTag("friend-list-screen__friend-$friend")
+                    )
+                    IconButton(
+                        onClick = {
+                            friendsViewModel.refreshFriendHistory(friend)
+                        },
+                        modifier = Modifier
+                            .testTag("friend-list-screen__history-$friend")
+                            .padding(8.dp)
+                    )
+                    {
+                        Icon(
+                            imageVector = Icons.Default.History,
+                            contentDescription = "history",
+                            modifier = Modifier.align(Alignment.CenterVertically),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    IconButton(
+                        onClick = {
+                            friendsViewModel.removeFriend(friend)
+                                .addOnSuccessListener {
+                                    showSuccessToast(context)
+                                    friendsViewModel.refreshFriendsList()
+                                }
+                                .addOnFailureListener {
+                                    showFailureToast(
+                                        context,
+                                        it.message.orEmpty()
+                                    )
+                                }
+                        },
+                        modifier = Modifier
+                            .testTag("friend-list-screen__delete-$friend")
+                            .padding(8.dp),
+                        colors = IconButtonDefaults.iconButtonColors(
+                            contentColor = MaterialTheme.colorScheme.primary
+                        )
+                    )
+                    {
+                        Icon(
+                            imageVector = Icons.Filled.Delete,
+                            contentDescription = "delete",
+                            modifier = Modifier.align(Alignment.CenterVertically))
+                    }
+                }
+                Spacer(
+                    modifier = Modifier
+                        .height(2.dp)
+                        .background(Color.Gray)
+                        .fillMaxWidth()
+                )
+            }
+        }
+
     }
 }

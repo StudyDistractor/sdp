@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.Tag
 import androidx.compose.material.icons.filled.ThumbDown
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,17 +43,11 @@ fun DistractionStatScreen(viewModel : DistractionStatViewModel) {
     val uiState by viewModel.uiState.collectAsState()
     viewModel.refreshModel()
 
-    Card(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 14.dp, vertical = 32.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        ),
-    ) {
-
-    Column(
-        modifier = Modifier.fillMaxWidth().fillMaxHeight().padding(26.dp),
+            .fillMaxHeight()
+            .padding(26.dp),
     ) {
         /**
          * Like and dislike count
@@ -87,7 +82,8 @@ fun DistractionStatScreen(viewModel : DistractionStatViewModel) {
                 onClick = {
                     viewModel.dislike()
                 },
-                Modifier.testTag("distraction-stat-screen__dislike")
+                Modifier.testTag("distraction-stat-screen__dislike"),
+
             ) {
                 Icon(imageVector = Icons.Default.ThumbDown, contentDescription = "Like")
             }
@@ -116,8 +112,13 @@ fun DistractionStatScreen(viewModel : DistractionStatViewModel) {
                 viewModel.postFeedback()
                 viewModel.refreshModel()
             },
-            Modifier.fillMaxWidth()
-                .testTag("distraction-stat-screen__feedback-button")
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag("distraction-stat-screen__feedback-button"),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+            )
 
         ) {
             Text("Validate")
@@ -150,8 +151,13 @@ fun DistractionStatScreen(viewModel : DistractionStatViewModel) {
                 viewModel.postTag()
                 viewModel.refreshModel()
             },
-            Modifier.testTag("distraction-stat-screen__tag-button")
-                .fillMaxWidth()
+            modifier = Modifier
+                .testTag("distraction-stat-screen__tag-button")
+                .fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+            )
         ) {
             Text("Validate")
         }
@@ -165,7 +171,7 @@ fun DistractionStatScreen(viewModel : DistractionStatViewModel) {
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 4.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.inversePrimary
+                containerColor = MaterialTheme.colorScheme.surfaceVariant
             ),
         ) {
             Text(
@@ -194,7 +200,7 @@ fun DistractionStatScreen(viewModel : DistractionStatViewModel) {
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 4.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.inversePrimary
+                containerColor = MaterialTheme.colorScheme.surfaceVariant
             ),
         ) {
             Text(
@@ -215,6 +221,5 @@ fun DistractionStatScreen(viewModel : DistractionStatViewModel) {
                 }
             }
         }
-    }
     }
 }
