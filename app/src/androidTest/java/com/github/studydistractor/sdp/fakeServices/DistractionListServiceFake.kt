@@ -14,7 +14,9 @@ class DistractionListServiceFake : DistractionListModel {
         Distraction("mediumDistraction", "test", length = Distraction.Length.MEDIUM, distractionId = "medium"),
         Distraction("longDistraction", "test", length = Distraction.Length.LONG, distractionId = "long"),
         Distraction("foodDistraction", "test", tags = listOf("Food"), distractionId = "food"),
-        Distraction("mixDistraction", "test", length = Distraction.Length.MEDIUM, tags = listOf("testTag"), distractionId = "mix")
+        Distraction("mixDistraction", "test", length = Distraction.Length.MEDIUM, tags = listOf("testTag"), distractionId = "mix"),
+        Distraction("coordsDistraction", "test", length = Distraction.Length.MEDIUM,
+            tags = listOf("testTag"), distractionId = "coordsDistraction", lat = 10.0, long = 10.0),
     )
 
     override fun getAllDistractions(): SnapshotStateList<Distraction> {

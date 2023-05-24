@@ -2,6 +2,7 @@ package com.github.studydistractor.sdp.event
 
 import android.util.Log
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import com.github.studydistractor.sdp.data.Event
 import com.github.studydistractor.sdp.ui.state.EventUiState
@@ -20,6 +21,7 @@ class EventViewModel(eventModel: EventModel): ViewModel() {
     private val _uiState = MutableStateFlow(EventUiState())
     val uiState: StateFlow<EventUiState> = _uiState.asStateFlow()
 
+
     init {
         _uiState.update {
             it.copy(
@@ -33,18 +35,22 @@ class EventViewModel(eventModel: EventModel): ViewModel() {
                 //setEventId(_uiState.value.eventId)
             }
         )
+
+        upDateUiStateHeadingText()
     }
 
     private fun getToggleParticipationButtonText(participating: Boolean): String {
         return if(participating) "Withdraw" else "Participate"
     }
 
-    private fun getParticipantsHeadingText(isParticipantsEmpty: Boolean): String {
-        return if(isParticipantsEmpty) {
+    private fun upDateUiStateHeadingText() {
+        val text = if(_eventModel.getParticipants().isEmpty()) {
             "Be the first to participate!"
         } else {
             "Participants"
         }
+
+        _uiState.update { it.copy(participantsHeadingText = text) }
     }
 
     private fun canParticipate(
@@ -70,6 +76,8 @@ class EventViewModel(eventModel: EventModel): ViewModel() {
             userId = uiState.value.userId
         ).continueWith {
             updateParticipationUiState(true)
+            updateUIParticipants()
+            upDateUiStateHeadingText()
             null// fsm update returns unit and that does not cast to void
         }
     }
@@ -82,6 +90,8 @@ class EventViewModel(eventModel: EventModel): ViewModel() {
                 )
                 .continueWith {
                     updateParticipationUiState(false)
+                    updateUIParticipants()
+                    upDateUiStateHeadingText()
                     null// fsm update returns unit and that does not cast to void
                 }
     }
@@ -91,6 +101,7 @@ class EventViewModel(eventModel: EventModel): ViewModel() {
      */
     fun setEventId(event: Event) {
         val eventId = event.eventId!!
+
         _eventModel.changeParticipantListener(eventId)
 
         //Handle participation button (Which is like the floating one)
@@ -104,6 +115,7 @@ class EventViewModel(eventModel: EventModel): ViewModel() {
 
         //Handle participants list display
         updateUIParticipants()
+        upDateUiStateHeadingText()
     }
 
     /**

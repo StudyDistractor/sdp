@@ -1,8 +1,11 @@
 package com.github.studydistractor.sdp.viewModels
 
+import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
 import com.github.studydistractor.sdp.createUser.CreateUserViewModel
 import com.github.studydistractor.sdp.fakeServices.CreateUserServiceFake
 import com.github.studydistractor.sdp.ui.CreateUserScreen
@@ -131,11 +134,27 @@ class CreateUserScreenTest {
     }
     @Test
     fun testUiIsDisplay(){
-        composeRule.onNodeWithTag("create_account_screen").assertIsDisplayed()
-        composeRule.onNodeWithTag("validbutton").assertIsDisplayed()
-        composeRule.onNodeWithTag("firstname").assertIsDisplayed()
-        composeRule.onNodeWithTag("lastname").assertIsDisplayed()
-        composeRule.onNodeWithTag("birthday").assertIsDisplayed()
+        composeRule.onNodeWithTag("create-account-screen").assertIsDisplayed()
+        composeRule.onNodeWithTag("create-account-screen__firstname").assertIsDisplayed()
+        composeRule.onNodeWithTag("create-account-screen__firstname").performTextInput("firstname")
+
+        composeRule.onNodeWithTag("create-account-screen__lastname").assertIsDisplayed()
+        composeRule.onNodeWithTag("create-account-screen__lastname").performTextInput("lastname")
+
+        composeRule.onNodeWithTag("create-account-screen__birthday").assertIsDisplayed()
+        composeRule.onNodeWithTag("create-account-screen__birthday").performTextInput("1970-01-01")
+
+        composeRule.onNodeWithTag("create-account-screen__selectBirthdayButton").assertIsDisplayed()
+        composeRule.onNodeWithTag("create-account-screen__selectBirthdayButton").assertHasClickAction()
+        composeRule.onNodeWithTag("create-account-screen__selectBirthdayButton").performClick()
+
+
+        composeRule.onNodeWithTag("create-account-screen__phone").assertIsDisplayed()
+        composeRule.onNodeWithTag("create-account-screen__phone").performTextInput("+41000000000")
+        composeRule.onNodeWithTag("create-account-screen__validbutton").assertIsDisplayed()
+        composeRule.onNodeWithTag("create-account-screen__validbutton").assertHasClickAction()
+        composeRule.onNodeWithTag("create-account-screen__validbutton").performClick()
+
     }
 
 }

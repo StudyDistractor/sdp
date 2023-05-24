@@ -45,7 +45,6 @@ import androidx.compose.ui.window.PopupProperties
 
 @Composable
 fun AppBarBottom(
-    onHomeClick: () -> Unit,
     onMapClick: () -> Unit,
     onListClick: () -> Unit,
     onEventListClick: () -> Unit,
@@ -82,18 +81,28 @@ fun AppBarBottom(
                         contentDescription = "List of events",
                     )
                 }
-                Box() {
+                Box(
+                    modifier = Modifier.testTag("app-bar-bottom__create-activity-dropdown")
+                ) {
                     var dropDownExpanded by remember { mutableStateOf(false) }
                     DropdownMenu(
                         expanded = dropDownExpanded,
                         onDismissRequest = { dropDownExpanded = false },
-                        modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.primaryContainer)
+
                     ) {
-                        DropdownMenuItem({ Text("Create distraction") }, onClick = {
+                        DropdownMenuItem({ Text("Create distraction") },
+                            modifier = Modifier
+                                .testTag("app-bar-bottom__create-distraction-activity-button"),
+                            onClick = {
                             dropDownExpanded = false
                             onCreateDistractionActivityClick()
                         })
-                        DropdownMenuItem({ Text("Create event") }, onClick = {
+                        DropdownMenuItem({ Text("Create event") },
+                            modifier = Modifier
+                                .testTag("app-bar-bottom__create-event-activity-button"),
+                            onClick = {
                             dropDownExpanded = false
                             onCreateEventActivityClick()
                         })

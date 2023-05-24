@@ -70,12 +70,15 @@ fun DistractionScreen(
                 if (!uiState.isBookmarked) {
                     Icon(
                         ImageVector.vectorResource(id = com.github.studydistractor.sdp.R.drawable.baseline_favorite_border_24),
-                        contentDescription = "Bookmark button"
+                        contentDescription = "Bookmark button",
+                        modifier = Modifier.testTag("unbookmark-icon")
                     )
                 } else {
                     Icon(
                         Icons.Filled.Favorite,
-                        contentDescription = "Bookmark button"
+                        contentDescription = "Bookmark button",
+                        modifier = Modifier.testTag("bookmark-icon")
+
                     )
                 }
             }

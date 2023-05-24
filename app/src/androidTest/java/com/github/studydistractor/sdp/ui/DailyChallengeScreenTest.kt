@@ -1,11 +1,14 @@
 package com.github.studydistractor.sdp.ui
 
+import android.util.Log
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertHasClickAction
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import com.github.studydistractor.sdp.dailyChallenge.DailyChallengeViewModel
 import com.github.studydistractor.sdp.fakeServices.DailyChallengeServiceFake
 import org.junit.Before
@@ -15,6 +18,9 @@ import org.junit.Test
 class DailyChallengeScreenTest {
     @get:Rule(order = 1)
     val composeTestRule = createComposeRule()
+    val fakeService = DailyChallengeServiceFake()
+
+    val viewModel =DailyChallengeViewModel(fakeService)
 
     @Before
     fun setup() {
@@ -59,5 +65,10 @@ class DailyChallengeScreenTest {
         composeTestRule.onNodeWithTag("distraction-card__checkbox-for-Name1").assertHasClickAction()
         composeTestRule.onNodeWithTag("distraction-card__checkbox-for-Name2").assertHasClickAction()
         composeTestRule.onNodeWithTag("distraction-card__checkbox-for-Name3").assertHasClickAction()
+    }
+
+    @Test
+    fun testKonfetti() {
+        composeTestRule.onNodeWithTag("daily-challenge-screen__konfetti").assertDoesNotExist()
     }
 }
