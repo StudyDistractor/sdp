@@ -14,9 +14,10 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
 import java.lang.NullPointerException
+import javax.inject.Inject
 
-class EventListServiceFirebase : EventListModel {
-    private val EVENTPATH = "Events"
+class EventListServiceFirebase @Inject constructor(eventPath: String): EventListModel {
+    private val EVENTPATH = eventPath
     private val participantsPath = "EventParticipants"
     private val eventDatabaseRef = FirebaseDatabase.getInstance().getReference(EVENTPATH)
     private val dbParticipants = FirebaseDatabase.getInstance().getReference(participantsPath)

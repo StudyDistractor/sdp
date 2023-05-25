@@ -151,7 +151,7 @@ fun StudyDistractorApp(
     val eventListViewModel =
         remember { EventListViewModel(
                 EventListMiddlewareOffline(
-                    EventListServiceFirebase(),
+                    EventListServiceFirebase("Events"),
                     database,
                     connectivityManager
                 )
@@ -168,7 +168,7 @@ fun StudyDistractorApp(
     val createEventViewModel =
         remember { CreateEventViewModel(CreateEventServiceFirebase()) }
     val mapViewModel =
-        remember{ MapViewModel(EventListServiceFirebase(), DistractionListServiceFirebase("ProcrastinationActivities", "Tags"))}
+        remember{ MapViewModel(EventListServiceFirebase("Events"), DistractionListServiceFirebase("ProcrastinationActivities", "Tags"))}
 
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
