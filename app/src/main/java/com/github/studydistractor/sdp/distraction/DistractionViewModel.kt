@@ -35,10 +35,8 @@ class DistractionViewModel(
     fun updateDistraction(distraction: Distraction) {
         _uiState.update { it.copy(distraction = distraction) }
         if(isBookmarked(distraction)) {
-            Log.d("Bookmark update", "value is true")
             _uiState.update { it.copy(isBookmarked = true) }
         } else {
-            Log.d("Bookmark update", "value is false")
             _uiState.update { it.copy(isBookmarked = false) }
         }
     }
@@ -68,10 +66,8 @@ class DistractionViewModel(
      */
     fun onChangedBookmark() {
         if(bookmarked) {
-            Log.d("boomarked", "update UI to true")
             _uiState.update { it.copy(isBookmarked = true) }
         } else {
-            Log.d("boomarked", "update UI to false")
             _uiState.update { it.copy(isBookmarked = false) }
         }
     }
