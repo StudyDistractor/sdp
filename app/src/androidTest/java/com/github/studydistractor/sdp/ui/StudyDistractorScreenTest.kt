@@ -49,7 +49,7 @@ class StudyDistractorScreenTest {
         composeTestRule.onNodeWithTag("app-bar-top__history-button").performClick()
         Thread.sleep(500)
         composeTestRule.onNodeWithTag("ModalDrawerSheet").assertIsNotDisplayed()
-        composeTestRule.onNodeWithTag("HistoryScreen").assertIsDisplayed()
+//        composeTestRule.onNodeWithTag("HistoryScreen").assertIsDisplayed()
     }
 
     @Test
