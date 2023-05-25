@@ -128,6 +128,7 @@ class EventViewModel(eventModel: EventModel): ViewModel() {
                 participantsHeadingText = getParticipantsHeadingText(it.participants.isEmpty())
             )
         }
+        upDateUiStateHeadingText()
     }
 
     private fun updateParticipationUiState(participating: Boolean) {
