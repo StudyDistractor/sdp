@@ -79,20 +79,7 @@ data class EventParticipants(
     val participants: Map<String, Boolean> = mapOf()
 )
 
-/**
- * Represent a chat that is received or sent from/to the firebase database
- *
- * @property participants list of messageId that were sent in the chat
- */
-data class FirebaseEventParticipants(
-    val participants: Map<String, Boolean>? = null
-) {
-    fun toEventParticipants(): EventParticipants {
-        return EventParticipants(
-            participants!!
-        )
-    }
-}
+
 
 /**
  * Represent the point to be claimed/claimed of a particular event
@@ -103,15 +90,3 @@ data class EventClaimPoints(
     val claimUser: Map<String, Boolean> = mapOf()
 )
 
-/**
- * Represent the eventClaimPoint that is received or sent from/to the firebase database
- */
-data class FirebaseEventClaimPoints(
-    val claimUser: Map<String, Boolean>? = null
-) {
-    fun toEventClaimPoints(): EventClaimPoints{
-        return EventClaimPoints(
-            claimUser!!
-        )
-    }
-}

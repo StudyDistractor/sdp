@@ -28,10 +28,6 @@ import com.github.studydistractor.sdp.createUser.CreateUserViewModel
 import java.util.*
 
 
-object Constants{
-    const val TAG = "CreateAccountScreen"
-    // TODO add more constants
-}
 
 /**
  * A composable function that creates a screen for creating a new account. The function
