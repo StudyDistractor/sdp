@@ -532,6 +532,406 @@ class CreateEventScreenTest {
         Assert.assertEquals(0, successCount)
     }
 
+    @Test
+    fun eventWithMoreThan100PointsCannotBeCreated(){
+        successCount = 0
+        composeRule.onNodeWithTag("name").performTextInput("name")
+        composeRule.onNodeWithTag("description").performTextInput("description")
+        composeRule.onNodeWithTag("Start date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 12:00")
+        composeRule.onNodeWithTag("longitude").performScrollTo()
+        composeRule.onNodeWithTag("End date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 13:00")
+        composeRule.onNodeWithTag("latitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("longitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("pointsAwardedField").performTextInput("101")
+        composeRule.onNodeWithTag("addActivity").performScrollTo()
+        composeRule.onNodeWithTag("lateParticipationAllowedCheckbox").performClick()
+        composeRule.onNodeWithTag("addActivity").performClick()
+        Thread.sleep(500)
+        Assert.assertEquals(0, successCount)
+    }
+
+    @Test
+    fun eventWithNonIntegerPointsCannotBeCreated(){
+        successCount = 0
+        composeRule.onNodeWithTag("name").performTextInput("name")
+        composeRule.onNodeWithTag("description").performTextInput("description")
+        composeRule.onNodeWithTag("Start date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 12:00")
+        composeRule.onNodeWithTag("longitude").performScrollTo()
+        composeRule.onNodeWithTag("End date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 13:00")
+        composeRule.onNodeWithTag("latitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("longitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("pointsAwardedField").performTextInput("sdfg")
+        composeRule.onNodeWithTag("addActivity").performScrollTo()
+        composeRule.onNodeWithTag("lateParticipationAllowedCheckbox").performClick()
+        composeRule.onNodeWithTag("addActivity").performClick()
+        Thread.sleep(500)
+        Assert.assertEquals(0, successCount)
+    }
+
+    @Test
+    fun eventWithStartDateButNoTimeCannotBeCreated(){
+        successCount = 0
+        composeRule.onNodeWithTag("name").performTextInput("name")
+        composeRule.onNodeWithTag("description").performTextInput("description")
+        composeRule.onNodeWithTag("Start date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021")
+        composeRule.onNodeWithTag("longitude").performScrollTo()
+        composeRule.onNodeWithTag("End date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 13:00")
+        composeRule.onNodeWithTag("latitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("longitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("pointsAwardedField").performTextInput("1")
+        composeRule.onNodeWithTag("addActivity").performScrollTo()
+        composeRule.onNodeWithTag("lateParticipationAllowedCheckbox").performClick()
+        composeRule.onNodeWithTag("addActivity").performClick()
+        Thread.sleep(500)
+        Assert.assertEquals(0, successCount)
+    }
+
+    @Test
+    fun eventWithEndDateButNoTimeCannotBeCreated(){
+        successCount = 0
+        composeRule.onNodeWithTag("name").performTextInput("name")
+        composeRule.onNodeWithTag("description").performTextInput("description")
+        composeRule.onNodeWithTag("Start date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 12:00")
+        composeRule.onNodeWithTag("longitude").performScrollTo()
+        composeRule.onNodeWithTag("End date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021")
+        composeRule.onNodeWithTag("latitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("longitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("pointsAwardedField").performTextInput("1")
+        composeRule.onNodeWithTag("addActivity").performScrollTo()
+        composeRule.onNodeWithTag("lateParticipationAllowedCheckbox").performClick()
+        composeRule.onNodeWithTag("addActivity").performClick()
+        Thread.sleep(500)
+        Assert.assertEquals(0, successCount)
+    }
+
+    @Test
+    fun eventWithWronglyFormattedStartDateCannotBeCreated(){
+        successCount = 0
+        composeRule.onNodeWithTag("name").performTextInput("name")
+        composeRule.onNodeWithTag("description").performTextInput("description")
+        composeRule.onNodeWithTag("Start date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01/01/2021 12:00")
+        composeRule.onNodeWithTag("longitude").performScrollTo()
+        composeRule.onNodeWithTag("End date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 13:00")
+        composeRule.onNodeWithTag("latitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("longitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("pointsAwardedField").performTextInput("1")
+        composeRule.onNodeWithTag("addActivity").performScrollTo()
+        composeRule.onNodeWithTag("lateParticipationAllowedCheckbox").performClick()
+        composeRule.onNodeWithTag("addActivity").performClick()
+        Thread.sleep(500)
+        Assert.assertEquals(0, successCount)
+    }
+
+    @Test
+    fun eventWithWronglyFormattedEndDateCannotBeCreated(){
+        successCount = 0
+        composeRule.onNodeWithTag("name").performTextInput("name")
+        composeRule.onNodeWithTag("description").performTextInput("description")
+        composeRule.onNodeWithTag("Start date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 12:00")
+        composeRule.onNodeWithTag("longitude").performScrollTo()
+        composeRule.onNodeWithTag("End date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01/01/2021 13:00")
+        composeRule.onNodeWithTag("latitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("longitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("pointsAwardedField").performTextInput("1")
+        composeRule.onNodeWithTag("addActivity").performScrollTo()
+        composeRule.onNodeWithTag("lateParticipationAllowedCheckbox").performClick()
+        composeRule.onNodeWithTag("addActivity").performClick()
+        Thread.sleep(500)
+        Assert.assertEquals(0, successCount)
+    }
+
+    @Test
+    fun eventWithStartDayOfMonthLessThan1CannotBeCreated(){
+        successCount = 0
+        composeRule.onNodeWithTag("name").performTextInput("name")
+        composeRule.onNodeWithTag("description").performTextInput("description")
+        composeRule.onNodeWithTag("Start date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("00-01-2021 12:00")
+        composeRule.onNodeWithTag("longitude").performScrollTo()
+        composeRule.onNodeWithTag("End date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 13:00")
+        composeRule.onNodeWithTag("latitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("longitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("pointsAwardedField").performTextInput("1")
+        composeRule.onNodeWithTag("addActivity").performScrollTo()
+        composeRule.onNodeWithTag("lateParticipationAllowedCheckbox").performClick()
+        composeRule.onNodeWithTag("addActivity").performClick()
+        Thread.sleep(500)
+        Assert.assertEquals(0, successCount)
+    }
+
+    @Test
+    fun eventWithStartDayOfMonthGreaterThan31CannotBeCreated(){
+        successCount = 0
+        composeRule.onNodeWithTag("name").performTextInput("name")
+        composeRule.onNodeWithTag("description").performTextInput("description")
+        composeRule.onNodeWithTag("Start date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("32-01-2021 12:00")
+        composeRule.onNodeWithTag("longitude").performScrollTo()
+        composeRule.onNodeWithTag("End date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 13:00")
+        composeRule.onNodeWithTag("latitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("longitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("pointsAwardedField").performTextInput("1")
+        composeRule.onNodeWithTag("addActivity").performScrollTo()
+        composeRule.onNodeWithTag("lateParticipationAllowedCheckbox").performClick()
+        composeRule.onNodeWithTag("addActivity").performClick()
+        Thread.sleep(500)
+        Assert.assertEquals(0, successCount)
+    }
+
+    @Test
+    fun eventWithStartMonthLessThan1CannotBeCreated(){
+        successCount = 0
+        composeRule.onNodeWithTag("name").performTextInput("name")
+        composeRule.onNodeWithTag("description").performTextInput("description")
+        composeRule.onNodeWithTag("Start date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-00-2021 12:00")
+        composeRule.onNodeWithTag("longitude").performScrollTo()
+        composeRule.onNodeWithTag("End date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 13:00")
+        composeRule.onNodeWithTag("latitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("longitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("pointsAwardedField").performTextInput("1")
+        composeRule.onNodeWithTag("addActivity").performScrollTo()
+        composeRule.onNodeWithTag("lateParticipationAllowedCheckbox").performClick()
+        composeRule.onNodeWithTag("addActivity").performClick()
+        Thread.sleep(500)
+        Assert.assertEquals(0, successCount)
+    }
+
+    @Test
+    fun eventWithStartMonthGreaterThan12CannotBeCreated(){
+        successCount = 0
+        composeRule.onNodeWithTag("name").performTextInput("name")
+        composeRule.onNodeWithTag("description").performTextInput("description")
+        composeRule.onNodeWithTag("Start date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-13-2021 12:00")
+        composeRule.onNodeWithTag("longitude").performScrollTo()
+        composeRule.onNodeWithTag("End date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 13:00")
+        composeRule.onNodeWithTag("latitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("longitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("pointsAwardedField").performTextInput("1")
+        composeRule.onNodeWithTag("addActivity").performScrollTo()
+        composeRule.onNodeWithTag("lateParticipationAllowedCheckbox").performClick()
+        composeRule.onNodeWithTag("addActivity").performClick()
+        Thread.sleep(500)
+        Assert.assertEquals(0, successCount)
+    }
+
+    @Test
+    fun eventWithEndDayOfMonthLessThan1CannotBeCreated(){
+        successCount = 0
+        composeRule.onNodeWithTag("name").performTextInput("name")
+        composeRule.onNodeWithTag("description").performTextInput("description")
+        composeRule.onNodeWithTag("Start date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 12:00")
+        composeRule.onNodeWithTag("longitude").performScrollTo()
+        composeRule.onNodeWithTag("End date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("00-01-2021 13:00")
+        composeRule.onNodeWithTag("latitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("longitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("pointsAwardedField").performTextInput("1")
+        composeRule.onNodeWithTag("addActivity").performScrollTo()
+        composeRule.onNodeWithTag("lateParticipationAllowedCheckbox").performClick()
+        composeRule.onNodeWithTag("addActivity").performClick()
+        Thread.sleep(500)
+        Assert.assertEquals(0, successCount)
+    }
+
+    @Test
+    fun eventWithEndDayOfMonthGreaterThan31CannotBeCreated(){
+        successCount = 0
+        composeRule.onNodeWithTag("name").performTextInput("name")
+        composeRule.onNodeWithTag("description").performTextInput("description")
+        composeRule.onNodeWithTag("Start date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 12:00")
+        composeRule.onNodeWithTag("longitude").performScrollTo()
+        composeRule.onNodeWithTag("End date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("32-01-2021 13:00")
+        composeRule.onNodeWithTag("latitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("longitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("pointsAwardedField").performTextInput("1")
+        composeRule.onNodeWithTag("addActivity").performScrollTo()
+        composeRule.onNodeWithTag("lateParticipationAllowedCheckbox").performClick()
+        composeRule.onNodeWithTag("addActivity").performClick()
+        Thread.sleep(500)
+        Assert.assertEquals(0, successCount)
+    }
+
+    @Test
+    fun eventWithEndMonthLessThan1CannotBeCreated(){
+        successCount = 0
+        composeRule.onNodeWithTag("name").performTextInput("name")
+        composeRule.onNodeWithTag("description").performTextInput("description")
+        composeRule.onNodeWithTag("Start date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 12:00")
+        composeRule.onNodeWithTag("longitude").performScrollTo()
+        composeRule.onNodeWithTag("End date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-00-2021 13:00")
+        composeRule.onNodeWithTag("latitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("longitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("pointsAwardedField").performTextInput("1")
+        composeRule.onNodeWithTag("addActivity").performScrollTo()
+        composeRule.onNodeWithTag("lateParticipationAllowedCheckbox").performClick()
+        composeRule.onNodeWithTag("addActivity").performClick()
+        Thread.sleep(500)
+        Assert.assertEquals(0, successCount)
+    }
+
+    @Test
+    fun eventWithEndMonthGreaterThan12CannotBeCreated(){
+        successCount = 0
+        composeRule.onNodeWithTag("name").performTextInput("name")
+        composeRule.onNodeWithTag("description").performTextInput("description")
+        composeRule.onNodeWithTag("Start date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 12:00")
+        composeRule.onNodeWithTag("longitude").performScrollTo()
+        composeRule.onNodeWithTag("End date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-13-2021 13:00")
+        composeRule.onNodeWithTag("latitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("longitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("pointsAwardedField").performTextInput("1")
+        composeRule.onNodeWithTag("addActivity").performScrollTo()
+        composeRule.onNodeWithTag("lateParticipationAllowedCheckbox").performClick()
+        composeRule.onNodeWithTag("addActivity").performClick()
+        Thread.sleep(500)
+        Assert.assertEquals(0, successCount)
+    }
+
+    @Test
+    fun eventWithNonNumberLatitudeCannotBeCreated(){
+        successCount = 0
+        composeRule.onNodeWithTag("name").performTextInput("name")
+        composeRule.onNodeWithTag("description").performTextInput("description")
+        composeRule.onNodeWithTag("Start date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 12:00")
+        composeRule.onNodeWithTag("longitude").performScrollTo()
+        composeRule.onNodeWithTag("End date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 13:00")
+        composeRule.onNodeWithTag("latitude").performTextInput("a")
+        composeRule.onNodeWithTag("longitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("pointsAwardedField").performTextInput("1")
+        composeRule.onNodeWithTag("addActivity").performScrollTo()
+        composeRule.onNodeWithTag("lateParticipationAllowedCheckbox").performClick()
+        composeRule.onNodeWithTag("addActivity").performClick()
+        Thread.sleep(500)
+        Assert.assertEquals(0, successCount)
+    }
+
+    @Test
+    fun eventWithNonNumberLongitudeCannotBeCreated(){
+        successCount = 0
+        composeRule.onNodeWithTag("name").performTextInput("name")
+        composeRule.onNodeWithTag("description").performTextInput("description")
+        composeRule.onNodeWithTag("Start date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 12:00")
+        composeRule.onNodeWithTag("longitude").performScrollTo()
+        composeRule.onNodeWithTag("End date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 13:00")
+        composeRule.onNodeWithTag("latitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("longitude").performTextInput("a")
+        composeRule.onNodeWithTag("pointsAwardedField").performTextInput("1")
+        composeRule.onNodeWithTag("addActivity").performScrollTo()
+        composeRule.onNodeWithTag("lateParticipationAllowedCheckbox").performClick()
+        composeRule.onNodeWithTag("addActivity").performClick()
+        Thread.sleep(500)
+        Assert.assertEquals(0, successCount)
+    }
+
+    @Test
+    fun eventWithLatitudeLessThanMinus90CannotBeCreated(){
+        successCount = 0
+        composeRule.onNodeWithTag("name").performTextInput("name")
+        composeRule.onNodeWithTag("description").performTextInput("description")
+        composeRule.onNodeWithTag("Start date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 12:00")
+        composeRule.onNodeWithTag("longitude").performScrollTo()
+        composeRule.onNodeWithTag("End date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 13:00")
+        composeRule.onNodeWithTag("latitude").performTextInput("-90.1")
+        composeRule.onNodeWithTag("longitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("pointsAwardedField").performTextInput("1")
+        composeRule.onNodeWithTag("addActivity").performScrollTo()
+        composeRule.onNodeWithTag("lateParticipationAllowedCheckbox").performClick()
+        composeRule.onNodeWithTag("addActivity").performClick()
+        Thread.sleep(500)
+        Assert.assertEquals(0, successCount)
+    }
+
+    @Test
+    fun eventWithLatitudeGreaterThan90CannotBeCreated(){
+        successCount = 0
+        composeRule.onNodeWithTag("name").performTextInput("name")
+        composeRule.onNodeWithTag("description").performTextInput("description")
+        composeRule.onNodeWithTag("Start date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 12:00")
+        composeRule.onNodeWithTag("longitude").performScrollTo()
+        composeRule.onNodeWithTag("End date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 13:00")
+        composeRule.onNodeWithTag("latitude").performTextInput("90.1")
+        composeRule.onNodeWithTag("longitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("pointsAwardedField").performTextInput("1")
+        composeRule.onNodeWithTag("addActivity").performScrollTo()
+        composeRule.onNodeWithTag("lateParticipationAllowedCheckbox").performClick()
+        composeRule.onNodeWithTag("addActivity").performClick()
+        Thread.sleep(500)
+        Assert.assertEquals(0, successCount)
+    }
+
+    @Test
+    fun eventWithLongitudeLessThanMinus180CannotBeCreated(){
+        successCount = 0
+        composeRule.onNodeWithTag("name").performTextInput("name")
+        composeRule.onNodeWithTag("description").performTextInput("description")
+        composeRule.onNodeWithTag("Start date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 12:00")
+        composeRule.onNodeWithTag("longitude").performScrollTo()
+        composeRule.onNodeWithTag("End date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 13:00")
+        composeRule.onNodeWithTag("latitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("longitude").performTextInput("-180.1")
+        composeRule.onNodeWithTag("pointsAwardedField").performTextInput("1")
+        composeRule.onNodeWithTag("addActivity").performScrollTo()
+        composeRule.onNodeWithTag("lateParticipationAllowedCheckbox").performClick()
+        composeRule.onNodeWithTag("addActivity").performClick()
+        Thread.sleep(500)
+        Assert.assertEquals(0, successCount)
+    }
+
+    @Test
+    fun eventWithLongitudeGreaterThan180CannotBeCreated() {
+        successCount = 0
+        composeRule.onNodeWithTag("name").performTextInput("name")
+        composeRule.onNodeWithTag("description").performTextInput("description")
+        composeRule.onNodeWithTag("Start date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 12:00")
+        composeRule.onNodeWithTag("longitude").performScrollTo()
+        composeRule.onNodeWithTag("End date and time (dd-mm-yyyy hh:mm)Field")
+            .performTextInput("01-01-2021 13:00")
+        composeRule.onNodeWithTag("latitude").performTextInput("1.0")
+        composeRule.onNodeWithTag("longitude").performTextInput("180.1")
+        composeRule.onNodeWithTag("pointsAwardedField").performTextInput("1")
+        composeRule.onNodeWithTag("addActivity").performScrollTo()
+        composeRule.onNodeWithTag("lateParticipationAllowedCheckbox").performClick()
+        composeRule.onNodeWithTag("addActivity").performClick()
+        Thread.sleep(500)
+        Assert.assertEquals(0, successCount)
+    }
+
 
 
 

@@ -23,7 +23,7 @@ class EventListServiceFake: EventListModel {
     }
 
     val dummy = Event(
-        "id",
+        "id1",
         "event name",
         "desciption",
         0.0,
@@ -36,7 +36,7 @@ class EventListServiceFake: EventListModel {
     )
 
     val dummy2 = Event(
-        "id",
+        "id2",
         "event name",
         "desciption",
         10.0,
@@ -49,7 +49,7 @@ class EventListServiceFake: EventListModel {
     )
 
     val dummy3 = Event(
-        "id",
+        "id3",
         "event name",
         "desciption",
         10.0,

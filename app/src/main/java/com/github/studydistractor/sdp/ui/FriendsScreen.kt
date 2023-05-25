@@ -50,7 +50,7 @@ fun  FriendsScreen(friendsViewModel: FriendsViewModel) {
     val uiState by friendsViewModel.uiState.collectAsState()
     val context = LocalContext.current
 
-    Column(modifier = Modifier.padding(20.dp)) {
+    Column(modifier = Modifier.padding(20.dp).testTag("FriendsScreen")) {
         OutlinedTextField(
             value = uiState.newFriend,
             onValueChange = { friendsViewModel.updateNewFriend(it) },

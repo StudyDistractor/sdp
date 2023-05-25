@@ -40,7 +40,7 @@ fun ListedEvent(
     Card(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 4.dp)
-            .testTag("event-list-screen__event-card"),
+            .testTag("event-list-screen__event-card-${event.eventId}"),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
@@ -48,7 +48,7 @@ fun ListedEvent(
         Column(
             modifier = Modifier
                 .padding(horizontal = 14.dp, vertical = 4.dp)
-                .fillMaxSize(),
+                .fillMaxSize().testTag("event-list-screen__event-card-column-${event.eventId}"),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
 
@@ -63,11 +63,11 @@ fun ListedEvent(
                 text = event.description,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
-                modifier = Modifier.testTag("event-list-screen__event-description")
+                modifier = Modifier.testTag("event-list-screen__event-description-${event.eventId}")
             )
 
             // Time and 'More' Button
-            Row(modifier = Modifier.fillMaxWidth(),
+            Row(modifier = Modifier.fillMaxWidth().testTag("event-list-screen__event-row-${event.eventId}"),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ){
@@ -76,19 +76,20 @@ fun ListedEvent(
                         text = "start : " + event.start,
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.testTag("event-list-screen__event-start")
+                        modifier = Modifier.testTag("event-list-screen__event-start-${event.eventId}")
 
                     )
                     Text(
                         text = "end : " + event.end,
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.testTag("event-list-screen__event-end")
+                        modifier = Modifier.testTag("event-list-screen__event-end-${event.eventId}")
                     )
                 }
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.testTag("event-list-screen__event-row-count-${event.eventId}")
                 ) {
                     Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
                         Icon(
@@ -107,7 +108,7 @@ fun ListedEvent(
                         Text(
                             text = "More",
                             color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            modifier = Modifier.testTag("event-list-screen__more-button")
+                            modifier = Modifier.testTag("event-list-screen__more-button-${event.eventId}")
                         )
                     }
                 }
