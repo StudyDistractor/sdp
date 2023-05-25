@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -47,25 +49,29 @@ fun DistractionStatScreen(viewModel : DistractionStatViewModel) {
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .padding(26.dp),
+            .padding(26.dp)
     ) {
         /**
          * Like and dislike count
          */
         Row(
             horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag("distraction-stat-screen__like-dislike")
 
         ) {
-            Text(text = "Likes : ${uiState.likes}", fontSize = 20.sp)
+            Text(text = "Likes : ${uiState.likes}", fontSize = 20.sp, modifier = Modifier.testTag("distraction-stat-screen__like-count"))
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = "Dislikes :${uiState.dislikes}", fontSize = 20.sp)
+            Text(text = "Dislikes :${uiState.dislikes}", fontSize = 20.sp, modifier = Modifier.testTag("distraction-stat-screen__dislike-count"))
         }
         /**
          * Like and dislike buttons
          */
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag("distraction-stat-screen__like-dislike-buttons"),
             horizontalArrangement = Arrangement.Center
         ) {
             IconButton(
@@ -169,7 +175,8 @@ fun DistractionStatScreen(viewModel : DistractionStatViewModel) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 4.dp),
+                .padding(horizontal = 16.dp, vertical = 4.dp)
+                .testTag("distraction-stat-screen__feedback-list"),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceVariant
             ),
@@ -177,7 +184,9 @@ fun DistractionStatScreen(viewModel : DistractionStatViewModel) {
             Text(
                 text = "Feedbacks : ",
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(horizontal = 14.dp, vertical = 4.dp)
+                modifier = Modifier
+                    .padding(horizontal = 14.dp, vertical = 4.dp)
+                    .testTag("distraction-stat-screen__feedback-list__title")
             )
             LazyColumn() {
                 items(uiState.feedbacks) { i ->
@@ -198,7 +207,8 @@ fun DistractionStatScreen(viewModel : DistractionStatViewModel) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 4.dp),
+                .padding(horizontal = 16.dp, vertical = 4.dp)
+                .testTag("distraction-stat-screen__tag-list"),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceVariant
             ),
@@ -206,7 +216,9 @@ fun DistractionStatScreen(viewModel : DistractionStatViewModel) {
             Text(
                 "Tags: ",
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(horizontal = 14.dp, vertical = 4.dp)
+                modifier = Modifier
+                    .padding(horizontal = 14.dp, vertical = 4.dp)
+                    .testTag("distraction-stat-screen__tag-list__title")
             )
             LazyColumn() {
                 items(uiState.tags) { i ->
