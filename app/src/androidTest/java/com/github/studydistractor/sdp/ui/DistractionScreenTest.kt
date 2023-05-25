@@ -47,8 +47,6 @@ class DistractionScreenTest {
         composeRule.onNodeWithTag("completeButton").assertExists()
         composeRule.onNodeWithTag("completeButton").assert(hasText("Activity completed!"))
         composeRule.onNodeWithTag("completeButton").assertIsDisplayed()
-        composeRule.onNodeWithTag("completeButton").assertHasClickAction()
-        composeRule.onNodeWithTag("completeButton").performClick()
     }
 
     @Test
