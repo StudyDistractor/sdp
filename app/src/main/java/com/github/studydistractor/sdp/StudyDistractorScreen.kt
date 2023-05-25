@@ -137,7 +137,7 @@ fun StudyDistractorApp(
     val distractionListViewModel   =
         remember { DistractionListViewModel(DistractionListServiceFirebase("ProcrastinationActivities", "Tags")) }
     val distractionStatViewModel          =
-        remember { DistractionStatViewModel(DistractionStatServiceFirebase()) }
+        remember { DistractionStatViewModel(DistractionStatServiceFirebase("Feedback", "Likes", "Dislikes", "TagsUsers")) }
     val dailyChallengeViewModel =
         remember { DailyChallengeViewModel(DailyChallengeServiceFirebase()) }
     val eventViewModel =
