@@ -31,5 +31,6 @@ class MapScreenTest {
     @Test
     fun testMapDisplay(){
         composeTestRule.onNodeWithTag("maps-screen__main-container").assertIsDisplayed()
+
     }
 }

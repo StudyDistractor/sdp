@@ -1,7 +1,10 @@
 package com.github.studydistractor.sdp.ui
 
 
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -21,10 +24,9 @@ class AppBarBottomTest {
         for(i in 0..5) { clicksNumber[i] = 0 }
         composeRule.setContent {
             AppBarBottom(
-                onHomeClick = { clicksNumber[0]++ },
-                onMapClick = { clicksNumber[1]++ },
-                onListClick = { clicksNumber[2]++ },
-                onMagicClick = { clicksNumber[3]++ },
+                onMapClick = { clicksNumber[0]++ },
+                onListClick = { clicksNumber[1]++ },
+                onMagicClick = { clicksNumber[2]++ },
                 onEventListClick = {clicksNumber[3]++},
                 onCreateDistractionActivityClick = {clicksNumber[4]++},
                 onCreateEventActivityClick = {clicksNumber[5]++}
@@ -34,8 +36,27 @@ class AppBarBottomTest {
 
     @Test
     fun testComponentsAppear() {
+        composeRule.onNodeWithTag("app-bar-bottom").assertIsDisplayed()
+
         composeRule.onNodeWithTag("app-bar-bottom__list-button").assertIsDisplayed()
+        composeRule.onNodeWithTag("app-bar-bottom__list-button").assertHasClickAction()
+
         composeRule.onNodeWithTag("app-bar-bottom__magic-button").assertIsDisplayed()
+        composeRule.onNodeWithTag("app-bar-bottom__magic-button").assertHasClickAction()
+
+        composeRule.onNodeWithTag("app-bar-bottom__map-button").assertIsDisplayed()
+        composeRule.onNodeWithTag("app-bar-bottom__map-button").assertHasClickAction()
+
+        composeRule.onNodeWithTag("app-bar-bottom__create-distraction-activity-button").assertDoesNotExist()
+        composeRule.onNodeWithTag("app-bar-bottom__create-event-activity-button").assertDoesNotExist()
+
+        composeRule.onNodeWithTag("app-bar-bottom__create-activity-dropdown").assertIsDisplayed()
+        composeRule.onNodeWithTag("app-bar-bottom__create-activity-dropdown").performClick()
+
+        composeRule.onNodeWithTag("app-bar-bottom__create-distraction-activity-button").assertIsDisplayed()
+        composeRule.onNodeWithTag("app-bar-bottom__create-distraction-activity-button").assertHasClickAction()
+        composeRule.onNodeWithTag("app-bar-bottom__create-event-activity-button").assertIsDisplayed()
+        composeRule.onNodeWithTag("app-bar-bottom__create-event-activity-button").assertHasClickAction()
     }
 
     @Test

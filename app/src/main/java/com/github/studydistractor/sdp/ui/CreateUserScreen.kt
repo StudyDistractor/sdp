@@ -66,7 +66,7 @@ fun CreateUserScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-            .testTag("create_account_screen"),
+            .testTag("create-account-screen"),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
@@ -85,7 +85,7 @@ fun CreateUserScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
-                .testTag("firstname")
+                .testTag("create-account-screen__firstname")
         )
 
         // LastName Text Field
@@ -103,7 +103,7 @@ fun CreateUserScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
-                .testTag("lastname")
+                .testTag("create-account-screen__lastname")
         )
 
         // Phone Text Field
@@ -121,7 +121,7 @@ fun CreateUserScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
-                .testTag("phone")
+                .testTag("create-account-screen__phone")
         )
 
         OutlinedTextField(
@@ -134,7 +134,7 @@ fun CreateUserScreen(
             trailingIcon = { Button(
                     onClick = { datePicker.show()},
                     colors = ButtonDefaults.buttonColors(contentColor = Color.White),
-                    modifier = Modifier.testTag("selectBirthdayButton").padding(8.dp),
+                    modifier = Modifier.testTag("create-account-screen__selectBirthdayButton").padding(8.dp),
                     shape = MaterialTheme.shapes.small,
             ) {
                 Text("Select")
@@ -143,7 +143,7 @@ fun CreateUserScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
-                .testTag("birthday")
+                .testTag("create-account-screen__birthday")
         )
 
         // Validate
@@ -157,7 +157,7 @@ fun CreateUserScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
-                .testTag("validbutton"),
+                .testTag("create-account-screen__validbutton"),
         ) {
             Text(text = "Validate")
         }

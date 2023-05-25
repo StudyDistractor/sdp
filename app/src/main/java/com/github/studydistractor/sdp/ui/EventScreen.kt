@@ -62,7 +62,7 @@ fun EventScreen(
             Text(
                 text = uiState.event.name,
                 style = MaterialTheme.typography.displayMedium,
-                modifier = Modifier.testTag("event-name"),
+                modifier = Modifier.testTag("event-screen__name"),
             )
         }
 
@@ -70,7 +70,7 @@ fun EventScreen(
             Text(
                 text = uiState.event.description,
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.testTag("event-description")
+                modifier = Modifier.testTag("event-screen__description")
             )
         }
 
@@ -82,43 +82,46 @@ fun EventScreen(
                 Text(
                     text = "start: " + uiState.event.start,
                     style = MaterialTheme.typography.labelSmall,
-                    modifier = Modifier.testTag("event-start")
+                    modifier = Modifier.testTag("event-screen__start")
                 )
 
                 Text(
                     text = "end: " + uiState.event.end,
                     style = MaterialTheme.typography.labelSmall,
-                    modifier = Modifier.testTag("event-end")
+                    modifier = Modifier.testTag("event-screen__end")
                 )
 
                 if (uiState.event.lateParticipation) {
                     Text(
                         text = "late participation is allowed",
                         style = MaterialTheme.typography.labelSmall,
-                        modifier = Modifier.testTag("event-lateparticipation")
+                        modifier = Modifier.testTag("event-screen__lateparticipation")
                     )
                 }
             }
         }
 
         item {
-            Divider(color = MaterialTheme.colorScheme.inversePrimary)
+            Divider(
+                color = MaterialTheme.colorScheme.inversePrimary,
+                modifier = Modifier.testTag("event-screen__divider"),
+            )
         }
 
         item {
             Text(
                 text = uiState.participantsHeadingText,
                 style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.testTag("event-participants-headline")
+                modifier = Modifier.testTag("event-screen__participants-headline")
             )
         }
 
-        Log.d("UI", "nbr of participants " + uiState.participants.count())
         items(uiState.participants) {
             // Participants list
-            Log.d("UI", "draw")
             Text(
-                text = it
+                text = it,
+                modifier = Modifier.testTag("event-screen__participant-$it")
+
             )
         }
 
@@ -130,7 +133,7 @@ fun EventScreen(
                     eventViewModel.toggleParticipation().addOnFailureListener {
                         showFailureToast(context, "Failed to update participation !")
                     }
-                }
+                },
             )
         }
     }
@@ -155,19 +158,18 @@ fun FloatingActionButtons(
                 onClick = onOpenChatClick,
                 modifier = Modifier
                     .height(45.dp)
-                    .testTag("open-chat"),
+                    .testTag("floating-action-buttons-screen__open-chat"),
                 text = { Text(text = "Open chat") },
                 icon = { Icon(Icons.Outlined.Chat, "Open Chat") }
             )
         }
-        Log.d("event", uiState.canParticipate.toString())
         if(uiState.canParticipate) {
             ExtendedFloatingActionButton(
                 onClick = onParticipateClick,
                 containerColor = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .height(45.dp)
-                    .testTag("toggle-participate"),
+                    .testTag("floating-action-buttons-screen__toggle-participate"),
                 text = { Text(text = uiState.toggleParticipationButtonText) },
                 icon = {
                     if (uiState.participating) {

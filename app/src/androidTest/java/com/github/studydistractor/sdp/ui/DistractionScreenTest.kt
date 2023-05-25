@@ -2,10 +2,12 @@ package com.github.studydistractor.sdp.ui
 
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertContentDescriptionEquals
+import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import com.github.studydistractor.sdp.data.Distraction
 import com.github.studydistractor.sdp.distraction.DistractionViewModel
 import com.github.studydistractor.sdp.fakeServices.DistractionServiceFake
@@ -44,6 +46,7 @@ class DistractionScreenTest {
         distractionViewModel.updateDistraction(distraction)
         composeRule.onNodeWithTag("completeButton").assertExists()
         composeRule.onNodeWithTag("completeButton").assert(hasText("Activity completed!"))
+        composeRule.onNodeWithTag("completeButton").assertIsDisplayed()
     }
 
     @Test
@@ -64,5 +67,17 @@ class DistractionScreenTest {
         val distraction = Distraction("test", "test description", null, null, null, null, "bathtub_fill0_wght200_grad0_opsz48")
         distractionViewModel.updateDistraction(distraction)
         composeRule.onNodeWithTag("distraction-screen__stat-button").assertIsDisplayed()
+        composeRule.onNodeWithTag("distraction-screen__stat-button").assertHasClickAction()
+        composeRule.onNodeWithTag("distraction-screen__stat-button").performClick()
+    }
+
+    @Test
+    fun bookmarkButtonWork(){
+        val distraction = Distraction("test", "test description", null, null, null, null, "bathtub_fill0_wght200_grad0_opsz48")
+        distractionViewModel.updateDistraction(distraction)
+        composeRule.onNodeWithTag("unbookmark-icon",true).assertIsDisplayed()
+        composeRule.onNodeWithTag("bookmark-icon").assertDoesNotExist()
+        composeRule.onNodeWithTag("distraction-screen__bookmark-button").assertIsDisplayed()
+        composeRule.onNodeWithTag("distraction-screen__bookmark-button").assertHasClickAction()
     }
 }

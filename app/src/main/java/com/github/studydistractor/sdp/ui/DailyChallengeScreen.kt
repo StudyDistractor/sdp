@@ -75,9 +75,10 @@ fun DailyChallengeScreen(
 
 
     if (uiState.allChecked) {
-        Log.d("DailyChallengeScreen", "all checked")
         KonfettiView(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .testTag("daily-challenge-screen__konfetti"),
             parties = listOf(
                 Party(
                     emitter = Emitter(

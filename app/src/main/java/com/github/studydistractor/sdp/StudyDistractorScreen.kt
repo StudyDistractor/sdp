@@ -248,7 +248,6 @@ fun StudyDistractorApp(
                 openDrawer = { scope.launch { drawerState.open() }}
             ) },
             bottomBar = { AppBarBottom(
-                onHomeClick = { navController.navigate(StudyDistractorScreen.Login.name) },
                 onListClick = { navController.navigate(StudyDistractorScreen.DistractionList.name) },
                 onMapClick = { navController.navigate(StudyDistractorScreen.Maps.name) },
                 onEventListClick = { navController.navigate(StudyDistractorScreen.EventList.name) },
