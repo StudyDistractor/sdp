@@ -4,7 +4,16 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.Log
 
+/**
+ * A utils class that tell the current online status of the application based on the
+ * connectivityManager
+ */
 class OnlineStatus {
+    /**
+     * Return the current online status based on the connectivity status
+     * @param connectivityManager based on the current context
+     * @return True if the app is online and false if not
+     */
     fun isOnline(connectivityManager: ConnectivityManager): Boolean {
         val capabilities =
             connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)

@@ -90,6 +90,7 @@ class DistractionViewModel(
      */
     fun distractionCompleted(): Boolean {
         val distraction = _uiState.value.distraction
+        if (historyService.getCurrentUid() == null) return false
         return historyService.addHistoryEntry(
             entry = HistoryEntry(
                 name = distraction.name!!,

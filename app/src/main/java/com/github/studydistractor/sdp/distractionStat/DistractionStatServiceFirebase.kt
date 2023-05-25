@@ -4,6 +4,7 @@ import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import java.lang.Exception
 
 class DistractionStatServiceFirebase : DistractionStatModel {
 
@@ -56,17 +57,17 @@ class DistractionStatServiceFirebase : DistractionStatModel {
 
     override fun postNewFeedback(did: String, feedback: String) : Task<Void>{
         if(feedback.isEmpty()) throw  IllegalArgumentException()
-        val uid = auth.uid
+        val uid = auth.uid ?: return Tasks.forException(Exception("Not login"))
         return db.getReference(pathFeedback)
             .child(did)
-            .child(uid!!)
+            .child(uid)
             .child(feedback)
             .setValue(feedback)
     }
 
     override fun postLike(did: String) : Task<Void> {
-        val uid = auth.uid
-        return db.getReference(pathDislikes).child(did).child(uid!!).get().continueWithTask{
+        val uid = auth.uid ?: return Tasks.forException(Exception("Not login"))
+        return db.getReference(pathDislikes).child(did).child(uid).get().continueWithTask{
                 j ->
                     if(j.isSuccessful && j.result.value == uid){
                         db.getReference(pathDislikes).child(did).child(uid).removeValue()
@@ -82,8 +83,8 @@ class DistractionStatServiceFirebase : DistractionStatModel {
     }
 
     override fun postDislike(did: String) : Task<Void>{
-        val uid = auth.uid
-        return db.getReference(pathLikes).child(did).child(uid!!).get().continueWithTask{
+        val uid = auth.uid ?: return Tasks.forException(Exception("Not login"))
+        return db.getReference(pathLikes).child(did).child(uid).get().continueWithTask{
                 j ->
             if(j.isSuccessful && j.result.value == uid){
                 db.getReference(pathLikes).child(did).child(uid).removeValue()

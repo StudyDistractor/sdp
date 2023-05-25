@@ -5,17 +5,36 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.github.studydistractor.sdp.data.EventEntity
+
+/**
+ * The EventHistory interface to do SQL query to the room database
+ */
 @Dao
 interface EventHistoryDao {
+    /**
+     * Get all Event from the EventHistory specified to the function
+     */
     @Query("SELECT *  FROM event e WHERE e.history = 1")
     fun getAllHistory(): List<EventEntity>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(messages: EventEntity): Long
 
+    /**
+     * Insert the specific event to the database
+     * @param event The EventEntity to add to the database
+     */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(messages: List<EventEntity>): List<Long>
+    fun insert(event: EventEntity): Long
 
+    /**
+     * Insert all the specified events to the database
+     * @param events to add to the database
+     */
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(events : List<EventEntity>): List<Long>
+
+    /**
+     * Delete all the events in the database
+     */
     @Query("DELETE FROM event")
     fun delete()
 }

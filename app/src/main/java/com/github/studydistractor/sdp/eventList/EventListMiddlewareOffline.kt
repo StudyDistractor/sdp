@@ -10,8 +10,6 @@ class EventListMiddlewareOffline constructor(
     private val database: RoomDatabase,
     private val connectivityManager : ConnectivityManager
 )  : EventListModel{
-
-
     override fun getAllEvents(): List<Event> {
         if(OnlineStatus().isOnline(connectivityManager)){
             val events = service.getAllEvents()
