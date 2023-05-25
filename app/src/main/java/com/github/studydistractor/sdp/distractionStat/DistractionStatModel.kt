@@ -58,10 +58,4 @@ interface DistractionStatModel {
      */
     fun addTag(did : String, tag : String) : Task<Void>
 
-    /**
-     * Remove the tag from the list of tag of the Distraction
-     * @param did The did of the Distraction
-     * @param tag The tag to be removed the distraction
-     */
-    fun removeTag(did : String, tag : String) : Task<Void>
 }
