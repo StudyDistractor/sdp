@@ -6,9 +6,10 @@ import com.github.studydistractor.sdp.data.FirebaseEvent
 import com.google.android.gms.tasks.Task
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import javax.inject.Inject
 
-class CreateEventServiceFirebase : CreateEventModel {
-    private val eventsDB: DatabaseReference = FirebaseDatabase.getInstance().getReference("Events")
+class CreateEventServiceFirebase @Inject constructor(eventsDBPath: String): CreateEventModel {
+    private val eventsDB: DatabaseReference = FirebaseDatabase.getInstance().getReference(eventsDBPath)
     private val chatDB: DatabaseReference = FirebaseDatabase.getInstance().getReference("ChatEvent")
     override fun createEvent(event: Event): Task<Void> {
         val chatRef = chatDB.push()

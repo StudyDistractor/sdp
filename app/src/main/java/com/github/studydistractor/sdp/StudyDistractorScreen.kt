@@ -166,7 +166,7 @@ fun StudyDistractorApp(
             )
         }
     val createEventViewModel =
-        remember { CreateEventViewModel(CreateEventServiceFirebase()) }
+        remember { CreateEventViewModel(CreateEventServiceFirebase("Events")) }
     val mapViewModel =
         remember{ MapViewModel(EventListServiceFirebase("Events"), DistractionListServiceFirebase("ProcrastinationActivities", "Tags"))}
 
