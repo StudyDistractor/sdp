@@ -21,11 +21,7 @@ data class FirebaseChat(
     val chatId: String?,
     val messageIds: List<String>? = null
 ) {
-    fun toChat(): Chat {
-        return Chat(
-            chatId, messageIds!!
-        )
-    }
+
 }
 
 /**
