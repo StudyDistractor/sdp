@@ -125,7 +125,6 @@ class EventViewModel(eventModel: EventModel): ViewModel() {
         _uiState.update {
             it.copy(
                 participants = _eventModel.getParticipants(),
-                participantsHeadingText = getParticipantsHeadingText(it.participants.isEmpty())
             )
         }
         upDateUiStateHeadingText()
