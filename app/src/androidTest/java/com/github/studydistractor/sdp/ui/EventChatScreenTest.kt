@@ -15,11 +15,12 @@ class EventChatScreenTest {
     val composeTestRule = createComposeRule()
 
     private val fakeFriends = EventChatServiceFake()
+    private val viewModel = EventChatViewModel(fakeFriends)
 
     @Before
     fun setup() {
         composeTestRule.setContent {
-            EventChatScreen(EventChatViewModel(fakeFriends))
+            EventChatScreen(viewModel)
         }
     }
 
@@ -49,5 +50,12 @@ class EventChatScreenTest {
             .performTextInput("test")
         composeTestRule.onNodeWithTag("event-chat-screen__icon-button").assertExists()
             .performClick()
+    }
+
+    @Test
+    fun chatChangeWhenUse(){
+        viewModel.changeEventChat("1")
+        viewModel.changeEventChat("2")
+
     }
 }

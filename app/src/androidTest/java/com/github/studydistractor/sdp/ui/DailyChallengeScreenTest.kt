@@ -71,4 +71,9 @@ class DailyChallengeScreenTest {
     fun testKonfetti() {
         composeTestRule.onNodeWithTag("daily-challenge-screen__konfetti").assertDoesNotExist()
     }
+
+    @Test
+    fun testCheckBoxWorks(){
+        viewModel.onCheckboxClicked(0, true)
+    }
 }
