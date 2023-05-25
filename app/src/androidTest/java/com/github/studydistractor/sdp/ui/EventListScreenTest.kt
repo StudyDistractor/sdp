@@ -29,17 +29,40 @@ class EventListScreenTest {
 
     @Test
     fun eventElementsAreDisplayed() {
-        composeTestRule.onAllNodesWithTag("event-list-screen__event-card", useUnmergedTree = true)[0].assertExists()
-        composeTestRule.onAllNodesWithTag("event-list-screen__event-name-id", useUnmergedTree = true)[0].assertExists()
-        composeTestRule.onAllNodesWithTag("event-list-screen__event-description", useUnmergedTree = true)[0].assertExists()
-        composeTestRule.onAllNodesWithTag("event-list-screen__event-start", useUnmergedTree = true)[0].assertExists()
-        composeTestRule.onAllNodesWithTag("event-list-screen__event-end", useUnmergedTree = true)[0].assertExists()
+        composeTestRule.onNodeWithTag("event-list-screen__event-card-id2", useUnmergedTree = true).assertExists()
+        composeTestRule.onNodeWithTag("event-list-screen__event-card-id3", useUnmergedTree = true).assertExists()
+        composeTestRule.onNodeWithTag("event-list-screen__event-name-id2", useUnmergedTree = true).assertExists()
+        composeTestRule.onNodeWithTag("event-list-screen__event-name-id3", useUnmergedTree = true).assertExists()
+        composeTestRule.onNodeWithTag("event-list-screen__event-description-id2", useUnmergedTree = true).assertExists()
+        composeTestRule.onNodeWithTag("event-list-screen__event-description-id3", useUnmergedTree = true).assertExists()
+        composeTestRule.onNodeWithTag("event-list-screen__event-card-column-id2", useUnmergedTree = true).assertExists()
+        composeTestRule.onNodeWithTag("event-list-screen__event-card-column-id3", useUnmergedTree = true).assertExists()
+        composeTestRule.onNodeWithTag("event-list-screen__event-row-id2", useUnmergedTree = true).assertExists()
+        composeTestRule.onNodeWithTag("event-list-screen__event-row-id3", useUnmergedTree = true).assertExists()
+        composeTestRule.onNodeWithTag("event-list-screen__event-start-id2", useUnmergedTree = true).assertExists()
+        composeTestRule.onNodeWithTag("event-list-screen__event-start-id3", useUnmergedTree = true).assertExists()
+        composeTestRule.onNodeWithTag("event-list-screen__event-end-id2", useUnmergedTree = true).assertExists()
+        composeTestRule.onNodeWithTag("event-list-screen__event-end-id3", useUnmergedTree = true).assertExists()
+        composeTestRule.onNodeWithTag("event-list-screen__event-row-count-id2", useUnmergedTree = true).assertExists()
+        composeTestRule.onNodeWithTag("event-list-screen__event-row-count-id3", useUnmergedTree = true).assertExists()
+        composeTestRule.onNodeWithTag("event-list-screen__more-button-id2", useUnmergedTree = true).assertExists()
+        composeTestRule.onNodeWithTag("event-list-screen__more-button-id3", useUnmergedTree = true).assertExists()
     }
 
     @Test
     fun clickOnEventCardIsRegistered() {
         assert(clickCount == 0)
-        composeTestRule.onAllNodesWithTag("event-list-screen__more-button", useUnmergedTree = true)[0].performClick()
+        composeTestRule.onAllNodesWithTag("event-list-screen__more-button-id2", useUnmergedTree = true)[0].performClick()
         assert(clickCount == 1)
+    }
+
+    @Test
+    fun eventThatHasStartedAndLateParticipationIsNotAllowedIsNotDisplayed(){
+        composeTestRule.onNodeWithTag("event-list-screen__event-card-id1").assertDoesNotExist()
+    }
+
+    @Test
+    fun eventThatHasStartedAndLateParticipationIsAllowedIsDisplayed(){
+        composeTestRule.onNodeWithTag("event-list-screen__event-card-id2").assertExists()
     }
 }
