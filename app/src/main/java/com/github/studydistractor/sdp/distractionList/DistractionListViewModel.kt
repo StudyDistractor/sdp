@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class DistractionListViewModel(
-    private val distractionListModel: DistractionListModel = DistractionListServiceFirebase(),
+    private val distractionListModel: DistractionListModel = DistractionListServiceFirebase("ProcrastinationActivities", "Tags"),
     private val bookmarkService: BookmarkModel = BookmarkServiceFirebase(),
 ) : ViewModel(){
 

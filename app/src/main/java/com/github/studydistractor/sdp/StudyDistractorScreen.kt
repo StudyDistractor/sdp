@@ -135,7 +135,7 @@ fun StudyDistractorApp(
     val distractionViewModel       =
         remember { DistractionViewModel() }
     val distractionListViewModel   =
-        remember { DistractionListViewModel(DistractionListServiceFirebase()) }
+        remember { DistractionListViewModel(DistractionListServiceFirebase("ProcrastinationActivities", "Tags")) }
     val distractionStatViewModel          =
         remember { DistractionStatViewModel(DistractionStatServiceFirebase()) }
     val dailyChallengeViewModel =
@@ -168,7 +168,7 @@ fun StudyDistractorApp(
     val createEventViewModel =
         remember { CreateEventViewModel(CreateEventServiceFirebase()) }
     val mapViewModel =
-        remember{ MapViewModel(EventListServiceFirebase(), DistractionListServiceFirebase())}
+        remember{ MapViewModel(EventListServiceFirebase(), DistractionListServiceFirebase("ProcrastinationActivities", "Tags"))}
 
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
