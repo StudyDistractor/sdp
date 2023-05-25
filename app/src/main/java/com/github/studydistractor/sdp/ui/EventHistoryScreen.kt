@@ -40,7 +40,7 @@ fun EventHistoryScreen(
     val uiState by eventHistoryViewModel.uiState.collectAsState()
 
     Column(
-        modifier = Modifier.padding(6.dp).fillMaxSize(),
+        modifier = Modifier.padding(6.dp).fillMaxSize().testTag("EventHistoryScreen"),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LazyColumn() {

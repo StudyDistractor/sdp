@@ -175,16 +175,18 @@ fun StudyDistractorApp(
 
     ModalNavigationDrawer(
         drawerState = drawerState,
+        modifier = Modifier.testTag("ModalNavigationDrawer"),
         gesturesEnabled = false,
         drawerContent = {
             ModalDrawerSheet(
-                drawerContainerColor = MaterialTheme.colorScheme.inverseOnSurface
+                drawerContainerColor = MaterialTheme.colorScheme.inverseOnSurface,
+                modifier = Modifier.testTag("ModalDrawerSheet"),
             ) {
                 Spacer(Modifier.height(12.dp))
                 Text(
                     text = "Study Distractor",
                     style = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding).testTag("app-bar-top__title")
                 )
                 Divider(
                     color = MaterialTheme.colorScheme.primary,
@@ -196,7 +198,7 @@ fun StudyDistractorApp(
                         imageVector = Icons.Filled.HourglassFull,
                         contentDescription = "History"
                     )},
-                    label = {Text("Distraction's history")},
+                    label = {Text("Distraction history")},
                     onClick = {
                         scope.launch { drawerState.close() }
                         navController.navigate(StudyDistractorScreen.History.name)
@@ -215,7 +217,7 @@ fun StudyDistractorApp(
                         Icons.Outlined.AccessTime,
                         contentDescription = "History of events",
                     )},
-                    label = {Text("Event's history")},
+                    label = {Text("Event history")},
                     onClick = {
                         scope.launch { drawerState.close() }
                         navController.navigate(StudyDistractorScreen.EventHistory.name)
@@ -226,7 +228,7 @@ fun StudyDistractorApp(
                     ),
                     modifier = Modifier
                         .padding(NavigationDrawerItemDefaults.ItemPadding)
-                        .testTag("app-bar-bottom__history-button")
+                        .testTag("app-bar-top__event-history-button")
                 )
 
                 NavigationDrawerItem(
@@ -245,7 +247,7 @@ fun StudyDistractorApp(
                     ),
                     modifier = Modifier
                         .padding(NavigationDrawerItemDefaults.ItemPadding)
-                        .testTag("app-bar-bottom__friend-list-button")
+                        .testTag("app-bar-top__friends-button")
                 )
 
                 NavigationDrawerItem(
@@ -264,7 +266,7 @@ fun StudyDistractorApp(
                     ),
                     modifier = Modifier
                         .padding(NavigationDrawerItemDefaults.ItemPadding)
-                        .testTag("app-bar-bottom__friend-list-button")
+                        .testTag("app-bar-top__account-button")
                 )
 
             }
@@ -291,7 +293,7 @@ fun StudyDistractorApp(
                 navController = navController,
                 startDestination = StudyDistractorScreen.DistractionList.name,
                 modifier = modifier
-                    .padding(it)
+                    .padding(it).testTag("NavHost")
             ) {
                 composable(route = StudyDistractorScreen.Login.name) {
                     LoginScreen(

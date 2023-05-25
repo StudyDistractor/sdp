@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.studydistractor.sdp.history.HistoryModel
@@ -22,7 +23,7 @@ import com.github.studydistractor.sdp.ui.components.MessageCard
 fun HistoryScreen(historyViewModel: HistoryViewModel) {
     val uiState by historyViewModel.uiState.collectAsState()
 
-    Column(modifier = Modifier.padding(6.dp)){
+    Column(modifier = Modifier.padding(6.dp).testTag("HistoryScreen")){
         LazyColumn(){
             items(uiState.historyEntries) {i->
                 MessageCard(i)
