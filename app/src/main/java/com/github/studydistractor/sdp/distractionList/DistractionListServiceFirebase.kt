@@ -65,7 +65,6 @@ class DistractionListServiceFirebase @Inject constructor(pathProcrastinationActi
 
     /**
      * This is a workaround for the maps
-     * TODO: When maps are move to screen remove this function
      */
     fun fetchDistractionsCallBack(callback: (List<Distraction>) -> Unit) {
         val result =  mutableStateListOf<Distraction>()

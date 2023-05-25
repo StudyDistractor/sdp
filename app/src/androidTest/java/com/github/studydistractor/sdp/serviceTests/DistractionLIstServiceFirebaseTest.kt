@@ -1,7 +1,6 @@
 package com.github.studydistractor.sdp.serviceTests
 
 import android.util.Log
-import com.github.studydistractor.sdp.distraction.DistractionServiceFirebase
 import com.github.studydistractor.sdp.distractionList.DistractionListServiceFirebase
 import org.junit.Test
 
