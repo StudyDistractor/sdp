@@ -49,19 +49,4 @@ class DailyChallengeServiceFirebase : DailyChallengeModel {
         }
         return challengeDistractions
     }
-
-    override fun postDailyChallenge(
-        dailyChallenge: List<Distraction>,
-        date: String,
-        onSuccess: () -> Unit,
-        onFailure: () -> Unit
-    ) {
-        db.child(date).setValue(dailyChallenge).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                onSuccess()
-            } else {
-                onFailure()
-            }
-        }
-    }
 }

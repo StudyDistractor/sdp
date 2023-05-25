@@ -12,12 +12,4 @@ class DailyChallengeServiceFake : DailyChallengeModel {
         )
     }
 
-    override fun postDailyChallenge(
-        dailyChallenge: List<Distraction>,
-        date: String,
-        onSuccess: () -> Unit,
-        onFailure: () -> Unit
-    ) {
-        onSuccess()
-    }
 }

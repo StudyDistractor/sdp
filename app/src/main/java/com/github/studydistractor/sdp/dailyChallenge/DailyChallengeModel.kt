@@ -7,6 +7,4 @@ interface DailyChallengeModel {
     /* Fetch the daily challenge from the database */
     fun fetchDailyChallenge(dateString : String) : List<Distraction>
 
-    /* Post the daily challenge to the database */
-    fun postDailyChallenge(dailyChallenge: List<Distraction>, date: String, onSuccess: () -> Unit, onFailure: () -> Unit)
 }
