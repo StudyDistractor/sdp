@@ -29,7 +29,9 @@ class EventChatServiceFirebase : EventChatModel {
             for(m in snapshot.children){
                 try {
                     val message = m.getValue(FirebaseMessage::class.java)
-                    list.add(message!!.toMessage())
+                    val m = message!!.toMessage()
+                    m.eventId = currentChat
+                    list.add(m)
                 } catch (_: NullPointerException){
                     Log.d("ERROR",
                         "Unable to fetch data from firebase due to structure difference"
@@ -40,7 +42,6 @@ class EventChatServiceFirebase : EventChatModel {
         }
 
         override fun onCancelled(error: DatabaseError) {
-            Log.d("ERROR", error.message)
         }
     }
 
@@ -55,11 +56,11 @@ class EventChatServiceFirebase : EventChatModel {
     override fun postMessage(message: String): Task<Void> {
         if(auth.uid == null) return Tasks.forException(Exception())
         val newMessage = db.child(currentChat).push()
-        val m = Message(
+        val m = FirebaseMessage(
             messageId = newMessage.key!!,
             message = message,
             userId = auth.uid!!,
-            timeStamp = Date().time
+            timeStamp = Date().time,
         )
         return newMessage.setValue(m)
     }
