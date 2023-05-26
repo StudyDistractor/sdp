@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.HourglassFull
@@ -27,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
@@ -180,7 +182,15 @@ fun StudyDistractorApp(
         drawerContent = {
             ModalDrawerSheet(
                 drawerContainerColor = MaterialTheme.colorScheme.inverseOnSurface,
-                modifier = Modifier.testTag("ModalDrawerSheet"),
+                modifier = Modifier.testTag("ModalDrawerSheet").pointerInput(Unit) {
+                    detectTapGestures(onTap = {
+                        scope.launch {
+                            if (drawerState.isOpen) {
+                                drawerState.close()
+                            }
+                        }
+                    })
+                },
             ) {
                 Spacer(Modifier.height(12.dp))
                 Text(
