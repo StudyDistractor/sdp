@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.update
 
 class DistractionListViewModel(
     private val distractionListModel: DistractionListModel = DistractionListServiceFirebase("ProcrastinationActivities", "Tags"),
-    private val bookmarkService: BookmarkModel = BookmarkServiceFirebase(),
+    private val bookmarkService: BookmarkModel = BookmarkServiceFirebase("Bookmarks"),
 ) : ViewModel(){
 
     private val _uiState = MutableStateFlow(DistractionListUiState())

@@ -12,13 +12,14 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import javax.inject.Inject
 
-class BookmarkServiceFirebase : BookmarkModel {
+class BookmarkServiceFirebase @Inject constructor(bookmarkPath: String): BookmarkModel {
 
     private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseDatabase.getInstance()
     private var bookmarks = SnapshotStateList<String>()
-    private val BOOKMARKSPATH = "Bookmarks"
+    private val BOOKMARKSPATH = bookmarkPath
     private var databaseRef: DatabaseReference = db.getReference(BOOKMARKSPATH).child("")
     private var hasListener = false
 

@@ -5,13 +5,14 @@ import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import java.lang.Exception
+import javax.inject.Inject
 
-class DistractionStatServiceFirebase : DistractionStatModel {
+class DistractionStatServiceFirebase @Inject constructor(feedbackPath: String, likesPath: String, dislikesPath: String, tagsPath: String) : DistractionStatModel {
 
-    private val pathFeedback = "Feedback"
-    private val pathLikes = "Likes"
-    private val pathDislikes = "Dislikes"
-    private val pathTags = "TagsUsers"
+    private val pathFeedback = feedbackPath
+    private val pathLikes = likesPath
+    private val pathDislikes = dislikesPath
+    private val pathTags = tagsPath // "TagsUsers"
     private val db = FirebaseDatabase.getInstance()
     private val auth = FirebaseAuth.getInstance()
     override fun fetchDistractionFeedback(did: String): Task<List<String>> {

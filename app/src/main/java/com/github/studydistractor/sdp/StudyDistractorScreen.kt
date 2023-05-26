@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.HourglassFull
@@ -27,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
@@ -137,7 +139,7 @@ fun StudyDistractorApp(
     val distractionListViewModel   =
         remember { DistractionListViewModel(DistractionListServiceFirebase("ProcrastinationActivities", "Tags")) }
     val distractionStatViewModel          =
-        remember { DistractionStatViewModel(DistractionStatServiceFirebase()) }
+        remember { DistractionStatViewModel(DistractionStatServiceFirebase("Feedback", "Likes", "Dislikes", "TagsUsers")) }
     val dailyChallengeViewModel =
         remember { DailyChallengeViewModel(DailyChallengeServiceFirebase()) }
     val eventViewModel =
@@ -151,7 +153,7 @@ fun StudyDistractorApp(
     val eventListViewModel =
         remember { EventListViewModel(
                 EventListMiddlewareOffline(
-                    EventListServiceFirebase(),
+                    EventListServiceFirebase("Events"),
                     database,
                     connectivityManager
                 )
@@ -160,15 +162,15 @@ fun StudyDistractorApp(
     val eventHistoryViewModel =
         remember { EventHistoryViewModel(
             EventHistoryMiddlewareOffline(
-                EventHistoryServiceFirebase(),
+                EventHistoryServiceFirebase("Events", "EventParticipants", "Users", "EventClaimPoints"),
                 database,
                 connectivityManager)
             )
         }
     val createEventViewModel =
-        remember { CreateEventViewModel(CreateEventServiceFirebase()) }
+        remember { CreateEventViewModel(CreateEventServiceFirebase("Events")) }
     val mapViewModel =
-        remember{ MapViewModel(EventListServiceFirebase(), DistractionListServiceFirebase("ProcrastinationActivities", "Tags"))}
+        remember{ MapViewModel(EventListServiceFirebase("Events"), DistractionListServiceFirebase("ProcrastinationActivities", "Tags"))}
 
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -180,7 +182,15 @@ fun StudyDistractorApp(
         drawerContent = {
             ModalDrawerSheet(
                 drawerContainerColor = MaterialTheme.colorScheme.inverseOnSurface,
-                modifier = Modifier.testTag("ModalDrawerSheet"),
+                modifier = Modifier.testTag("ModalDrawerSheet").pointerInput(Unit) {
+                    detectTapGestures(onTap = {
+                        scope.launch {
+                            if (drawerState.isOpen) {
+                                drawerState.close()
+                            }
+                        }
+                    })
+                },
             ) {
                 Spacer(Modifier.height(12.dp))
                 Text(
