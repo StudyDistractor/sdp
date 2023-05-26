@@ -162,7 +162,7 @@ fun StudyDistractorApp(
     val eventHistoryViewModel =
         remember { EventHistoryViewModel(
             EventHistoryMiddlewareOffline(
-                EventHistoryServiceFirebase(),
+                EventHistoryServiceFirebase("Events", "EventParticipants", "Users", "EventClaimPoints"),
                 database,
                 connectivityManager)
             )

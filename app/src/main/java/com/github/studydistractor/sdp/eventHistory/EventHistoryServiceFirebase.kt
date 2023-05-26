@@ -2,6 +2,7 @@ package com.github.studydistractor.sdp.eventHistory
 
 import android.util.Log
 import com.github.studydistractor.sdp.data.Event
+import com.github.studydistractor.sdp.data.EventParticipants
 import com.github.studydistractor.sdp.data.UserData
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
@@ -12,14 +13,15 @@ import com.google.firebase.database.ValueEventListener
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Optional
+import javax.inject.Inject
 
-class EventHistoryServiceFirebase: EventHistoryModel {
+class EventHistoryServiceFirebase @Inject constructor(pathEvents: String, pathEventParticipants: String, pathUsers: String, pathEventClaimPoints: String): EventHistoryModel {
     private val db = FirebaseDatabase.getInstance()
 
-    private val eventsPath = "Events"
-    private val eventParticipantsPath = "EventParticipants"
-    private val usersPath = "Users"
-    private val userClaimsPath = "EventClaimPoints"
+    private val eventsPath = pathEvents //"Events"
+    private val eventParticipantsPath = pathEventParticipants // "EventParticipants"
+    private val usersPath = pathUsers // "Users"
+    private val userClaimsPath = pathEventClaimPoints // "EventClaimPoints"
 
     private val eventsDatabaseRef = db.getReference(eventsPath)
     private val eventParticipantsDatabaseRef = db.getReference(eventParticipantsPath)

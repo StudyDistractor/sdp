@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.update
  * This class help passing distraction data between views
  */
 class DistractionViewModel(
-    private val bookmarksService : BookmarkModel = BookmarkServiceFirebase(),
+    private val bookmarksService : BookmarkModel = BookmarkServiceFirebase("Bookmarks"),
     private val historyService: HistoryModel = HistoryServiceFirebase()
 ) : ViewModel(){
 
