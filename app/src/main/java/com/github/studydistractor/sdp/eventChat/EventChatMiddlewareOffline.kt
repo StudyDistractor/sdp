@@ -34,7 +34,7 @@ class EventChatMiddlewareOffline constructor(
     }
 
     override fun postMessage(message: String): Task<Void> {
-        if(OnlineStatus().isOnline(connectivityManager)) return Tasks.forException(Exception())
+        if(!OnlineStatus().isOnline(connectivityManager)) return Tasks.forException(Exception())
         return service.postMessage(message)
     }
 

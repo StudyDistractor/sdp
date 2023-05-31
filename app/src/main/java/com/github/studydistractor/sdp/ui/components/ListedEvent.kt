@@ -62,7 +62,6 @@ fun ListedEvent(
             Text(
                 text = event.description,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.testTag("event-list-screen__event-description-${event.eventId}")
             )
 

@@ -31,16 +31,13 @@ fun EventChatScreen(
     viewModel: EventChatViewModel
 ){
     val uiState by viewModel.uiState.collectAsState()
-    Surface(
-        color = MaterialTheme.colorScheme.primary,
-        contentColor = MaterialTheme.colorScheme.onSurface
-    ) {
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 14.dp, vertical = 32.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer
+                containerColor = MaterialTheme.colorScheme.surfaceVariant
             ),
         ) {
         Column(
@@ -48,25 +45,18 @@ fun EventChatScreen(
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surface)
         ) {
-            TopAppBar(
-                title = { Text(text = "Chat") },
-                modifier = Modifier.testTag("event-chat-screen__title")
-            )
             LazyColumn(
                 modifier = Modifier.weight(1f)
             ) {
                 items(uiState.messages) { message ->
-                    Surface(
-                        modifier = Modifier.padding(
-                            start = 16.dp,
-                            end = 16.dp,
-                            top = 8.dp,
-                            bottom = 8.dp
-                        )
-                            .testTag("event-chat-screen__message-${message.messageId}"),
-                        shape = RoundedCornerShape(8.dp),
-                        color = MaterialTheme.colorScheme.primary,
-                        contentColor = MaterialTheme.colorScheme.onPrimary,
+                        Card(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp, vertical = 8.dp)
+                                .testTag("event-chat-screen__message-${message.messageId}"),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.inverseOnSurface,
+                                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
                     ) {
                         Text(
                             text = message.message,
@@ -100,7 +90,8 @@ fun EventChatScreen(
                     value = uiState.message,
                     onValueChange = { viewModel.updateMessage(it) },
                     label = { Text(text = "Enter your message") },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .testTag("event-chat-screen__text-field")
 
                 )
@@ -108,7 +99,8 @@ fun EventChatScreen(
                     onClick = {
                         viewModel.postMessage()
                     },
-                    modifier = Modifier.padding(start = 16.dp)
+                    modifier = Modifier
+                        .padding(start = 16.dp)
                         .testTag("event-chat-screen__icon-button")
                 ) {
                     Icon(
@@ -118,7 +110,6 @@ fun EventChatScreen(
                     )
                 }
             }
-        }
         }
     }
 }

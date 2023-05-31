@@ -63,14 +63,6 @@ fun CreateEventScreen(
         uiState.endMinute
     )
 
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 14.dp, vertical = 32.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        ),
-    ) {
     Box(
         modifier = Modifier
             .padding(16.dp)
@@ -87,12 +79,13 @@ fun CreateEventScreen(
         ) {
 
             Row {
-                androidx.compose.material.Text(
+                Text(
                     text = "Create event",
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.displayMedium,
                     modifier = Modifier
                         .padding(vertical = 32.dp)
-                        .testTag("create-event-screen__title")
+                        .testTag("create-event-screen__title"),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
 
@@ -129,7 +122,6 @@ fun CreateEventScreen(
                 buttonText = "Create event"
             )
         }
-    }
     }
 }
 

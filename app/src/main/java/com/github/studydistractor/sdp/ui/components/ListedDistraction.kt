@@ -69,7 +69,8 @@ fun ListedDistraction(
                             Text(
                                 text = distraction.name!!,
                                 style = MaterialTheme.typography.headlineLarge,
-                                modifier = Modifier.testTag("name")
+                                modifier = Modifier.testTag("name"),
+                                color = MaterialTheme.colorScheme.onPrimaryContainer
                             )
                             if (isBookmarked(distraction)) {
                                 Icon(

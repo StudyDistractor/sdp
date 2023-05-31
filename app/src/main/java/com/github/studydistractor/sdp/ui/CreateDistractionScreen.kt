@@ -33,14 +33,7 @@ fun CreateDistractionScreen(
     onDistractionCreated: () -> Unit
 ) {
     val uiState = createDistractionViewModel.uiState.collectAsState().value
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 14.dp, vertical = 32.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        ),
-    ) {
+
     Box(
         modifier = Modifier
             .padding(16.dp)
@@ -55,12 +48,13 @@ fun CreateDistractionScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Row {
-                androidx.compose.material.Text(
+                Text(
                     text = "Create distraction",
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.displayMedium,
                     modifier = Modifier
                         .padding(vertical = 32.dp)
-                        .testTag("create-distraction-screen__title")
+                        .testTag("create-distraction-screen__title"),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
             CreateActivityNameAndDescriptionFields(
@@ -99,5 +93,5 @@ fun CreateDistractionScreen(
                 buttonText = "Create new distraction"
             )
         }
-    }}
+    }
 }
