@@ -11,6 +11,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,11 +25,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.studydistractor.sdp.distraction.DistractionViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun DistractionScreen(
     distractionViewModel : DistractionViewModel,
-    onDistractionState : (did : String) -> Unit
+    onDistractionState : (did : String) -> Unit,
+    snackbarHostState : SnackbarHostState? = null
 ) {
     fun showFailureToast(context: Context, message: String) {
         Toast.makeText(context, "Failure: $message", Toast.LENGTH_SHORT)
@@ -36,6 +40,7 @@ fun DistractionScreen(
 
     val uiState by distractionViewModel.uiState.collectAsState()
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -138,11 +143,16 @@ fun DistractionScreen(
             Button(
                 onClick = {
                     if (distractionViewModel.distractionCompleted()) {
-                        Toast.makeText(
-                            context,
-                            "Activity completed!",
-                            Toast.LENGTH_SHORT
-                        ).show()
+//                        Toast.makeText(
+//                            context,
+//                            "Activity completed!",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+                        scope.launch {
+                            snackbarHostState!!.showSnackbar(
+                                "Activity completed!"
+                            )
+                        }
                     }
                 },
                 modifier = Modifier.testTag("completeButton"),

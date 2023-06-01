@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -11,6 +12,7 @@ import androidx.compose.material.icons.filled.HourglassFull
 import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Group
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,7 +23,13 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarVisuals
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -174,6 +182,7 @@ fun StudyDistractorApp(
 
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -297,7 +306,25 @@ fun StudyDistractorApp(
                 onCreateDistractionActivityClick = {navController.navigate(StudyDistractorScreen.CreateDistraction.name)},
                 onCreateEventActivityClick = {navController.navigate(StudyDistractorScreen.CreateEvent.name)},
                 onMagicClick = { navController.navigate(StudyDistractorScreen.DailyChallenge.name) }
-            ) }
+            ) },
+            snackbarHost = {
+                // reuse default SnackbarHost to have default animation and timing handling
+                SnackbarHost(snackbarHostState) { data ->
+                    Snackbar(
+                        modifier = Modifier
+                            .padding(horizontal = 96.dp, vertical = 12.dp),
+                        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Text(data.visuals.message)
+                        }
+                    }
+                }
+            }
         ) {
             NavHost(
                 navController = navController,
@@ -360,7 +387,8 @@ fun StudyDistractorApp(
                     DistractionScreen(distractionViewModel, onDistractionState = { it ->
                         distractionStatViewModel.updateDid(it)
                         navController.navigate(StudyDistractorScreen.DistractionStat.name)
-                    })
+                    },
+                        snackbarHostState)
                 }
                 composable(route = StudyDistractorScreen.CreateDistraction.name)  {
                     CreateDistractionScreen(
